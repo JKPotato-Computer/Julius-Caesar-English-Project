@@ -22,3 +22,5 @@ Array.from(document.querySelectorAll("#teamSelector>div:not(.navOptions)>button"
 		});
 	});
 });
+
+gameModule.loadDialogue("dialoguePage");
