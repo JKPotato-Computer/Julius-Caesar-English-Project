@@ -23,4 +23,13 @@ Array.from(document.querySelectorAll("#teamSelector>div:not(.navOptions)>button"
 	});
 });
 
-gameModule.init();
+document.querySelector("#confirm").addEventListener("click", () => {
+	gameModule.init(document.querySelector("#specificID").value);
+	document.querySelector("#gamePage").style.display = "";
+	document.querySelector("#mainPage").style.display = "none";
+});
+
+if (true) {
+	document.querySelector("#gamePage").style.display = "none";
+	document.querySelector("#mainPage").style.display = "";
+}
