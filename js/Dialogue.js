@@ -8,6 +8,7 @@ class OptionElement {
 	createOption() {
 		const button = document.createElement("button");
 		button.className = "iconLabelBtn dialogueOption";
+		button.dataset.optionId = this.id;
 
 		const label = document.createElement("span");
 		const icon = document.createElement("span");
@@ -69,10 +70,31 @@ class Dialogue {
 		return [dialogueElem, message];
 	}
 
-	displayOptions(dialogueElem, options) {
+	displayOptions(dialogueElem, options, optionsConfig) {
 		
 		const dialogueOptions = document.createElement("div");
 		dialogueOptions.classList.add("dialogueOptions");
+
+		if ((optionsConfig.timedQuestion) && (optionsConfig.timedQuestion > 0)) {
+			const timedQuestion = document.createElement("div");
+			timedQuestion.classList.add("timedQuestion");
+
+			const timedBar = document.createElement("div");
+			timedBar.classList.add("timedBar");
+
+			const barComplete = document.createElement("div");
+			barComplete.classList.add("barComplete")
+
+			const timerSpan = document.createElement("span")
+			timerSpan.textContent = (optionsConfig.timedQuestion / 1000).toFixed(1) + "s";
+
+			timedBar.appendChild(barComplete);
+			timedQuestion.appendChild(timedBar);
+			timedQuestion.appendChild(timerSpan);
+			dialogueElem.appendChild(timedQuestion);
+		}
+
+		let optionsList = [];
 
 		switch (options.length) {
 			case 1:
@@ -90,7 +112,16 @@ class Dialogue {
 
 		Array.from(options).forEach((option) => {
 			const optionElement = option.createOption();
+			optionsList.push(optionElement);
 			dialogueOptions.appendChild(optionElement);
+
+			optionElement.addEventListener("click", () => {
+				optionElement.classList.add("locked");
+				gameModule.getStoryline().answerResponse(optionElement.dataset.optionId);
+				gameModule.answerQuestion();
+
+				Array.from(optionsList).forEach(option => option.disabled = option != optionElement);
+			}) 
 		})
 
 		dialogueElem.appendChild(dialogueOptions);

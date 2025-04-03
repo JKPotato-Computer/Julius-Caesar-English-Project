@@ -19,36 +19,34 @@ class Storyline {
 
 	answerResponse(answer) {
 		this.lineIndecies.push(answer);
+		this.lineIndecies.push(-1);
+		this.linePointerIndex += 2;
 	}
 
 	hasNext() {
 		let currentScene = Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
 		let currentLine = currentScene;
-		for (let i = 0; i < this.lineIndecies.length;) {
-			if ((i + 1 < this.lineIndecies.length) && (typeof (this.lineIndecies[i + 1]) == "string")) {
+		for (let i = 0;i < this.lineIndecies.length;) {
+			if ((i + 1 < this.lineIndecies.length) && (typeof(this.lineIndecies[i + 1]) == "string")) {
 				currentLine = currentLine[this.storyID + "_" + this.lineIndecies[i] + "_" + this.lineIndecies[i + 1]];
 				i += 2;
 			} else {
-				currentLine = currentLine[this.lineIndecies[i++]];
+				return currentLine[this.lineIndecies[i] + 1] != undefined;
 			}
 		}
-		let nextScene = Object.values(currentScene);
-		if (nextScene.length > (this.lineIndecies.length + 1)) return true;
-		return false;
 	}
 
 	next() {
 		let currentScene = Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
 		let currentLine = currentScene;
-		for (let i = 0; i <= this.linePointerIndex;) {
-			if ((i + 1 < this.lineIndecies.length) && (typeof (this.lineIndecies[i + 1]) == "string")) {
+		for (let i = 0;i < this.lineIndecies.length;) {
+			if ((i + 1 < this.lineIndecies.length) && (typeof(this.lineIndecies[i + 1]) == "string")) {
 				currentLine = currentLine[this.storyID + "_" + this.lineIndecies[i] + "_" + this.lineIndecies[i + 1]];
 				i += 2;
 			} else {
-				if (i == this.linePointerIndex) {
-					this.lineIndecies[i]++;
-				}
-				currentLine = currentLine[this.lineIndecies[i++]];
+				this.lineIndecies[i]++;
+				currentLine = currentLine[this.lineIndecies[i]];
+				break;
 			}
 		}
 		return currentLine;
@@ -65,16 +63,40 @@ class GameFail {
 	}
 
 	displayFail() {
-		const failText = document.createElement("p");
-		failText.textContent = this.failText;
-		failText.classList.add("failText");
-		document.querySelector("#dialoguePage").appendChild(failText);
+		console.log(this.failID);
+		document.querySelector("#failScreen").style.display = "flex";
+		document.querySelector("#failReason").innerHTML = this.failText;
+		document.querySelector("#failType > small").textContent = "Fail ID: " + this.failID;
+		document.querySelector("#failScreen > h1").textContent = GameFail.prototype.failTitle[Math.floor(Math.random() * GameFail.prototype.failTitle.length)];
 	}
 }
+GameFail.prototype.failTitle = [
+	"DEED UNDONE",
+	"PURPOSE LOST",
+	"FIE ON'T",
+	"TASK NAUGHT",
+	"FOILED NOW",
+	"UNDONE US",
+	"NO SUCCESS",
+	"AIM MISSED",
+	"PLOT FAILED",
+	"DESIGN LOST",
+	"HOPES DASHED",
+	"FALLEN SO",
+	"LOST LABOR",
+	"WRECKED NOW",
+	"NO FRUIT",
+	"QUEST VAIN",
+	"GAME LOST",
+	"VAIN STRENGTH",
+	"BAD END",
+	"CAUSE COLD",
+];
 
 Storyline.prototype.acts = {
 	["Tutorial"]: {
 		["teamConspirators"]: {
+			/*
 			[0]: {
 				dialogue: new Dialogue("Welcome to the tale of Julius Caesar! Before we get started, let's roll through a <b>quick tutorial</b>, shall we?"),
 			},
@@ -87,29 +109,38 @@ Storyline.prototype.acts = {
 			[3]: {
 				dialogue: new Dialogue("How are you going to do that? Well, you'll have the power to enter people's minds and control their decisions - sometimes it helps you get closer to the plan, other times it might just go <i>horribly wrong...</i>."),
 			},
-			[4]: {
+			*/
+			[0]: {
 				dialogue: new Dialogue("What do I mean by that, exactly? Well, let's play through Act 1 : Scene 1 as a demonstration, <i>shalt we</i>?"),
 				options: [
 					new OptionElement("Yes, let's do it!", "thumb_up", "Yes"),
-					new OptionElement("No. Julius Caesar was never real.", "thumb_down", "No"),
+					new OptionElement("What's a Julius Caesar?", "thumb_down", "No"),
 				],
 				optionsConfig: {
-					timedQuestion: 0,
+					timedQuestion: 5000,
 					instantFeedback: true,
 					appear: "afterDialogue"
 				}
 			},
-			["Tutorial_4_Yes"]: {
+			["Tutorial_0_Yes"]: {
 				[0]: {
 					dialogue: new Dialogue("Alright... here we go!!!"),
 					next: "A1_S1"
 				}
 			},
-			["Tutorial_4_No"]: {
+			["Tutorial_0_No"]: {
 				[0]: {
 					dialogue: new Dialogue("<b>Wrong answer.</b>", "crimson"),
-					fail: new GameFail("TutorialFail", "What a shame. You failed the tutorial. Not even Casca is that dumb!")
+					fail: new GameFail({
+						failID: "TUTORIAL_FAIL",
+						failText: "dude, you're in the wrong universe. this is not romeo and juliet.<br>come back later for a romeo and juliet edition ;)"}
+					)
 				},
+			},
+			["Tutorial_0_Void"]: {
+				[0]: {
+					dialogue: new Dialogue("The Mongol Empire of the 13th and 14th centuries was the largest contiguous empire in history.[4] Originating in present-day Mongolia in East Asia, the Mongol Empire at its height stretched from the Sea of Japan to parts of Eastern Europe, extending northward into parts of the Arctic;[5] eastward and southward into parts of the Indian subcontinent, mounted invasions of Southeast Asia, and conquered the Iranian Plateau; and reached westward as far as the Levant and the Carpathian Mountains.")
+				}
 			}
 		}
 	},

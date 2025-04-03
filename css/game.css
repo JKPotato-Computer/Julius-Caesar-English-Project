@@ -304,19 +304,32 @@
   font-size: 14px;
 }
 
-.dialogueOptions>button:hover {
+.dialogueOptions:not(:has(button.locked))>button:hover,
+.dialogueOptions>button.locked {
   background: white;
   border: white;
   font-size: 14px;
   min-width: auto;
 }
 
-.dialogueOptions>button:hover>span {
+.dialogueOptions:not(:has(button.locked))>button:hover>span,
+.dialogueOptions>button.locked>span {
   color: black;
 }
 
-.character .name,
-{
+.dialogueOptions:has(button.locked) > button:not(.locked):hover {
+  background: none;
+  border: none;
+  font-size: 14px;
+  min-width: auto;
+}
+
+.dialogueOptions:has(button.locked) > button:not(.locked) {
+  border: none;
+  background: none;
+}
+
+.character .name {
 font-weight: bold;
 color: var(--accent-color);
 font-weight: 700;
@@ -417,4 +430,540 @@ text-shadow: 0 0 black;
   gap: 8px;
   margin-right: 0;
   margin-left: auto;
+}
+
+:root {
+  /* Deep & Earthy Pairs */
+  --deep-slate-bg: #05080a;
+  /* Even darker */
+  --deep-slate-accent: #607d8b;
+  /* Even brighter */
+
+  --midnight-blue-bg: #06090b;
+  /* Even darker */
+  --midnight-blue-accent: #607d8b;
+  /* Even brighter */
+
+  --charcoal-black-bg: #080b0e;
+  /* Even darker */
+  --charcoal-black-accent: #78909c;
+  /* Even brighter */
+
+  --obsidian-black-bg: #020304;
+  /* Even darker */
+  --obsidian-black-accent: #455a64;
+  /* Even brighter */
+
+  --smoky-gray-bg: #0d1113;
+  /* Even darker */
+  --smoky-gray-accent: #90a4ae;
+  /* Even brighter */
+
+  --forest-green-bg: #040e08;
+  /* Even darker */
+  --forest-green-accent: #66bb6a;
+  /* Even brighter */
+
+  --deep-olive-bg: #0a0d09;
+  /* Even darker */
+  --deep-olive-accent: #8bc34a;
+  /* Even brighter */
+
+  --rustic-brown-bg: #0e0a07;
+  /* Even darker */
+  --rustic-brown-accent: #8d6e63;
+  /* Even brighter */
+
+  --mahogany-bg: #0f0b07;
+  /* Even darker */
+  --mahogany-accent: #a1887f;
+  /* Even brighter */
+
+  --burgundy-bg: #110708;
+  /* Even darker */
+  --burgundy-accent: #ad1457;
+  /* Even brighter */
+
+  /* Cool & Moody Pairs */
+  --dark-teal-bg: #001515;
+  /* Even darker */
+  --dark-teal-accent: #26a69a;
+  /* Even brighter */
+
+  --slate-blue-bg: #0c1214;
+  /* Even darker */
+  --slate-blue-accent: #78909c;
+  /* Even brighter */
+
+  --indigo-dye-bg: #0a0d1f;
+  /* Even darker */
+  --indigo-dye-accent: #7986cb;
+  /* Even brighter */
+
+  --deep-violet-bg: #0f0c1b;
+  /* Even darker */
+  --deep-violet-accent: #9575cd;
+  /* Even brighter */
+
+  --shadow-purple-bg: #0c090f;
+  /* Even darker */
+  --shadow-purple-accent: #8e24aa;
+  /* Even brighter */
+
+  --steel-blue-bg: #0b151d;
+  /* Even darker */
+  --steel-blue-accent: #81d4fa;
+  /* Even brighter */
+
+  --cobalt-blue-bg: #0a0f18;
+  /* Even darker */
+  --cobalt-blue-accent: #64b5f6;
+  /* Even brighter */
+
+  --denim-blue-bg: #081117;
+  /* Even darker */
+  --denim-blue-accent: #81d4fa;
+  /* Even brighter */
+
+  --navy-blue-bg: #00001a;
+  /* Even darker */
+  --navy-blue-accent: #2196f3;
+  /* Even brighter */
+
+  --twilight-gray-bg: #101010;
+  /* Even darker */
+  --twilight-gray-accent: #cfd8dc;
+  /* Even brighter */
+
+  /* Rich & Warm Pairs */
+  --burnt-orange-bg: #1c0e00;
+  /* Even darker */
+  --burnt-orange-accent: #ffb74d;
+  /* Even brighter */
+
+  --sienna-brown-bg: #170c04;
+  /* Even darker */
+  --sienna-brown-accent: #bcaaa4;
+  /* Even brighter */
+
+  --dark-red-bg: #170000;
+  /* Even darker */
+  --dark-red-accent: #ef5350;
+  /* Even brighter */
+
+  --crimson-bg: #240209;
+  /* Even darker */
+  --crimson-accent: #e53935;
+  /* Even brighter */
+
+  --brick-red-bg: #1e0505;
+  /* Even darker */
+  --brick-red-accent: #ef5350;
+  /* Even brighter */
+
+  --umber-brown-bg: #130d07;
+  /* Even darker */
+  --umber-brown-accent: #a1887f;
+  /* Even brighter */
+
+  --russet-brown-bg: #150b04;
+  /* Even darker */
+  --russet-brown-accent: #bcaaa4;
+  /* Even brighter */
+
+  --dark-gold-bg: #171101;
+  /* Even darker */
+  --dark-gold-accent: #ffca28;
+  /* Even brighter */
+
+  --bronze-bg: #17140e;
+  /* Even darker */
+  --bronze-accent: #bcaaa4;
+  /* Even brighter */
+
+  --copper-bg: #1e1308;
+  /* Even darker */
+  --copper-accent: #d7ccc8;
+  /* Even brighter */
+
+  /* Subtle & Muted Pairs */
+  --muted-teal-bg: #0d1717;
+  /* Even darker */
+  --muted-teal-accent: #4dd0e1;
+  /* Even brighter */
+
+  --dusty-blue-bg: #11181b;
+  /* Even darker */
+  --dusty-blue-accent: #81d4fa;
+  /* Even brighter */
+
+  --ash-gray-bg: #161616;
+  /* Even darker */
+  --ash-gray-accent: #e0f2f7;
+  /* Even brighter */
+
+  --graphite-gray-bg: #0d0d0d;
+  /* Even darker */
+  --graphite-gray-accent: #9e9e9e;
+  /* Even brighter */
+
+  --lichen-green-bg: #131813;
+  /* Even darker */
+  --lichen-green-accent: #aed581;
+  /* Even brighter */
+
+  --dark-khaki-bg: #171600;
+  /* Even darker */
+  --dark-khaki-accent: #dce775;
+  /* Even brighter */
+
+  --sepia-tone-bg: #130a03;
+  /* Even darker */
+  --sepia-tone-accent: #bcaaa4;
+  /* Even brighter */
+
+  --dark-mauve-bg: #110b1e;
+  /* Even darker */
+  --dark-mauve-accent: #ab47bc;
+  /* Even brighter */
+
+  --nightshade-bg: #080008;
+  /* Even darker */
+  --nightshade-accent: #ba68c8;
+  /* Even brighter */
+
+  --onyx-black-bg: #09090a;
+  /* Even darker */
+  --onyx-black-accent: #757575;
+  /* Even brighter */
+}
+
+#dialoguePage {
+  width: 70%;
+  margin: 0 auto;
+  padding: 20px;
+  position: absolute;
+  height: 95%;
+  top: 5%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.message:not(.stage-direction, .character) {
+  border: 1px solid white;
+}
+
+.stage-direction {
+  font-style: italic;
+  color: var(--bg-color);
+  border-left: 4px solid var(--accent-color);
+  padding-left: 10px;
+}
+
+.character {
+  background-color: var(--bg-color);
+  border-left: 4px solid var(--accent-color);
+  padding-left: 10px;
+}
+
+.dialogueQuestion {
+  --bg-color: var(--dark-teal-bg);
+  --accent-color: var(--dark-teal-accent);
+
+  background-color: var(--bg-color);
+  border-left: 4px solid var(--accent-color);
+  padding-left: 10px;
+}
+
+.dialogueOptions {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+
+.dialogueOptions.one-option {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.dialogueOptions.two-option {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+}
+
+.dialogueOptions.three-option,
+.dialoguOptions-four-option {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.dialogueOption>button {
+  min-width: auto;
+  width: auto;
+  height: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+  .dialogueOptions.two-option {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  .dialogueOptions.three-option {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+  }
+
+  .dialogueOptions.four-option {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+  }
+
+  #dialoguePage {
+    width: 95%;
+  }
+}
+
+.dialogueOption * {
+  font-size: 14px;
+}
+
+.dialogueOptions:not(:has(button.locked))>button:hover,
+.dialogueOptions>button.locked {
+  background: white;
+  border: white;
+  font-size: 14px;
+  min-width: auto;
+}
+
+.dialogueOptions:not(:has(button.locked))>button:hover>span,
+.dialogueOptions>button.locked>span {
+  color: black;
+}
+
+.dialogueOptions:has(button.locked) > button:not(.locked):hover {
+  background: none;
+  border: none;
+  font-size: 14px;
+  min-width: auto;
+}
+
+.dialogueOptions:has(button.locked) > button:not(.locked) {
+  border: none;
+  background: none;
+}
+
+.character .name {
+font-weight: bold;
+color: var(--accent-color);
+font-weight: 700;
+text-shadow: 0 0 black;
+}
+
+.dialog {
+  margin-left: 10px;
+  display: inline;
+  color: var(--text);
+  text-shadow: 0 0 black;
+}
+
+.direction {
+  font-size: 14px;
+}
+
+.message {
+  /* Initially invisible and slightly below its final position */
+  opacity: 0;
+  transform: translateY(20px);
+  /* Adjust this value to control the slide distance */
+  /* Apply the animation when the element is added to the DOM */
+  animation: slideUpFadeIn 0.3s ease-out forwards;
+  /* Adjust duration and easing as needed */
+}
+
+@keyframes slideUpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+#paneFade {
+  position: absolute;
+  width: 100%;
+  height: 20%;
+  top: 0;
+
+  background: linear-gradient(to bottom, var(--background), transparent);
+  z-index: 1;
+  padding: 16px;
+}
+
+#paneFade>.navOptions {
+  display: flex;
+  justify-content: row;
+  align-items: center;
+  gap: 16px;
+}
+
+#paneFade button {
+  font-size: 16px;
+  min-width: auto;
+  padding: 4px;
+  height: max-content;
+}
+
+#paneFade button span {
+  font-size: 16px;
+}
+
+
+#paneFade>.navOptions>div:nth-child(2) {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  gap: 8px;
+}
+
+#dialogProgress {
+  background: var(--secondary);
+  height: 8px;
+  width: 80px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+#dialogBar {
+  width: 10%;
+  height: 100%;
+  background: var(--accent);
+}
+
+#paneFade>.navOptions>div:nth-child(3) {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+  gap: 8px;
+  margin-right: 0;
+  margin-left: auto;
+}
+
+#failScreen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgb(255,0,0,.15), var(--secondary));
+  z-index: 2;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 48px;
+  gap: 48px;
+}
+
+#failScreen > h1 {
+  background-color: var(--secondary);
+  color: var(--accent);
+  text-shadow: 0 0 .75rem red;
+  text-decoration: underline;
+  padding: 8px;
+  position: absolute;
+  top: 8vh;
+  font-size: 12vh;
+  animation: failAnimation .15s ease-in-out forwards;
+}
+
+@keyframes failAnimation {
+  0% {
+    transform: scale(1.5) rotate(-4deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(-2deg); /* Switch back to normal rotation */
+  }
+}
+
+#failScreen > span {
+  font-size: 3vh;
+}
+
+#failReason {
+  text-align: center;
+}
+
+#failType > small {
+  font-size: 8px;
+  opacity: .5;
+}
+
+#failScreenOptions {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 2vh;
+  bottom: 2vh;
+  gap: .5vh;
+}
+
+#failScreenOptions > button {
+  padding: 4px;
+  min-width: auto;
+}
+
+#failScreenOptions > button > span {
+  font-size: 2vh;
+}
+
+#failScreenStats {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 4px;
+  position: absolute;
+  right: 2vh;
+  bottom: 2vh;
+  font-size: 2vh;
+}
+
+.timedQuestion {
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  gap: 8px;
+  border: 1px solid white;
+  width: max-content;
+  border-radius: 6px;
+}
+
+.timedBar {
+  width: 128px;
+  height: 75%;
+  background-color: white;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.barComplete {
+  height: 100%;
+  background-color: var(--primary);
 }

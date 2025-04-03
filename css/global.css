@@ -143,10 +143,17 @@ button.iconLabelBtn.vertical {
 	gap: 8px;
 }
 
-button:not(.selected):hover {
+button:not([disabled]):hover,
+button:not(.selected):hover,
+button:not(.locked):hover {
 	min-width: 200px;
 	border-color: var(--accent);
 	background: linear-gradient(to bottom, transparent, rgb(232, 129, 120, 0.3));
+}
+
+button:disabled {
+	opacity: .5;
+	cursor: auto;
 }
 
 #title {

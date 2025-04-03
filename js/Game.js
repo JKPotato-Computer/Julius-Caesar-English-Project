@@ -39,13 +39,10 @@ const currentDialogue = {
 }
 
 const gameModule = (() => {
-	const setTeam = (teamName) => {
-		saveData.team = teamName;
-	}
 
 	let shouldAutoScroll = true; // Variable to control auto-scrolling
 	let hasAnsweredQuestion = false;
-	
+
 	const autoScrollDialogue = function(dialogueListId) {
 		const dialogueList = document.getElementById(dialogueListId);
 		if (!dialogueList) {
@@ -58,6 +55,10 @@ const gameModule = (() => {
 		}
 	}
 
+	const answerQuestion = function() {
+		hasAnsweredQuestion = true;
+	}
+	
 	// Example of how you might prevent auto-scrolling (e.g., when the user scrolls up)
 	function handleDialogueScroll(dialogueListId) {
 		const dialogueList = document.getElementById(dialogueListId);
@@ -91,28 +92,70 @@ const gameModule = (() => {
 
 		container.innerHTML = "";
 		function displayDialogue() {
-			function awaitResponse() {
-				
-			}
-			
 			if (!saveData.storyline.hasNext()) {
 				return;
 			}
 
 			const dialogue = saveData.storyline.next();
 			const [dialogueElement, message] = dialogue.dialogue.createDialogue();
+			let startTime = null;
+			function awaitInterval() {
+				if ((dialogue.optionsConfig.timedQuestion) && (dialogue.optionsConfig.timedQuestion > 0)) {
+					if (startTime == null) {
+						startTime = Date.now() / 1000;
+					}
+	
+					let secondsLeft = (dialogue.optionsConfig.timedQuestion / 1000) - ((Date.now() / 1000) - startTime);
+					dialogueElement.querySelector(".barComplete").style.width = ((Math.abs(secondsLeft) / (dialogue.optionsConfig.timedQuestion / 1000)) * 100) + "%"; 
+					dialogueElement.querySelector(".timedQuestion > span").textContent = Math.abs(secondsLeft).toFixed(1) + "s";
+
+					if ((secondsLeft <= 0)) {
+						if (!hasAnsweredQuestion) {
+							saveData.storyline.answerResponse("Void");
+						}
+
+						for (const e of dialogueElement.querySelectorAll(".dialogueOptions > button")) {
+							e.disabled = true;
+						}
+
+						hasAnsweredQuestion = false;
+						displayDialogue();
+						return;
+					}
+				}
+
+				if (((hasAnsweredQuestion) && (dialogue.optionsConfig.instantFeedback))) {
+					hasAnsweredQuestion = false;
+					displayDialogue();
+					return;
+				}
+
+				setTimeout(awaitInterval, 1);
+			}
+
+			console.log("Hi");
+
 			handleDialogueScroll(containerId);
 			addMessageAndAutoScroll(containerId, dialogueElement, message);
 			if (dialogue.options) {
 				if (dialogue.optionsConfig.appear == "afterDialogue") {
 					setTimeout(function() {
-						dialogue.dialogue.displayOptions(dialogueElement, dialogue.options);
+						dialogue.dialogue.displayOptions(dialogueElement, dialogue.options, dialogue.optionsConfig);
+						awaitInterval();
 					}, dialogue.dialogue.getDialogueDuration());
 				} else {
-					dialogue.dialogue.displayOptions(dialogueElement, dialogue.options);
+					dialogue.dialogue.displayOptions(dialogueElement, dialogue.options, dialogue.optionsConfig);
+					awaitInterval();
 				}
 			} else {
-				setTimeout(displayDialogue, dialogue.dialogue.getDialogueDuration())
+				if (dialogue.fail) {
+					setTimeout(() => {
+						dialogue.fail.displayFail()
+					}, 1000);
+					return;
+				}
+
+				setTimeout(displayDialogue, dialogue.dialogue.getDialogueDuration());
 			}
 		}
 
@@ -125,13 +168,22 @@ const gameModule = (() => {
 		loadDialogue("dialoguePage");
 	}
 
+	const setTeam = (teamName) => {
+		saveData.team = teamName;
+	}
+
 	const getTeam = () => saveData.team;
+	const getStoryline = () => saveData.storyline;
+	const getSaveData = () => saveData;
 
 	return {
 		setTeam: setTeam,
 		getTeam: getTeam,
+		getStoryline : getStoryline,
 		loadDialogue: loadDialogue,
 		init: init,
-		autoScrollDialogue: autoScrollDialogue
+		autoScrollDialogue: autoScrollDialogue,
+		answerQuestion : answerQuestion,
+		getSaveData: getSaveData
 	};
 })();

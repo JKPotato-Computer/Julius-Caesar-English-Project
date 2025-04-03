@@ -18,6 +18,20 @@
 
 <body>
   <content id="gamePage">
+    <div id="failScreen">
+      <h1>TASK FAILED</h1>
+      <span id="failReason">for the last time, no you cannot just kill caesar in the first scene</span>
+      <div id="failScreenOptions">
+        <button class="iconLabelBtn"><span class="material-symbols-outlined">refresh</span><span>Retry</span></button>
+        <button class="iconLabelBtn"><span class="material-symbols-outlined">home</span><span>Menu</span></button>
+      </div>
+      <div id="failScreenStats">
+        <span id="failCount">Fails: 0</span>
+        <span id="uniqueFails">Unique Fails: 0/0</span>
+        <span id="endings">Endings: 0/0</span>
+        <span id="failType"><small>Fail ID: 0</small></span>
+      </div>
+    </div>
     <div id="paneFade">
       <div class="navOptions">
         <button class="iconLabelBtn" id="closeBtn"><span class="material-symbols-outlined">close</span>
@@ -36,6 +50,10 @@
     </div>
     <div id="dialoguePage">
       <div class="message dialogueQuestion">
+        <div class="timedQuestion">
+          <div class="timedBar"><div class="barComplete"></div></div>
+          <span>10.0s</span>
+        </div>
         <div class="dialogueOptions">
           <button class="iconLabelBtn dialogueOption">
             <span class="material-symbols-outlined">radio_button_unchecked</span>
