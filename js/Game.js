@@ -43,6 +43,25 @@ const gameModule = (() => {
 	let shouldAutoScroll = true; // Variable to control auto-scrolling
 	let hasAnsweredQuestion = false;
 
+	// Function to show the loading screen
+	const showLoadingScreen = (duration) => {
+		const loadingScreen = document.getElementById('loading-screen');
+		loadingScreen.style.display = 'flex'; // Show the loading screen
+
+		if (duration) {
+			setTimeout(() => {
+				hideLoadingScreen();
+			}, duration);
+		}
+	}
+
+	// Function to hide the loading screen
+	const hideLoadingScreen = () => {
+		const loadingScreen = document.getElementById('loading-screen');
+		loadingScreen.style.display = 'none'; // Hide the loading screen
+	}
+
+
 	const autoScrollDialogue = function(dialogueListId) {
 		const dialogueList = document.getElementById(dialogueListId);
 		if (!dialogueList) {
@@ -58,7 +77,7 @@ const gameModule = (() => {
 	const answerQuestion = function() {
 		hasAnsweredQuestion = true;
 	}
-	
+
 	// Example of how you might prevent auto-scrolling (e.g., when the user scrolls up)
 	function handleDialogueScroll(dialogueListId) {
 		const dialogueList = document.getElementById(dialogueListId);
@@ -83,6 +102,14 @@ const gameModule = (() => {
 		}
 	}
 
+	function transitionStoryline(storyID) {
+		showLoadingScreen(1000);
+		saveData.storyline.setStoryID(storyID);
+		setTimeout(() => {
+			loadDialogue("dialoguePage");
+		}, 1000);
+	}
+
 	const loadDialogue = (containerId) => {
 		const container = document.getElementById(containerId);
 		if (!container) {
@@ -91,12 +118,14 @@ const gameModule = (() => {
 		}
 
 		container.innerHTML = "";
+		document.querySelector("#actDetails").textContent = Storyline.prototype.acts[saveData.storyline.storyID].displayName;
+
 		function displayDialogue() {
 			if (!saveData.storyline.hasNext()) {
 				return;
 			}
 
-			const dialogue = saveData.storyline.next();
+			let [dialogue, dialogueCount] = saveData.storyline.next();
 			const [dialogueElement, message] = dialogue.dialogue.createDialogue();
 			let startTime = null;
 			function awaitInterval() {
@@ -104,9 +133,9 @@ const gameModule = (() => {
 					if (startTime == null) {
 						startTime = Date.now() / 1000;
 					}
-	
+
 					let secondsLeft = (dialogue.optionsConfig.timedQuestion / 1000) - ((Date.now() / 1000) - startTime);
-					dialogueElement.querySelector(".barComplete").style.width = ((Math.abs(secondsLeft) / (dialogue.optionsConfig.timedQuestion / 1000)) * 100) + "%"; 
+					dialogueElement.querySelector(".barComplete").style.width = ((Math.abs(secondsLeft) / (dialogue.optionsConfig.timedQuestion / 1000)) * 100) + "%";
 					dialogueElement.querySelector(".timedQuestion > span").textContent = Math.abs(secondsLeft).toFixed(1) + "s";
 
 					if ((secondsLeft <= 0)) {
@@ -133,7 +162,10 @@ const gameModule = (() => {
 				setTimeout(awaitInterval, 1);
 			}
 
-			console.log("Hi");
+
+			dialogueCount++;
+			document.querySelector("#dialogBar").style.width = ((dialogueCount / (saveData.storyline.getTotalLines())) * 100) + "%";
+			document.querySelector("#percentage").textContent = Math.floor((dialogueCount / (saveData.storyline.getTotalLines())) * 100) + "%";
 
 			handleDialogueScroll(containerId);
 			addMessageAndAutoScroll(containerId, dialogueElement, message);
@@ -151,7 +183,21 @@ const gameModule = (() => {
 				if (dialogue.fail) {
 					setTimeout(() => {
 						dialogue.fail.displayFail()
-					}, 1000);
+					}, dialogue.dialogue.getDialogueDuration() + 1000);
+					return;
+				}
+
+				if (dialogue.next) {
+					setTimeout(() => {
+						transitionStoryline(dialogue.next);
+					}, dialogue.dialogue.getDialogueDuration() + 1000);
+					return;
+				}
+
+				if (dialogue.goBack) {
+					setTimeout(() => {
+						saveData.storyline.goBack();
+					}, dialogue.dialogue.getDialogueDuration());
 					return;
 				}
 
@@ -162,10 +208,8 @@ const gameModule = (() => {
 		displayDialogue();
 	}
 
-	const init = function() {
-		saveData.storyline = new Storyline();
-		saveData.storyline.setStoryID("Tutorial");
-		loadDialogue("dialoguePage");
+	const init = function(s) {
+		transitionStoryline(((s != "") && (Storyline.prototype.acts[s])) ? (s) : ("Tutorial"));
 	}
 
 	const setTeam = (teamName) => {
@@ -179,11 +223,20 @@ const gameModule = (() => {
 	return {
 		setTeam: setTeam,
 		getTeam: getTeam,
-		getStoryline : getStoryline,
+		getStoryline: getStoryline,
 		loadDialogue: loadDialogue,
 		init: init,
 		autoScrollDialogue: autoScrollDialogue,
-		answerQuestion : answerQuestion,
-		getSaveData: getSaveData
+		answerQuestion: answerQuestion,
+		getSaveData: getSaveData,
+		showLoadingScreen: showLoadingScreen,
+		hideLoadingScreen: hideLoadingScreen
 	};
 })();
+
+window.onload = function() {
+	gameModule.showLoadingScreen(); // Show loading screen initially
+	setTimeout(() => {
+		gameModule.hideLoadingScreen(); // Hide loading screen after 1 second
+	}, 1000); // 1000ms (1 second) delay after window load
+};
