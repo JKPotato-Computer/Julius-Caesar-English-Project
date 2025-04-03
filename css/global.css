@@ -209,3 +209,9 @@ button:disabled {
 	border-color: rgb(120, 232, 139);
 	background: linear-gradient(to bottom, transparent, rgb(120, 232, 139, 0.3));
 }
+
+#specificID {
+	color: black;
+	padding: 8px;
+	width: 25%;
+}
