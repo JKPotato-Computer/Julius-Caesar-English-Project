@@ -23,11 +23,43 @@ class Storyline {
 		this.linePointerIndex += 2;
 	}
 
+	goBack() {
+		this.lineIndecies.pop();
+		this.lineIndecies.pop();
+		this.linePointerIndex -= 2;
+		this.lineIndecies[this.linePointerIndex]++;
+	}
+
+	getTotalLines() {
+		let currentScene = Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
+		let currentLine = currentScene;
+		let currentIndex;
+		let counter;
+
+		for (let i = 0; i < this.lineIndecies.length;) {
+			if ((i + 1) && (typeof (this.lineIndecies[i + 1]) == "string")) {
+				currentLine = currentLine[this.storyID + "_" + this.lineIndecies[i] + "_" + this.lineIndecies[i + 1]];
+				i += 2;
+			} else {
+				currentIndex = this.lineIndecies[i];
+				counter = currentIndex;
+				break;
+			}
+		}
+
+		while (currentScene[currentIndex]) {
+			currentIndex++;
+			counter++;
+		}
+
+		return counter;
+	}
+
 	hasNext() {
 		let currentScene = Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
 		let currentLine = currentScene;
-		for (let i = 0;i < this.lineIndecies.length;) {
-			if ((i + 1 < this.lineIndecies.length) && (typeof(this.lineIndecies[i + 1]) == "string")) {
+		for (let i = 0; i < this.lineIndecies.length;) {
+			if ((i + 1 < this.lineIndecies.length) && (typeof (this.lineIndecies[i + 1]) == "string")) {
 				currentLine = currentLine[this.storyID + "_" + this.lineIndecies[i] + "_" + this.lineIndecies[i + 1]];
 				i += 2;
 			} else {
@@ -39,17 +71,23 @@ class Storyline {
 	next() {
 		let currentScene = Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
 		let currentLine = currentScene;
-		for (let i = 0;i < this.lineIndecies.length;) {
-			if ((i + 1 < this.lineIndecies.length) && (typeof(this.lineIndecies[i + 1]) == "string")) {
+		let counter = 0;
+		for (let i = 0; i < this.lineIndecies.length;) {
+			if ((i + 1 < this.lineIndecies.length) && (typeof (this.lineIndecies[i + 1]) == "string")) {
+				if (typeof (this.lineIndecies[i]) == "number") {
+					counter += this.lineIndecies[i];
+				}
+
 				currentLine = currentLine[this.storyID + "_" + this.lineIndecies[i] + "_" + this.lineIndecies[i + 1]];
 				i += 2;
 			} else {
 				this.lineIndecies[i]++;
+				counter += this.lineIndecies[i];
 				currentLine = currentLine[this.lineIndecies[i]];
 				break;
 			}
 		}
-		return currentLine;
+		return [currentLine, counter];
 	}
 }
 
@@ -63,7 +101,6 @@ class GameFail {
 	}
 
 	displayFail() {
-		console.log(this.failID);
 		document.querySelector("#failScreen").style.display = "flex";
 		document.querySelector("#failReason").innerHTML = this.failText;
 		document.querySelector("#failType > small").textContent = "Fail ID: " + this.failID;
@@ -95,8 +132,8 @@ GameFail.prototype.failTitle = [
 
 Storyline.prototype.acts = {
 	["Tutorial"]: {
+		displayName: "Tutorial",
 		["teamConspirators"]: {
-			/*
 			[0]: {
 				dialogue: new Dialogue("Welcome to the tale of Julius Caesar! Before we get started, let's roll through a <b>quick tutorial</b>, shall we?"),
 			},
@@ -109,7 +146,6 @@ Storyline.prototype.acts = {
 			[3]: {
 				dialogue: new Dialogue("How are you going to do that? Well, you'll have the power to enter people's minds and control their decisions - sometimes it helps you get closer to the plan, other times it might just go <i>horribly wrong...</i>."),
 			},
-			*/
 			[0]: {
 				dialogue: new Dialogue("What do I mean by that, exactly? Well, let's play through Act 1 : Scene 1 as a demonstration, <i>shalt we</i>?"),
 				options: [
@@ -117,7 +153,7 @@ Storyline.prototype.acts = {
 					new OptionElement("What's a Julius Caesar?", "thumb_down", "No"),
 				],
 				optionsConfig: {
-					timedQuestion: 5000,
+					timedQuestion: 0,
 					instantFeedback: true,
 					appear: "afterDialogue"
 				}
@@ -133,20 +169,47 @@ Storyline.prototype.acts = {
 					dialogue: new Dialogue("<b>Wrong answer.</b>", "crimson"),
 					fail: new GameFail({
 						failID: "TUTORIAL_FAIL",
-						failText: "dude, you're in the wrong universe. this is not romeo and juliet.<br>come back later for a romeo and juliet edition ;)"}
+						failText: "why are you here then"
+					}
 					)
 				},
 			},
-			["Tutorial_0_Void"]: {
-				[0]: {
-					dialogue: new Dialogue("The Mongol Empire of the 13th and 14th centuries was the largest contiguous empire in history.[4] Originating in present-day Mongolia in East Asia, the Mongol Empire at its height stretched from the Sea of Japan to parts of Eastern Europe, extending northward into parts of the Arctic;[5] eastward and southward into parts of the Indian subcontinent, mounted invasions of Southeast Asia, and conquered the Iranian Plateau; and reached westward as far as the Levant and the Carpathian Mountains.")
-				}
-			}
 		}
 	},
 	["A1_S1"]: {
+		displayName: "Act 1: Scene 1",
 		["teamConspirators"]: {
+			[0]: {
+				dialogue: new StageDirections("<b>Flavius</b> and <b>Murellus</b> enter and speak to a <b>Carpenter, Cobbler,</b> and some other commoners.")
+			},
+			[1]: {
+				dialogue: new Character("Flavius", "Both of you lazy men, get off the streets! What, yall think today is a holiday? Don't you know yall mechanicals be out on the streets without their uniforms? On a <b dialogue-speed=100>WORK DAY??</b><br><u>[Carpenter]</u>, talk to me. What is your profession?", "shadow-purple"),
+				options: [
+					new OptionElement("I'm a carpenter, sir.", "forest", "IsCarpenter"),
+					new OptionElement("I plead the fifth, sir.", "volume_off", "PleadFifth"),
+					new OptionElement("You can't speak to me like that. What is YOUR profession?", "history", "Retaliation")
+				],
+				optionsConfig: {
+					timedQuestion: 0,
+					instantFeedback: true,
+					appear: "afterDialogue"
+				}
+			},
+			["A1_S1_1_IsCarpenter"]: {
 
+			},
+			["A1_S1_1_PleadFifth"]: {
+				[0]: {
+					dialogue: new Character("Flavius", "You dare to speak against me? Why don't we tell the WHOLE senate this.<br>Maybe then you'll tell me.", "shadow-purple"),
+					fail: new GameFail({
+						failID: "PleadingTheFifth",
+						failText: "You could've just said you were a carpenter..."
+					})
+				}
+			},
+			["A1_S1_1_Retaliation"]: {
+
+			}
 		}
 	}
 }
