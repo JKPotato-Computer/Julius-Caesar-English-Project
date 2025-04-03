@@ -1,247 +1,215 @@
-class OptionElement {
-	constructor(text, icon, id) {
-		this.text = text;
-		this.icon = icon;
-		this.id = id;
-	}
-
-	createOption() {
-		const button = document.createElement("button");
-		button.className = "iconLabelBtn dialogueOption";
-		button.dataset.optionId = this.id;
-
-		const label = document.createElement("span");
-		const icon = document.createElement("span");
-
-		label.className = "optionLabel";
-		icon.className = "material-symbols-outlined";
-
-		label.textContent = this.text;
-		icon.textContent = this.icon;
-		button.appendChild(icon);
-		button.appendChild(label);
-		return button;
-	}
-}
-
-class TextElement {
+class Storyline {
 	constructor({
-		text = "",
-		color = null,
+		storyID = "",
+		lineIndencies = [-1],
+		linePointerIndex = 0,
+		dialogueList = [],
 	} = {}) {
-		this.text = text;
-		this.color = color;
+		this.storyID = storyID;
+		this.lineIndecies = lineIndencies;
+		this.dialogueList = dialogueList;
+		this.linePointerIndex = linePointerIndex;
 	}
 
-	createTextElement() {
-		const message = document.createElement("span");
-		message.classList.add("text");
-		if (this.color != null) {
-			message.style.setProperty("--text-color", "var(--" + this.color + "--accent)");
-		} else {
-			message.style.setProperty("--text-color", "var(--text)");
-		}
-
-		message.innerHTML = this.text;
-		return message;
-	}
-}
-
-class Dialogue {
-	constructor(textProperties, color) {
-		if (typeof (textProperties) == "object") {
-			this.text = new TextElement(textProperties);
-		} else {
-			this.text = new TextElement({
-				text: textProperties
-			})
-		}
-
-		this.color = color;
+	setStoryID(storyID) {
+		this.storyID = storyID;
+		this.linePointerIndex = 0;
+		this.lineIndecies = [-1];
 	}
 
-	createDialogue() {
-		const dialogueElem = document.createElement("div");
-		dialogueElem.classList.add("message");
-		dialogueElem.style.setProperty("--accent-color", "var(--" + this.color + "-accent)");
-		dialogueElem.style.setProperty("--bg-color", "var(--" + this.color + "-bg)");
-
-		const message = this.text.createTextElement();
-		return [dialogueElem, message];
+	answerResponse(answer) {
+		this.lineIndecies.push(answer);
+		this.lineIndecies.push(-1);
+		this.linePointerIndex += 2;
 	}
 
-	displayOptions(dialogueElem, options, optionsConfig) {
-		
-		const dialogueOptions = document.createElement("div");
-		dialogueOptions.classList.add("dialogueOptions");
+	goBack() {
+		this.lineIndecies.pop();
+		this.lineIndecies.pop();
+		this.linePointerIndex -= 2;
+		this.lineIndecies[this.linePointerIndex]++;
+	}
 
-		if ((optionsConfig.timedQuestion) && (optionsConfig.timedQuestion > 0)) {
-			const timedQuestion = document.createElement("div");
-			timedQuestion.classList.add("timedQuestion");
+	getTotalLines() {
+		let currentScene = Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
+		let currentLine = currentScene;
+		let currentIndex;
+		let counter;
 
-			const timedBar = document.createElement("div");
-			timedBar.classList.add("timedBar");
-
-			const barComplete = document.createElement("div");
-			barComplete.classList.add("barComplete")
-
-			const timerSpan = document.createElement("span")
-			timerSpan.textContent = (optionsConfig.timedQuestion / 1000).toFixed(1) + "s";
-
-			timedBar.appendChild(barComplete);
-			timedQuestion.appendChild(timedBar);
-			timedQuestion.appendChild(timerSpan);
-			dialogueElem.appendChild(timedQuestion);
-		}
-
-		let optionsList = [];
-
-		switch (options.length) {
-			case 1:
-				dialogueOptions.classList.add("one-option");
+		for (let i = 0; i < this.lineIndecies.length;) {
+			if ((i + 1) && (typeof (this.lineIndecies[i + 1]) == "string")) {
+				currentLine = currentLine[this.storyID + "_" + this.lineIndecies[i] + "_" + this.lineIndecies[i + 1]];
+				i += 2;
+			} else {
+				currentIndex = this.lineIndecies[i];
+				counter = currentIndex;
 				break;
-			case 2:
-				dialogueOptions.classList.add("two-option");
-				break;
-			case 3:
-				dialogueOptions.classList.add("three-option");
-				break;
-			default:
-				dialogueOptions.classList.add("four-option");
+			}
 		}
 
-		Array.from(options).forEach((option) => {
-			const optionElement = option.createOption();
-			optionsList.push(optionElement);
-			dialogueOptions.appendChild(optionElement);
+		while (currentScene[currentIndex]) {
+			currentIndex++;
+			counter++;
+		}
 
-			optionElement.addEventListener("click", () => {
-				optionElement.classList.add("locked");
-				gameModule.getStoryline().answerResponse(optionElement.dataset.optionId);
-				gameModule.answerQuestion();
-
-				Array.from(optionsList).forEach(option => option.disabled = option != optionElement);
-			}) 
-		})
-
-		dialogueElem.appendChild(dialogueOptions);
+		return counter;
 	}
 
-	getDialogueDuration() {
-		let duration = 0, dialogueSpeed = Dialogue.prototype.dialogueSpeed;
-		let text = this.text.text;
+	hasNext() {
+		let currentScene = Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
+		let currentLine = currentScene;
+		for (let i = 0; i < this.lineIndecies.length;) {
+			if ((i + 1 < this.lineIndecies.length) && (typeof (this.lineIndecies[i + 1]) == "string")) {
+				currentLine = currentLine[this.storyID + "_" + this.lineIndecies[i] + "_" + this.lineIndecies[i + 1]];
+				i += 2;
+			} else {
+				return currentLine[this.lineIndecies[i] + 1] != undefined;
+			}
+		}
+	}
 
-		for (let i = 0; i < text.length;) {
-			let currentChar = text.charAt(i);
-			if (currentChar == "<") {
-				currentChar = text.substring(i, text.indexOf(">", i) + 1);
-				i = text.indexOf(">", i);
-				if (currentChar.includes("/")) {
-					dialogueSpeed = Dialogue.prototype.dialogueSpeed;
-				} else if (currentChar.match(/dialogue-speed=(\d+)/g)) {
-					dialogueSpeed = parseInt(currentChar.match(/dialogue-speed=(\d+)/g)[0].match(/(\d+)/g)[0]);
-				} else if (currentChar.match(/pause duration=(\d+)/g)) {
-					duration += parseInt(currentChar.match(/pause duration=(\d+)/g)[0].match(/(\d+)/)[0]);
-					i++;
-					continue;
+	next() {
+		let currentScene = Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
+		let currentLine = currentScene;
+		let counter = 0;
+		for (let i = 0; i < this.lineIndecies.length;) {
+			if ((i + 1 < this.lineIndecies.length) && (typeof (this.lineIndecies[i + 1]) == "string")) {
+				if (typeof (this.lineIndecies[i]) == "number") {
+					counter += this.lineIndecies[i];
 				}
-			}
 
-			duration += dialogueSpeed;
-			i++;
+				currentLine = currentLine[this.storyID + "_" + this.lineIndecies[i] + "_" + this.lineIndecies[i + 1]];
+				i += 2;
+			} else {
+				this.lineIndecies[i]++;
+				counter += this.lineIndecies[i];
+				currentLine = currentLine[this.lineIndecies[i]];
+				break;
+			}
 		}
-		return duration;
+		return [currentLine, counter];
+	}
+}
+
+class GameFail {
+	constructor({
+		failID = "",
+		failText = "",
+	} = {}) {
+		this.failID = failID;
+		this.failText = failText;
 	}
 
-	static typewriteDialogue(dialogueElem) {
-		const message = dialogueElem;
-		let i = 0, text = message.innerHTML;
-		message.innerHTML = ''; // Clear the initial text
+	displayFail() {
+		document.querySelector("#failScreen").style.display = "flex";
+		document.querySelector("#failReason").innerHTML = this.failText;
+		document.querySelector("#failType > small").textContent = "Fail ID: " + this.failID;
+		document.querySelector("#failScreen > h1").textContent = GameFail.prototype.failTitle[Math.floor(Math.random() * GameFail.prototype.failTitle.length)];
+	}
+}
+GameFail.prototype.failTitle = [
+	"DEED UNDONE",
+	"PURPOSE LOST",
+	"FIE ON'T",
+	"TASK NAUGHT",
+	"FOILED NOW",
+	"UNDONE US",
+	"NO SUCCESS",
+	"AIM MISSED",
+	"PLOT FAILED",
+	"DESIGN LOST",
+	"HOPES DASHED",
+	"FALLEN SO",
+	"LOST LABOR",
+	"WRECKED NOW",
+	"NO FRUIT",
+	"QUEST VAIN",
+	"GAME LOST",
+	"VAIN STRENGTH",
+	"BAD END",
+	"CAUSE COLD",
+];
 
-		let dialogueSpeed = Dialogue.prototype.dialogueSpeed;
-
-		function checkHeightChange() {
-			const currentHeight = dialogueElem.clientHeight;
-			if (currentHeight !== previousHeight) {
-				previousHeight = currentHeight;  // Update the previous height
-				gameModule.autoScrollDialogue("dialoguePage");
-			}
-		}
-
-		// Set an initial previous height
-		let previousHeight = dialogueElem.clientHeight;
-
-		// Resize observer to monitor the container's size (specifically its height)
-		const resizeObserver = new ResizeObserver(() => {
-			checkHeightChange();  // Check if the container's height has changed
-		});
-
-		function typeNextCharacter() {
-			if (i > text.length) {
-				return;
-			}
-
-			let currentChar = text.charAt(i);
-			if (currentChar == "<") {
-				currentChar = text.substring(i, text.indexOf(">", i) + 1);
-				i = text.indexOf(">", i);
-
-				if (currentChar.includes("/")) {
-					dialogueSpeed = Dialogue.prototype.dialogueSpeed;
-				} else if (currentChar.match(/dialogue-speed=("\d+")/g)) {
-					dialogueSpeed = parseInt(currentChar.match(/dialogue-speed=("\d+")/g)[0].match(/(\d+)/g)[0]);
-				} else if (currentChar.match(/pause duration=("\d+")/g)) {
-					i++;
-					setTimeout(typeNextCharacter, parseInt(currentChar.match(/pause duration=("\d+")/g)[0].match(/(\d+)/g)[0]));
-					return;
+Storyline.prototype.acts = {
+	["Tutorial"]: {
+		displayName: "Tutorial",
+		["teamConspirators"]: {
+			[0]: {
+				dialogue: new Dialogue("Welcome to the tale of Julius Caesar! Before we get started, let's roll through a <b>quick tutorial</b>, shall we?"),
+			},
+			[1]: {
+				dialogue: new Dialogue("Ever heard of the Henry Stickmin Collection, you know... this game? <br> <img src=\"https://m.media-amazon.com/images/M/MV5BZDI0Nzg0OWItODYwNC00NDJkLThlNDEtMDg5ODM3ODUyMjZiXkEyXkFqcGc@._V1_.jpg\" height=150> <br> Probably not, right? Well, let's say that you'll be <i>one like them.</i>"),
+			},
+			[2]: {
+				dialogue: new Dialogue("Here's the deal: as apart of Team Conspirators, your mission is to kill Caesar and take back the Roman Empire for ourselves, or perhaps for the \"better of Rome.\""),
+			},
+			[3]: {
+				dialogue: new Dialogue("How are you going to do that? Well, you'll have the power to enter people's minds and control their decisions - sometimes it helps you get closer to the plan, other times it might just go <i>horribly wrong...</i>."),
+			},
+			[0]: {
+				dialogue: new Dialogue("What do I mean by that, exactly? Well, let's play through Act 1 : Scene 1 as a demonstration, <i>shalt we</i>?"),
+				options: [
+					new OptionElement("Yes, let's do it!", "thumb_up", "Yes"),
+					new OptionElement("What's a Julius Caesar?", "thumb_down", "No"),
+				],
+				optionsConfig: {
+					timedQuestion: 0,
+					instantFeedback: true,
+					appear: "afterDialogue"
 				}
-			}
-
-			message.innerHTML = text.substring(0, i);
-			checkHeightChange();
-			i++;
-			setTimeout(typeNextCharacter, dialogueSpeed);
+			},
+			["Tutorial_0_Yes"]: {
+				[0]: {
+					dialogue: new Dialogue("Alright... here we go!!!"),
+					next: "A1_S1"
+				}
+			},
+			["Tutorial_0_No"]: {
+				[0]: {
+					dialogue: new Dialogue("<b>Wrong answer.</b>", "crimson"),
+					fail: new GameFail({
+						failID: "TUTORIAL_FAIL",
+						failText: "why are you here then"
+					}
+					)
+				},
+			},
 		}
+	},
+	["A1_S1"]: {
+		displayName: "Act 1: Scene 1",
+		["teamConspirators"]: {
+			[0]: {
+				dialogue: new StageDirections("<b>Flavius</b> and <b>Murellus</b> enter and speak to a <b>Carpenter, Cobbler,</b> and some other commoners.")
+			},
+			[1]: {
+				dialogue: new Character("Flavius", "Both of you lazy men, get off the streets! What, yall think today is a holiday? Don't you know yall mechanicals be out on the streets without their uniforms? On a <b dialogue-speed=100>WORK DAY??</b><br><u>[Carpenter]</u>, talk to me. What is your profession?", "shadow-purple"),
+				options: [
+					new OptionElement("I'm a carpenter, sir.", "forest", "IsCarpenter"),
+					new OptionElement("I plead the fifth, sir.", "volume_off", "PleadFifth"),
+					new OptionElement("You can't speak to me like that. What is YOUR profession?", "history", "Retaliation")
+				],
+				optionsConfig: {
+					timedQuestion: 0,
+					instantFeedback: true,
+					appear: "afterDialogue"
+				}
+			},
+			["A1_S1_1_IsCarpenter"]: {
 
-		typeNextCharacter();
+			},
+			["A1_S1_1_PleadFifth"]: {
+				[0]: {
+					dialogue: new Character("Flavius", "You dare to speak against me? Why don't we tell the WHOLE senate this.<br>Maybe then you'll tell me.", "shadow-purple"),
+					fail: new GameFail({
+						failID: "PleadingTheFifth",
+						failText: "You could've just said you were a carpenter..."
+					})
+				}
+			},
+			["A1_S1_1_Retaliation"]: {
+
+			}
+		}
 	}
 }
-
-class StageDirections extends Dialogue {
-	constructor(direction) {
-		super(direction, "ash-gray");
-	}
-
-	createDialogue() {
-		const [dialogueElem, message] = super.createDialogue();
-		dialogueElem.classList.add("stage-direction");
-		message.classList.add("direction");
-		dialogueElem.appendChild(message);
-
-		return dialogueElem;
-	}
-}
-
-class Character extends Dialogue {
-	constructor(name, text, color) {
-		super(text, color);
-		this.name = name;
-	}
-
-	createDialogue() {
-		const [dialogueElem, message] = super.createDialogue();
-		dialogueElem.classList.add("character");
-
-		const charName = document.createElement("span");
-		charName.classList.add("name");
-		charName.textContent = this.name + ":";
-
-		message.classList.add("dialog");
-		dialogueElem.appendChild(charName);
-		dialogueElem.appendChild(message);
-
-		return dialogueElem;
-	}
-}
-
-Dialogue.prototype.dialogueSpeed = 25;
