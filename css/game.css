@@ -317,23 +317,23 @@
   color: black;
 }
 
-.dialogueOptions:has(button.locked) > button:not(.locked):hover {
+.dialogueOptions:has(button.locked)>button:not(.locked):hover {
   background: none;
   border: none;
   font-size: 14px;
   min-width: auto;
 }
 
-.dialogueOptions:has(button.locked) > button:not(.locked) {
+.dialogueOptions:has(button.locked)>button:not(.locked) {
   border: none;
   background: none;
 }
 
 .character .name {
-font-weight: bold;
-color: var(--accent-color);
-font-weight: 700;
-text-shadow: 0 0 black;
+  font-weight: bold;
+  color: var(--accent-color);
+  font-weight: 700;
+  text-shadow: 0 0 black;
 }
 
 .dialog {
@@ -420,6 +420,7 @@ text-shadow: 0 0 black;
   width: 10%;
   height: 100%;
   background: var(--accent);
+  transition: .15s ease-in-out;
 }
 
 #paneFade>.navOptions>div:nth-child(3) {
@@ -751,23 +752,23 @@ text-shadow: 0 0 black;
   color: black;
 }
 
-.dialogueOptions:has(button.locked) > button:not(.locked):hover {
+.dialogueOptions:has(button.locked)>button:not(.locked):hover {
   background: none;
   border: none;
   font-size: 14px;
   min-width: auto;
 }
 
-.dialogueOptions:has(button.locked) > button:not(.locked) {
+.dialogueOptions:has(button.locked)>button:not(.locked) {
   border: none;
   background: none;
 }
 
 .character .name {
-font-weight: bold;
-color: var(--accent-color);
-font-weight: 700;
-text-shadow: 0 0 black;
+  font-weight: bold;
+  color: var(--accent-color);
+  font-weight: 700;
+  text-shadow: 0 0 black;
 }
 
 .dialog {
@@ -870,7 +871,7 @@ text-shadow: 0 0 black;
   position: absolute;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, rgb(255,0,0,.15), var(--secondary));
+  background: radial-gradient(circle, rgb(255, 0, 0, .15), var(--secondary));
   z-index: 2;
   inset: 0;
   display: none;
@@ -881,7 +882,7 @@ text-shadow: 0 0 black;
   gap: 48px;
 }
 
-#failScreen > h1 {
+#failScreen>h1 {
   background-color: var(--secondary);
   color: var(--accent);
   text-shadow: 0 0 .75rem red;
@@ -899,19 +900,22 @@ text-shadow: 0 0 black;
   }
 
   100% {
-    transform: scale(1) rotate(-2deg); /* Switch back to normal rotation */
+    transform: scale(1) rotate(-2deg);
+    /* Switch back to normal rotation */
   }
 }
 
-#failScreen > span {
-  font-size: 3vh;
+#failScreen>span {
+  font-size: 5vh;
+  text-shadow: 0 0 .5rem black;
+  font-weight: 700;
 }
 
 #failReason {
   text-align: center;
 }
 
-#failType > small {
+#failType>small {
   font-size: 8px;
   opacity: .5;
 }
@@ -922,16 +926,16 @@ text-shadow: 0 0 black;
   position: absolute;
   left: 2vh;
   bottom: 2vh;
-  gap: .5vh;
+  gap: 1vh;
 }
 
-#failScreenOptions > button {
+#failScreenOptions>button {
   padding: 4px;
   min-width: auto;
 }
 
-#failScreenOptions > button > span {
-  font-size: 2vh;
+#failScreenOptions>button>span {
+  font-size: 3vh;
 }
 
 #failScreenStats {
@@ -942,7 +946,7 @@ text-shadow: 0 0 black;
   position: absolute;
   right: 2vh;
   bottom: 2vh;
-  font-size: 2vh;
+  font-size: 3vh;
 }
 
 .timedQuestion {
@@ -966,4 +970,44 @@ text-shadow: 0 0 black;
 .barComplete {
   height: 100%;
   background-color: var(--primary);
+}
+
+/* Basic styles for the loading screen */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--background);
+  /* Semi-transparent background */
+  display: none;
+  /* Initially hidden */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  /* Ensures it appears on top */
+}
+
+/* The spinner styling */
+.spinner {
+  border: 16px solid #f3f3f3;
+  /* Light gray background */
+  border-top: 16px solid var(--primary);
+  /* Blue color for the spinning part */
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  animation: spin 1s linear infinite;
+}
+
+/* Animation for the spinner */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
