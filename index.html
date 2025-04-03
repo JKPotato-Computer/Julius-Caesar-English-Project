@@ -17,6 +17,9 @@
 </head>
 
 <body>
+  <div id="loading-screen" class="loading-screen">
+    <div class="spinner"></div>
+  </div>
   <content id="gamePage">
     <div id="failScreen">
       <h1>TASK FAILED</h1>
@@ -40,7 +43,7 @@
           <div id="dialogProgress">
             <div id="dialogBar"></div>
           </div>
-          <span id="percentage">10%</span>
+          <span id="percentage" title="% to next options/end of scene">10%</span>
         </div>
         <div>
           <span id="actDetails">Act 0 : Scene 0</span>
@@ -51,7 +54,9 @@
     <div id="dialoguePage">
       <div class="message dialogueQuestion">
         <div class="timedQuestion">
-          <div class="timedBar"><div class="barComplete"></div></div>
+          <div class="timedBar">
+            <div class="barComplete"></div>
+          </div>
           <span>10.0s</span>
         </div>
         <div class="dialogueOptions">
@@ -69,8 +74,9 @@
             <span class="optionLabel">Dog lazy the over jumps fox brown quick the.</span></button>
         </div>
       </div>
+    </div>
   </content>
-  <content id="mainPage" style="display: none;">
+  <content id="mainPage">
     <div id="title" style="">
       <span class="sans">-- The Tale of --</span>
       <h2 class="serif" id="title">Julius Caesar</h2>
@@ -93,7 +99,7 @@
           <span class="material-symbols-outlined">comedy_mask</span>
           <span><u>C</u>onspirators</span>
         </button>
-        <button class="iconLabelBtn vertical" id="teamLoyalists">
+        <button class="iconLabelBtn vertical" id="teamLoyalists" disabled>
           <span class="material-symbols-outlined">sentiment_very_satisfied</span>
           <span><u>L</u>oyalists</span>
         </button>
@@ -101,6 +107,7 @@
       <div class="navOptions">
         <button id="back"><span><u>B</u>ack</span></button>
         <button id="confirm"><span>Confir<u>m</u></span></button>
+        <input type="text" id="specificID" placeholder="Storyline ID" />
       </div>
   </content>
 </body>
