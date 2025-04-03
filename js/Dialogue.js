@@ -1,3 +1,28 @@
+class OptionElement {
+	constructor(text, icon, id) {
+		this.text = text;
+		this.icon = icon;
+		this.id = id;
+	}
+
+	createOption() {
+		const button = document.createElement("button");
+		button.className = "iconLabelBtn dialogueOption";
+
+		const label = document.createElement("span");
+		const icon = document.createElement("span");
+
+		label.className = "optionLabel";
+		icon.className = "material-symbols-outlined";
+
+		label.textContent = this.text;
+		icon.textContent = this.icon;
+		button.appendChild(icon);
+		button.appendChild(label);
+		return button;
+	}
+}
+
 class TextElement {
 	constructor({
 		text = "",
@@ -44,12 +69,82 @@ class Dialogue {
 		return [dialogueElem, message];
 	}
 
+	displayOptions(dialogueElem, options) {
+		
+		const dialogueOptions = document.createElement("div");
+		dialogueOptions.classList.add("dialogueOptions");
+
+		switch (options.length) {
+			case 1:
+				dialogueOptions.classList.add("one-option");
+				break;
+			case 2:
+				dialogueOptions.classList.add("two-option");
+				break;
+			case 3:
+				dialogueOptions.classList.add("three-option");
+				break;
+			default:
+				dialogueOptions.classList.add("four-option");
+		}
+
+		Array.from(options).forEach((option) => {
+			const optionElement = option.createOption();
+			dialogueOptions.appendChild(optionElement);
+		})
+
+		dialogueElem.appendChild(dialogueOptions);
+	}
+
+	getDialogueDuration() {
+		let duration = 0, dialogueSpeed = Dialogue.prototype.dialogueSpeed;
+		let text = this.text.text;
+
+		for (let i = 0; i < text.length;) {
+			let currentChar = text.charAt(i);
+			if (currentChar == "<") {
+				currentChar = text.substring(i, text.indexOf(">", i) + 1);
+				i = text.indexOf(">", i);
+				if (currentChar.includes("/")) {
+					dialogueSpeed = Dialogue.prototype.dialogueSpeed;
+				} else if (currentChar.match(/dialogue-speed=(\d+)/g)) {
+					dialogueSpeed = parseInt(currentChar.match(/dialogue-speed=(\d+)/g)[0].match(/(\d+)/g)[0]);
+				} else if (currentChar.match(/pause duration=(\d+)/g)) {
+					duration += parseInt(currentChar.match(/pause duration=(\d+)/g)[0].match(/(\d+)/)[0]);
+					i++;
+					continue;
+				}
+			}
+
+			duration += dialogueSpeed;
+			i++;
+		}
+		return duration;
+	}
+
 	static typewriteDialogue(dialogueElem) {
-		const message = dialogueElem.querySelector(".text");
+		const message = dialogueElem;
 		let i = 0, text = message.innerHTML;
 		message.innerHTML = ''; // Clear the initial text
 
 		let dialogueSpeed = Dialogue.prototype.dialogueSpeed;
+
+		function checkHeightChange() {
+			const currentHeight = dialogueElem.clientHeight;
+			if (currentHeight !== previousHeight) {
+				previousHeight = currentHeight;  // Update the previous height
+				gameModule.autoScrollDialogue("dialoguePage");
+			}
+		}
+
+		// Set an initial previous height
+		let previousHeight = dialogueElem.clientHeight;
+
+		// Resize observer to monitor the container's size (specifically its height)
+		const resizeObserver = new ResizeObserver(() => {
+			checkHeightChange();  // Check if the container's height has changed
+		});
+
 		function typeNextCharacter() {
 			if (i > text.length) {
 				return;
@@ -57,18 +152,22 @@ class Dialogue {
 
 			let currentChar = text.charAt(i);
 			if (currentChar == "<") {
-				currentChar = text.substring(i,text.indexOf(">",i) + 1);
-				i = text.indexOf(">",i);
+				currentChar = text.substring(i, text.indexOf(">", i) + 1);
+				i = text.indexOf(">", i);
 
 				if (currentChar.includes("/")) {
 					dialogueSpeed = Dialogue.prototype.dialogueSpeed;
 				} else if (currentChar.match(/dialogue-speed=("\d+")/g)) {
 					dialogueSpeed = parseInt(currentChar.match(/dialogue-speed=("\d+")/g)[0].match(/(\d+)/g)[0]);
-					console.log(dialogueSpeed);
+				} else if (currentChar.match(/pause duration=("\d+")/g)) {
+					i++;
+					setTimeout(typeNextCharacter, parseInt(currentChar.match(/pause duration=("\d+")/g)[0].match(/(\d+)/g)[0]));
+					return;
 				}
 			}
 
 			message.innerHTML = text.substring(0, i);
+			checkHeightChange();
 			i++;
 			setTimeout(typeNextCharacter, dialogueSpeed);
 		}
@@ -114,4 +213,4 @@ class Character extends Dialogue {
 	}
 }
 
-Dialogue.prototype.dialogueSpeed = 75;
+Dialogue.prototype.dialogueSpeed = 25;

@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Julius Caesar</title>
   <script src="js/Dialogue.js"></script>
+  <script src="js/Storyline.js"></script>
   <script src="js/Game.js"></script>
   <script src="js/Home.js" defer></script>
   <link rel="stylesheet" href="css/global.css">
@@ -19,22 +20,37 @@
   <content id="gamePage">
     <div id="paneFade">
       <div class="navOptions">
-		  <button class="iconLabelBtn" id="closeBtn"><span class="material-symbols-outlined">close</span>
-		  <span><u>E</u>xit</span></button>
-		  <div>
-			<div id="dialogProgress">
-			  <div id="dialogBar"></div>
-			</div>
-			<span id="percentage">10%</span>
-		  </div>
-		  <div>
-			  <span id="actDetails">Act 0 : Scene 0</span>
-			  <button id="viewStats" class="iconBtn"><span class="material-symbols-outlined">assignment</span></button>
-		  </div>
-	  </div>
+        <button class="iconLabelBtn" id="closeBtn"><span class="material-symbols-outlined">close</span>
+          <span><u>E</u>xit</span></button>
+        <div>
+          <div id="dialogProgress">
+            <div id="dialogBar"></div>
+          </div>
+          <span id="percentage">10%</span>
+        </div>
+        <div>
+          <span id="actDetails">Act 0 : Scene 0</span>
+          <button id="viewStats" class="iconBtn"><span class="material-symbols-outlined">assignment</span></button>
+        </div>
+      </div>
     </div>
     <div id="dialoguePage">
-    </div>
+      <div class="message dialogueQuestion">
+        <div class="dialogueOptions">
+          <button class="iconLabelBtn dialogueOption">
+            <span class="material-symbols-outlined">radio_button_unchecked</span>
+            <span class="optionLabel">The quick brown fox jumps over the lazy dog.</span></button>
+          <button class="iconLabelBtn dialogueOption">
+            <span class="material-symbols-outlined">radio_button_unchecked</span>
+            <span class="optionLabel">The brown quick fox jumps over the dog lazy.</span></button>
+          <button class="iconLabelBtn dialogueOption">
+            <span class="material-symbols-outlined">radio_button_unchecked</span>
+            <span class="optionLabel">The fox fox fox jumps jumps the dog dog.</span></button>
+          <button class="iconLabelBtn dialogueOption">
+            <span class="material-symbols-outlined">radio_button_unchecked</span>
+            <span class="optionLabel">Dog lazy the over jumps fox brown quick the.</span></button>
+        </div>
+      </div>
   </content>
   <content id="mainPage" style="display: none;">
     <div id="title" style="">
