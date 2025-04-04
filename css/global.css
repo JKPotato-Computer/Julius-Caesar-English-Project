@@ -11,6 +11,7 @@
 * {
 	color: var(--text);
 	box-sizing: border-box;
+	line-height: 120%;
 }
 
 body {

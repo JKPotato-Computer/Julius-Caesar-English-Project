@@ -29,6 +29,10 @@ document.querySelector("#confirm").addEventListener("click", () => {
 	document.querySelector("#mainPage").style.display = "none";
 });
 
+document.querySelector("#retry").addEventListener("click", () => {
+	gameModule.retryStory();
+})
+
 if (true) {
 	document.querySelector("#gamePage").style.display = "none";
 	document.querySelector("#mainPage").style.display = "";

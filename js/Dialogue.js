@@ -116,6 +116,10 @@ class Dialogue {
 			dialogueOptions.appendChild(optionElement);
 
 			optionElement.addEventListener("click", () => {
+				if ((optionElement.disabled) || (optionElement.classList.contains(("locked")))) {
+					return;
+				}
+
 				optionElement.classList.add("locked");
 				gameModule.getStoryline().answerResponse(optionElement.dataset.optionId);
 				gameModule.answerQuestion();
@@ -178,6 +182,11 @@ class Dialogue {
 
 		function typeNextCharacter() {
 			if (i > text.length) {
+				return;
+			}
+
+			if (message.classList.contains("skipped")) {
+				message.innerHTML = text;
 				return;
 			}
 

@@ -5,43 +5,39 @@ const saveData = {
 	}),
 	playMemory: {},
 
-	fails: 0,
-	endings: {},
+	fails: {
+		fails: 0,
+		discoveredFails: [],
+	},
+
+	gameEndFail: null,
+	endings: [],
 
 	timeSpent: 0,
-}
-
-const currentDialogue = {
-	dialogueID: "testID",
-	dialogueIndex: 0,
-	dialogueList: [
-		new StageDirections("[The scene is set in the Senate. The conspirators are gathered.]"),
-		new StageDirections("<image src=\"https://shallowfordvet.com/wp-content/uploads/2017/07/puppy.jpg\" height=200/><br>IS THAT A <pause duration=1000><b>DOG???</b>"),
-		new Character("Julius Caesar", "<b dialogue-speed=50>Cowards die many times before their deaths</b>; The valiant never taste of death but once.", "burnt-orange"),
-		new StageDirections("[Brutus enters from stage left.]"),
-		new Character("Brutus", "I fear the people choose <i>Caesar</i> for their king.", "slate-blue"),
-		new Character("Caesar", "Let me have men about me that are fat, Sleek-headed men, and such as sleep o' nights. Yond Cassius has a lean and hungry look; He thinks too much: such men are dangerous.", "burnt-orange"),
-		new StageDirections("[Caesar sits down in his chair as the conversation deepens.]"),
-		new Character("Brutus", "But I do fear the people may turn against us.", "slate-blue"),
-		new Character("Cassius", "Brutus, my lord, be confident; rest you content. When you know what is in hand, you shall be satisfied.", "dark-teal"),
-		new Character("Brutus", "I would not, Cassius; yet I love him well. What is it that you would impart to me? If it be aught toward the general good, set honour in one eye and death i' the other, and I will look on both indifferently; for let the gods so speed me as I love the name of honour more than I fear death.", "slate-blue"),
-		new Character("Cassius", "I know that virtue to be in you, Brutus, as well as I do know your outward favour. Well, honour is the subject of my story. I cannot tell what you and other men think of this life; but for my single self, I had as lief not be as live to be in awe of such a thing as I myself.", "dark-teal"),
-		new Character("Brutus", "What means this shouting? I do fear the people choose Caesar for their king.", "slate-blue"),
-		new Character("Cassius", "Ay, do you fear it? Then must I think you would not have it so.", "dark-teal"),
-		new Character("Brutus", "I would not, Cassius; yet I love him well.", "slate-blue"),
-		new Character("Cassius", "What is it that you would impart to me? I know not how, but you do love him, Brutus.", "dark-teal"),
-		new Character("Brutus", "I am not gamesome; I do lack some part Of that quick spirit that is in Antony. Let me not hinder, Cassius, your desires; I'll leave you.", "slate-blue"),
-		new Character("Cassius", "Brutus, I do observe your melancholy, And make even of your good wit and bad. Of what should it be that Brutus goes amiss? I would be glad to learn it; for, believe me, I had rather have my eyes than you should fear offense.", "dark-teal"),
-		new Character("Brutus", "I have been up and down to seek you; for I am troubled. I do fear the people choose Caesar for their king.", "slate-blue"),
-		new Character("Cassius", "You are dull, Brutus, and time marvelleth at your honourable words. But this same Cassius, though he be lean, he is a noble Roman, and well given.", "dark-teal"),
-		new Character("Brutus", "Would you were stronger.", "slate-blue"),
-		new Character("Cassius", "Be not deceived. If I were Brutus now, and he were Cassius, he should not humour me. I will this night, In several hands, in at his windows throw, As if they came from several citizens, Writings, all tending to the great opinion That Rome holds of his name; wherein obscurely Caesar's ambition shall be glanced at. And after this let Caesar seat him sure, For we will shake him, or worse days endure.", "dark-teal")]
 }
 
 const gameModule = (() => {
 
 	let shouldAutoScroll = true; // Variable to control auto-scrolling
 	let hasAnsweredQuestion = false;
+
+	let timeoutCallback, timeoutID;
+	const createInterruptableTimeout = (callback, delay) => {
+		timeoutID = setTimeout(callback, delay);
+		timeoutCallback = callback;
+	}
+
+	const interruptTimeout = (disableCallback) => {
+		if ((!timeoutCallback) || (!timeoutID)) {
+			return;
+		}
+
+		if (!disableCallback) {
+			timeoutCallback();
+		}
+
+		clearTimeout(timeoutID);
+	}
 
 	// Function to show the loading screen
 	const showLoadingScreen = (duration) => {
@@ -62,7 +58,7 @@ const gameModule = (() => {
 	}
 
 
-	const autoScrollDialogue = function(dialogueListId) {
+	const autoScrollDialogue = (dialogueListId) => {
 		const dialogueList = document.getElementById(dialogueListId);
 		if (!dialogueList) {
 			console.error(`Dialogue list element with ID "${dialogueListId}" not found.`);
@@ -74,12 +70,12 @@ const gameModule = (() => {
 		}
 	}
 
-	const answerQuestion = function() {
+	const answerQuestion = () => {
 		hasAnsweredQuestion = true;
 	}
 
 	// Example of how you might prevent auto-scrolling (e.g., when the user scrolls up)
-	function handleDialogueScroll(dialogueListId) {
+	const handleDialogueScroll = (dialogueListId) => {
 		const dialogueList = document.getElementById(dialogueListId);
 		if (!dialogueList) return;
 
@@ -91,26 +87,37 @@ const gameModule = (() => {
 		}
 	}
 
-	function addMessageAndAutoScroll(dialogueListId, dialogueElement, messageElement) {
+	const addMessageAndAutoScroll = (dialogueListId, dialogueElement, messageElement, disableTypewrite) => {
 		const dialogueList = document.getElementById(dialogueListId);
 		if (dialogueList) {
 			dialogueElement.appendChild(messageElement);
 
 			dialogueList.appendChild(dialogueElement);
-			Dialogue.typewriteDialogue(messageElement);
+			if (!disableTypewrite) {
+				Dialogue.typewriteDialogue(messageElement);
+			}
 			autoScrollDialogue(dialogueListId);
 		}
 	}
 
-	function transitionStoryline(storyID) {
+	const transitionStoryline = (storyID) => {
 		showLoadingScreen(1000);
 		saveData.storyline.setStoryID(storyID);
 		setTimeout(() => {
+			instantLoad("dialoguePage");
 			loadDialogue("dialoguePage");
 		}, 1000);
 	}
 
-	const loadDialogue = (containerId) => {
+	const retryStory = () => {
+		saveData.gameEndFail.reset();
+		saveData.gameEndFail = null;
+		saveData.storyline.goBack(true);
+		instantLoad("dialoguePage");
+		loadDialogue("dialoguePage");
+	}
+
+	const instantLoad = (containerId) => {
 		const container = document.getElementById(containerId);
 		if (!container) {
 			console.error(`Container with ID "${containerId}" not found.`);
@@ -118,6 +125,39 @@ const gameModule = (() => {
 		}
 
 		container.innerHTML = "";
+
+		let lastOptions = null;
+		for (const dialog of saveData.storyline.dialogueList) {
+			const [dialogueElement, message] = dialog.dialogue.createDialogue();
+			handleDialogueScroll(containerId);
+			addMessageAndAutoScroll(containerId, dialogueElement, message, true);
+
+			if (dialog.options) {
+				dialog.dialogue.displayOptions(dialogueElement, dialog.options, dialog.optionsConfig);
+				lastOptions = dialogueElement;
+			} else if (lastOptions) {
+				let choice = dialog.extraParams.split(" ");
+				choice = choice[choice.length - 2];
+				for (const e of lastOptions.querySelectorAll(".dialogueOptions > button")) {
+					if (e.dataset.optionId == choice) {
+						e.classList.add("locked");
+					} else {
+						e.disabled = true;
+					}
+				}
+				lastOptions = null;
+			}
+		}
+	}
+
+	const loadDialogue = (containerId) => {
+
+		const container = document.getElementById(containerId);
+		if (!container) {
+			console.error(`Container with ID "${containerId}" not found.`);
+			return;
+		}
+
 		document.querySelector("#actDetails").textContent = Storyline.prototype.acts[saveData.storyline.storyID].displayName;
 
 		function displayDialogue() {
@@ -128,6 +168,15 @@ const gameModule = (() => {
 			let [dialogue, dialogueCount] = saveData.storyline.next();
 			const [dialogueElement, message] = dialogue.dialogue.createDialogue();
 			let startTime = null;
+
+			const handleSpacebar = (event) => {
+				if (event.key === ' ' || event.code === 'Space' || event.keyCode === 32) {
+					message.classList.add("skipped");
+					interruptTimeout();
+				}
+			};
+
+			document.addEventListener('keydown', handleSpacebar);
 			function awaitInterval() {
 				if ((dialogue.optionsConfig.timedQuestion) && (dialogue.optionsConfig.timedQuestion > 0)) {
 					if (startTime == null) {
@@ -137,7 +186,7 @@ const gameModule = (() => {
 					let secondsLeft = (dialogue.optionsConfig.timedQuestion / 1000) - ((Date.now() / 1000) - startTime);
 					dialogueElement.querySelector(".barComplete").style.width = ((Math.abs(secondsLeft) / (dialogue.optionsConfig.timedQuestion / 1000)) * 100) + "%";
 					dialogueElement.querySelector(".timedQuestion > span").textContent = Math.abs(secondsLeft).toFixed(1) + "s";
-
+					
 					if ((secondsLeft <= 0)) {
 						if (!hasAnsweredQuestion) {
 							saveData.storyline.answerResponse("Void");
@@ -171,7 +220,8 @@ const gameModule = (() => {
 			addMessageAndAutoScroll(containerId, dialogueElement, message);
 			if (dialogue.options) {
 				if (dialogue.optionsConfig.appear == "afterDialogue") {
-					setTimeout(function() {
+					createInterruptableTimeout(function () {
+						document.removeEventListener('keydown', handleSpacebar);
 						dialogue.dialogue.displayOptions(dialogueElement, dialogue.options, dialogue.optionsConfig);
 						awaitInterval();
 					}, dialogue.dialogue.getDialogueDuration());
@@ -181,34 +231,46 @@ const gameModule = (() => {
 				}
 			} else {
 				if (dialogue.fail) {
-					setTimeout(() => {
-						dialogue.fail.displayFail()
+					createInterruptableTimeout(() => {
+						saveData.fails.fails += 1;
+						if (saveData.fails.discoveredFails.indexOf(dialogue.fail.failID) != -1) {
+							saveData.fails.discoveredFails.push(dialogue.fail.failID);
+						}
+
+						saveData.gameEndFail = dialogue.fail;
+						document.removeEventListener('keydown', handleSpacebar);
+						dialogue.fail.displayFail();
 					}, dialogue.dialogue.getDialogueDuration() + 1000);
 					return;
 				}
 
 				if (dialogue.next) {
-					setTimeout(() => {
+					createInterruptableTimeout(() => {
+						document.removeEventListener('keydown', handleSpacebar);
 						transitionStoryline(dialogue.next);
 					}, dialogue.dialogue.getDialogueDuration() + 1000);
 					return;
 				}
 
 				if (dialogue.goBack) {
-					setTimeout(() => {
+					createInterruptableTimeout(() => {
+						document.removeEventListener('keydown', handleSpacebar);
 						saveData.storyline.goBack();
 					}, dialogue.dialogue.getDialogueDuration());
 					return;
 				}
 
-				setTimeout(displayDialogue, dialogue.dialogue.getDialogueDuration());
+				createInterruptableTimeout(() => {
+					document.removeEventListener('keydown', handleSpacebar);
+					displayDialogue();
+				}, dialogue.dialogue.getDialogueDuration());
 			}
 		}
 
 		displayDialogue();
 	}
 
-	const init = function(s) {
+	const init = function (s) {
 		transitionStoryline(((s != "") && (Storyline.prototype.acts[s])) ? (s) : ("Tutorial"));
 	}
 
@@ -230,11 +292,12 @@ const gameModule = (() => {
 		answerQuestion: answerQuestion,
 		getSaveData: getSaveData,
 		showLoadingScreen: showLoadingScreen,
-		hideLoadingScreen: hideLoadingScreen
+		hideLoadingScreen: hideLoadingScreen,
+		retryStory: retryStory
 	};
 })();
 
-window.onload = function() {
+window.onload = function () {
 	gameModule.showLoadingScreen(); // Show loading screen initially
 	setTimeout(() => {
 		gameModule.hideLoadingScreen(); // Hide loading screen after 1 second

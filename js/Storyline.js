@@ -15,6 +15,7 @@ class Storyline {
 		this.storyID = storyID;
 		this.linePointerIndex = 0;
 		this.lineIndecies = [-1];
+		this.dialogueList = [];
 	}
 
 	answerResponse(answer) {
@@ -23,11 +24,24 @@ class Storyline {
 		this.linePointerIndex += 2;
 	}
 
-	goBack() {
-		this.lineIndecies.pop();
+	goBack(replayDialogue) {
+		let counterPop = this.lineIndecies.pop();
 		this.lineIndecies.pop();
 		this.linePointerIndex -= 2;
-		this.lineIndecies[this.linePointerIndex]++;
+		
+		if (!replayDialogue) {
+			this.lineIndecies[this.linePointerIndex]++;
+		} else {
+			this.lineIndecies[this.linePointerIndex]--;
+			for (let i = 0;i <= counterPop + 1;i++) {
+				this.dialogueList.pop();
+			}
+		}
+	}
+
+	pauseStory() {
+		this.lineIndecies[this.linePointerIndex]--;
+		this.dialogueList.pop();
 	}
 
 	getTotalLines() {
@@ -72,6 +86,8 @@ class Storyline {
 		let currentScene = Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
 		let currentLine = currentScene;
 		let counter = 0;
+		let extraParams = "";
+
 		for (let i = 0; i < this.lineIndecies.length;) {
 			if ((i + 1 < this.lineIndecies.length) && (typeof (this.lineIndecies[i + 1]) == "string")) {
 				if (typeof (this.lineIndecies[i]) == "number") {
@@ -79,14 +95,22 @@ class Storyline {
 				}
 
 				currentLine = currentLine[this.storyID + "_" + this.lineIndecies[i] + "_" + this.lineIndecies[i + 1]];
+				extraParams += this.lineIndecies[i + 1] + " ";
 				i += 2;
 			} else {
 				this.lineIndecies[i]++;
 				counter += this.lineIndecies[i];
 				currentLine = currentLine[this.lineIndecies[i]];
+
+				if (extraParams != "") {
+					currentLine.extraParams = extraParams;
+				}
+
+				this.dialogueList.push(currentLine);
 				break;
 			}
 		}
+
 		return [currentLine, counter];
 	}
 }
@@ -105,6 +129,14 @@ class GameFail {
 		document.querySelector("#failReason").innerHTML = this.failText;
 		document.querySelector("#failType > small").textContent = "Fail ID: " + this.failID;
 		document.querySelector("#failScreen > h1").textContent = GameFail.prototype.failTitle[Math.floor(Math.random() * GameFail.prototype.failTitle.length)];
+	
+		document.querySelector("#failCount").textContent = "Fails: " + gameModule.getSaveData().fails.fails;
+		document.querySelector("#uniqueFails").textContent = "Unique Fails: " + gameModule.getSaveData().fails.discoveredFails.length + "/60";
+		document.querySelector("#endings").textContent=  "Endings: " + gameModule.getSaveData().endings.length + "/5";
+	}
+
+	reset() {
+		document.querySelector("#failScreen").style.display = "none";
 	}
 }
 GameFail.prototype.failTitle = [
