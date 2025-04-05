@@ -223,6 +223,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  line-height: 175%;
 }
 
 .message:not(.stage-direction, .character) {
@@ -274,8 +275,8 @@
 
 .dialogueOptions.three-option {
   grid-template-areas:
-      "a b"
-      "c c";
+    "a b"
+    "c c";
 }
 
 .dialogueOptions.three-option > button:nth-child(1) {
@@ -290,7 +291,7 @@
   grid-area: c;
 }
 
-.dialogueOption>button {
+.dialogueOption > button {
   min-width: auto;
   width: auto;
   height: 100%;
@@ -326,27 +327,27 @@
   font-size: 14px;
 }
 
-.dialogueOptions:not(:has(button.locked))>button:hover,
-.dialogueOptions>button.locked {
+.dialogueOptions:not(:has(button.locked)) > button:hover,
+.dialogueOptions > button.locked {
   background: white;
   border: white;
   font-size: 14px;
   min-width: auto;
 }
 
-.dialogueOptions:not(:has(button.locked))>button:hover>span,
-.dialogueOptions>button.locked>span {
+.dialogueOptions:not(:has(button.locked)) > button:hover > span,
+.dialogueOptions > button.locked > span {
   color: black;
 }
 
-.dialogueOptions:has(button.locked)>button:not(.locked):hover {
+.dialogueOptions:has(button.locked) > button:not(.locked):hover {
   background: none;
   border: none;
   font-size: 14px;
   min-width: auto;
 }
 
-.dialogueOptions:has(button.locked)>button:not(.locked) {
+.dialogueOptions:has(button.locked) > button:not(.locked) {
   border: none;
   background: none;
 }
@@ -391,7 +392,6 @@
   }
 }
 
-
 #paneFade {
   position: absolute;
   width: 100%;
@@ -403,7 +403,7 @@
   padding: 16px;
 }
 
-#paneFade>.navOptions {
+#paneFade > .navOptions {
   display: flex;
   justify-content: row;
   align-items: center;
@@ -421,8 +421,7 @@
   font-size: 16px;
 }
 
-
-#paneFade>.navOptions>div:nth-child(2) {
+#paneFade > .navOptions > div:nth-child(2) {
   display: flex;
   flex-direction: row;
   justify-content: left;
@@ -444,7 +443,7 @@
   background: var(--accent);
 }
 
-#paneFade>.navOptions>div:nth-child(3) {
+#paneFade > .navOptions > div:nth-child(3) {
   display: flex;
   flex-direction: row;
   justify-content: right;
@@ -458,7 +457,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, rgb(255, 0, 0, .15), var(--secondary));
+  background: radial-gradient(circle, rgb(255, 0, 0, 0.3), var(--secondary));
   z-index: 2;
   inset: 0;
   display: none;
@@ -469,16 +468,17 @@
   gap: 48px;
 }
 
-#failScreen>h1 {
+#failScreen > h1 {
   background-color: var(--secondary);
   color: var(--accent);
-  text-shadow: 0 0 .75rem red;
+  text-shadow: 0 0 0.75rem red;
   text-decoration: underline;
   padding: 8px;
   position: absolute;
   top: 8vh;
-  font-size: 12vh;
-  animation: failAnimation .15s ease-in-out forwards;
+  font-size: 300%;
+  text-align: center;
+  animation: failAnimation 0.15s ease-in-out forwards;
 }
 
 @keyframes failAnimation {
@@ -492,9 +492,9 @@
   }
 }
 
-#failScreen>span {
+#failScreen > span {
   font-size: 5vh;
-  text-shadow: 0 0 .5rem black;
+  text-shadow: 0 0 0.5rem black;
   font-weight: 700;
 }
 
@@ -502,9 +502,9 @@
   text-align: center;
 }
 
-#failType>small {
+#failType > small {
   font-size: 8px;
-  opacity: .5;
+  opacity: 0.5;
 }
 
 #failScreenOptions {
@@ -516,12 +516,12 @@
   gap: 1vh;
 }
 
-#failScreenOptions>button {
+#failScreenOptions > button {
   padding: 4px;
   min-width: auto;
 }
 
-#failScreenOptions>button>span {
+#failScreenOptions > button > span {
   font-size: 3vh;
 }
 

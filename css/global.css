@@ -1,25 +1,24 @@
-@import url('https://fonts.googleapis.com/css?family=Merriweather%20Sans:700|Merriweather:400');
+@import url("https://fonts.googleapis.com/css?family=Merriweather%20Sans:700|Merriweather:400");
 
 :root {
-	--text: #f5e6e5;
-	--background: #100504;
-	--primary: #850000;
-	--secondary: #571e19;
-	--accent: #e88178;
+  --text: #f5e6e5;
+  --background: #100504;
+  --primary: #850000;
+  --secondary: #571e19;
+  --accent: #e88178;
 }
 
 * {
-	color: var(--text);
-	box-sizing: border-box;
-	line-height: 120%;
+  color: var(--text);
+  box-sizing: border-box;
 }
 
 body {
-	font-family: 'Merriweather';
-	font-weight: 400;
-	margin: 0;
-	background: var(--background);
-	/*overflow: hidden;*/
+  font-family: "Merriweather";
+  font-weight: 400;
+  margin: 0;
+  background: var(--background);
+  /*overflow: hidden;*/
 }
 
 h1,
@@ -27,192 +26,218 @@ h2,
 h3,
 h4,
 h5 {
-	font-family: 'Merriweather Sans';
-	font-weight: 700;
-	margin: 0;
+  font-family: "Merriweather Sans";
+  font-weight: 700;
+  margin: 0;
 }
 
 .serif {
-	font-family: "Merriweather";
+  font-family: "Merriweather";
 }
 
 .sans {
-	font-family: "Merriweather Sans";
+  font-family: "Merriweather Sans";
 }
 
 html {
-	font-size: 100%;
+  font-size: 100%;
 }
 
 /* 16px */
 
 h1 {
-	font-size: 4.210rem;
-	/* 67.36px */
+  font-size: 4.21rem;
+  /* 67.36px */
 }
 
 h2 {
-	font-size: 3.158rem;
-	/* 50.56px */
+  font-size: 3.158rem;
+  /* 50.56px */
 }
 
 h3 {
-	font-size: 2.369rem;
-	/* 37.92px */
+  font-size: 2.369rem;
+  /* 37.92px */
 }
 
 h4 {
-	font-size: 1.777rem;
-	/* 28.48px */
+  font-size: 1.777rem;
+  /* 28.48px */
 }
 
 h5 {
-	font-size: 1.333rem;
-	/* 21.28px */
+  font-size: 1.333rem;
+  /* 21.28px */
 }
 
 small {
-	font-size: 0.750rem;
-	/* 12px */
+  font-size: 0.75rem;
+  /* 12px */
 }
 
 content {
-	width: 100%;
-	height: 100%;
-	display: flex;
-	position: absolute;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	padding: 32px;
-	gap: 16px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  gap: 16px;
 }
 
 content#mainPage {
-	background: rgb(0, 0, 0);
-	background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(45, 0, 0, 1) 100%);
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(45, 0, 0, 1) 100%
+  );
 }
 
-content#mainPage>div:nth-child(1) {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
+content#mainPage > div:nth-child(1) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-content#mainPage>div:nth-child(1)>span.tip {
-	font-size: 12px;
-	text-align: center;
+content#mainPage > div:nth-child(1) > span.tip {
+  font-size: 12px;
+  text-align: center;
 }
 
-content#mainPage>div:nth-child(2) {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 8px;
+content#mainPage > div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
-
 
 button {
-	background: linear-gradient(to bottom, transparent, transparent);
-	border: 1px solid white;
-	border-radius: 6px;
-	min-width: 192px;
-	padding: 8px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 32px;
-	font-size: 20px;
-	font-family: "Merriweather";
-	transition: .1s ease-in-out;
-	cursor: pointer;
+  background: linear-gradient(to bottom, transparent, transparent);
+  border: 1px solid white;
+  border-radius: 6px;
+  min-width: 192px;
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  font-size: 20px;
+  font-family: "Merriweather";
+  transition: 0.1s ease-in-out;
+  cursor: pointer;
 }
 
 button.iconLabelBtn:not(.vertical) {
-	display: grid;
-	grid-template-columns: 1fr 3fr;
-	gap: 8px;
-	align-items: center;
-	justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
 }
 
 button.iconLabelBtn.vertical {
-	flex-direction: column;
-	min-width: auto;
-	gap: 8px;
+  flex-direction: column;
+  min-width: auto;
+  gap: 8px;
 }
 
 button:not([disabled]):hover,
 button:not(.selected):hover,
 button:not(.locked):hover {
-	min-width: 200px;
-	border-color: var(--accent);
-	background: linear-gradient(to bottom, transparent, rgb(232, 129, 120, 0.3));
+  min-width: 200px;
+  border-color: var(--accent);
+  background: linear-gradient(to bottom, transparent, rgb(232, 129, 120, 0.3));
 }
 
 button:disabled {
-	opacity: .5;
-	cursor: auto;
+  opacity: 0.5;
+  cursor: auto;
 }
 
 #title {
-	color: var(--accent);
+  color: var(--accent);
+  text-align: center;
 }
 
 #teamSelector {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 
-#teamSelector>span {
-	text-align: center;
+#teamSelector > span {
+  text-align: center;
 }
 
-#teamSelector>div {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	gap: 8px;
+#teamSelector > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 
-#teamSelector>div:not(.navOptions)>button {
-	width: 50vh;
-	padding: 16px;
+#teamSelector > div:not(.navOptions) > button {
+  width: 50vh;
+  padding: 16px;
 }
 
-#teamSelector>div.navOptions>button {
-	width: auto;
-	min-width: 128px;
-	padding: 8px;
+#teamSelector > div.navOptions > button {
+  width: auto;
+  min-width: 128px;
+  padding: 8px;
 }
 
-#teamSelector>div>button>.material-symbols-outlined {
-	font-size: 32px;
+#teamSelector > div > button > .material-symbols-outlined {
+  font-size: 32px;
 }
 
-#teamSelector>div>button.selected {
-	border-color: rgb(255, 255, 0);
-	background: linear-gradient(to bottom, transparent, rgb(255, 255, 0, 0.3));
+#teamSelector > div > button.selected {
+  border-color: rgb(255, 255, 0);
+  background: linear-gradient(to bottom, transparent, rgb(255, 255, 0, 0.3));
 }
 
-#teamSelector>div #teamLoyalists:not(.selected):hover {
-	border-color: rgb(120, 124, 232);
-	background: linear-gradient(to bottom, transparent, rgb(120, 124, 232, 0.3));
+#teamSelector > div #teamLoyalists:not(.selected):hover {
+  border-color: rgb(120, 124, 232);
+  background: linear-gradient(to bottom, transparent, rgb(120, 124, 232, 0.3));
 }
 
 #confirm:hover {
-	border-color: rgb(120, 232, 139);
-	background: linear-gradient(to bottom, transparent, rgb(120, 232, 139, 0.3));
+  border-color: rgb(120, 232, 139);
+  background: linear-gradient(to bottom, transparent, rgb(120, 232, 139, 0.3));
 }
 
 #specificID {
-	color: black;
-	padding: 8px;
-	width: 25%;
+  color: black;
+  padding: 8px;
+  width: 25%;
+}
+
+@media only screen and (max-width: 600px) {
+  #teamSelector > div {
+    flex-direction: column;
+  }
+
+  #teamSelector > div:nth-child(3) {
+    flex-direction: row;
+  }
+
+  #teamSelector > div:nth-child(3) > button {
+    min-width: auto;
+  }
+
+  #teamSelector > div:nth-child(2) > button {
+    min-width: 256px !important;
+  }
+
+  #dialogProgress {
+    width: 40px !important;
+  }
 }
