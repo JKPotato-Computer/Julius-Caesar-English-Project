@@ -1,247 +1,461 @@
 class Storyline {
-	constructor({
-		storyID = "",
-		lineIndencies = [-1],
-		linePointerIndex = 0,
-		dialogueList = [],
-	} = {}) {
-		this.storyID = storyID;
-		this.lineIndecies = lineIndencies;
-		this.dialogueList = dialogueList;
-		this.linePointerIndex = linePointerIndex;
-	}
+  constructor({
+    storyID = "",
+    lineIndencies = [-1],
+    linePointerIndex = 0,
+    dialogueList = [],
+  } = {}) {
+    this.storyID = storyID;
+    this.lineIndecies = lineIndencies;
+    this.dialogueList = dialogueList;
+    this.linePointerIndex = linePointerIndex;
+  }
 
-	setStoryID(storyID) {
-		this.storyID = storyID;
-		this.linePointerIndex = 0;
-		this.lineIndecies = [-1];
-		this.dialogueList = [];
-	}
+  setStoryID(storyID, safeTransition) {
+    this.storyID = storyID;
+    if (!safeTransition) {
+      this.linePointerIndex = 0;
+      this.lineIndecies = [-1];
+      this.dialogueList = [];
+    }
+  }
 
-	answerResponse(answer) {
-		this.lineIndecies.push(answer);
-		this.lineIndecies.push(-1);
-		this.linePointerIndex += 2;
-	}
+  answerResponse(answer) {
+    this.lineIndecies.push(answer);
+    this.lineIndecies.push(-1);
+    this.linePointerIndex += 2;
+  }
 
-	goBack(replayDialogue) {
-		let counterPop = this.lineIndecies.pop();
-		this.lineIndecies.pop();
-		this.linePointerIndex -= 2;
-		
-		if (!replayDialogue) {
-			this.lineIndecies[this.linePointerIndex]++;
-		} else {
-			this.lineIndecies[this.linePointerIndex]--;
-			for (let i = 0;i <= counterPop + 1;i++) {
-				this.dialogueList.pop();
-			}
-		}
-	}
+  goBack(replayDialogue) {
+    let counterPop = this.lineIndecies.pop();
+    this.lineIndecies.pop();
+    this.linePointerIndex -= 2;
 
-	pauseStory() {
-		this.lineIndecies[this.linePointerIndex]--;
-		this.dialogueList.pop();
-	}
+    if (!replayDialogue) {
+      this.lineIndecies[this.linePointerIndex]++;
+    } else {
+      this.lineIndecies[this.linePointerIndex]--;
+      for (let i = 0; i <= counterPop + 1; i++) {
+        this.dialogueList.pop();
+      }
+    }
+  }
 
-	getTotalLines() {
-		let currentScene = Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
-		let currentLine = currentScene;
-		let currentIndex;
-		let counter;
+  pauseStory() {
+    this.lineIndecies[this.linePointerIndex]--;
+    this.dialogueList.pop();
+  }
 
-		for (let i = 0; i < this.lineIndecies.length;) {
-			if ((i + 1) && (typeof (this.lineIndecies[i + 1]) == "string")) {
-				currentLine = currentLine[this.storyID + "_" + this.lineIndecies[i] + "_" + this.lineIndecies[i + 1]];
-				i += 2;
-			} else {
-				currentIndex = this.lineIndecies[i];
-				counter = currentIndex;
-				break;
-			}
-		}
+  hasFail() {
+    let currentScene =
+      Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
+    let currentLine = currentScene;
+    for (let i = 0; i < this.lineIndecies.length; ) {
+      if (
+        i + 1 < this.lineIndecies.length &&
+        typeof this.lineIndecies[i + 1] == "string"
+      ) {
+        currentLine =
+          currentLine[
+            this.storyID +
+              "_" +
+              this.lineIndecies[i] +
+              "_" +
+              this.lineIndecies[i + 1]
+          ];
+        i += 2;
+      } else {
+        break;
+      }
+    }
 
-		while (currentScene[currentIndex]) {
-			currentIndex++;
-			counter++;
-		}
+    let i = this.lineIndecies[this.linePointerIndex];
+    do {
+      if (currentLine[i].fail) {
+        return true;
+      }
+      i++;
+    } while (currentLine[i]);
+    return false;
+  }
 
-		return counter;
-	}
+  getTotalLines() {
+    let currentScene =
+      Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
+    let currentLine = currentScene;
+    let currentIndex;
+    let counter;
 
-	hasNext() {
-		let currentScene = Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
-		let currentLine = currentScene;
-		for (let i = 0; i < this.lineIndecies.length;) {
-			if ((i + 1 < this.lineIndecies.length) && (typeof (this.lineIndecies[i + 1]) == "string")) {
-				currentLine = currentLine[this.storyID + "_" + this.lineIndecies[i] + "_" + this.lineIndecies[i + 1]];
-				i += 2;
-			} else {
-				return currentLine[this.lineIndecies[i] + 1] != undefined;
-			}
-		}
-	}
+    for (let i = 0; i < this.lineIndecies.length; ) {
+      if (i + 1 && typeof this.lineIndecies[i + 1] == "string") {
+        currentLine =
+          currentLine[
+            this.storyID +
+              "_" +
+              this.lineIndecies[i] +
+              "_" +
+              this.lineIndecies[i + 1]
+          ];
+        i += 2;
+      } else {
+        currentIndex = this.lineIndecies[i];
+        counter = currentIndex;
+        break;
+      }
+    }
 
-	next() {
-		let currentScene = Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
-		let currentLine = currentScene;
-		let counter = 0;
-		let extraParams = "";
+    while (currentScene[currentIndex]) {
+      currentIndex++;
+      counter++;
+    }
 
-		for (let i = 0; i < this.lineIndecies.length;) {
-			if ((i + 1 < this.lineIndecies.length) && (typeof (this.lineIndecies[i + 1]) == "string")) {
-				if (typeof (this.lineIndecies[i]) == "number") {
-					counter += this.lineIndecies[i];
-				}
+    return counter;
+  }
 
-				currentLine = currentLine[this.storyID + "_" + this.lineIndecies[i] + "_" + this.lineIndecies[i + 1]];
-				extraParams += this.lineIndecies[i + 1] + " ";
-				i += 2;
-			} else {
-				this.lineIndecies[i]++;
-				counter += this.lineIndecies[i];
-				currentLine = currentLine[this.lineIndecies[i]];
+  hasNext() {
+    let currentScene =
+      Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
+    let currentLine = currentScene;
+    for (let i = 0; i < this.lineIndecies.length; ) {
+      if (
+        i + 1 < this.lineIndecies.length &&
+        typeof this.lineIndecies[i + 1] == "string"
+      ) {
+        currentLine =
+          currentLine[
+            this.storyID +
+              "_" +
+              this.lineIndecies[i] +
+              "_" +
+              this.lineIndecies[i + 1]
+          ];
+        i += 2;
+      } else {
+        return currentLine[this.lineIndecies[i] + 1] != undefined;
+      }
+    }
+  }
 
-				if (extraParams != "") {
-					currentLine.extraParams = extraParams;
-				}
+  next() {
+    let currentScene =
+      Storyline.prototype.acts[this.storyID][gameModule.getTeam()];
+    let currentLine = currentScene;
+    let counter = 0;
+    let extraParams = "";
 
-				this.dialogueList.push(currentLine);
-				break;
-			}
-		}
+    for (let i = 0; i < this.lineIndecies.length; ) {
+      if (
+        i + 1 < this.lineIndecies.length &&
+        typeof this.lineIndecies[i + 1] == "string"
+      ) {
+        if (typeof this.lineIndecies[i] == "number") {
+          counter += this.lineIndecies[i];
+        }
 
-		return [currentLine, counter];
-	}
+        currentLine =
+          currentLine[
+            this.storyID +
+              "_" +
+              this.lineIndecies[i] +
+              "_" +
+              this.lineIndecies[i + 1]
+          ];
+        extraParams += this.lineIndecies[i + 1] + " ";
+        i += 2;
+      } else {
+        this.lineIndecies[i]++;
+        counter += this.lineIndecies[i];
+        currentLine = currentLine[this.lineIndecies[i]];
+
+        if (extraParams != "") {
+          currentLine.extraParams = extraParams;
+        }
+
+        this.dialogueList.push(currentLine);
+        break;
+      }
+    }
+
+    return [currentLine, counter];
+  }
 }
 
 class GameFail {
-	constructor({
-		failID = "",
-		failText = "",
-	} = {}) {
-		this.failID = failID;
-		this.failText = failText;
-	}
+  constructor({ failID = "", failText = "" } = {}) {
+    this.failID = failID;
+    this.failText = failText;
+  }
 
-	displayFail() {
-		document.querySelector("#failScreen").style.display = "flex";
-		document.querySelector("#failReason").innerHTML = this.failText;
-		document.querySelector("#failType > small").textContent = "Fail ID: " + this.failID;
-		document.querySelector("#failScreen > h1").textContent = GameFail.prototype.failTitle[Math.floor(Math.random() * GameFail.prototype.failTitle.length)];
-	
-		document.querySelector("#failCount").textContent = "Fails: " + gameModule.getSaveData().fails.fails;
-		document.querySelector("#uniqueFails").textContent = "Unique Fails: " + gameModule.getSaveData().fails.discoveredFails.length + "/60";
-		document.querySelector("#endings").textContent=  "Endings: " + gameModule.getSaveData().endings.length + "/5";
-	}
+  displayFail() {
+    document.querySelector("#failScreen").style.display = "flex";
+    document.querySelector("#failReason").innerHTML = this.failText;
+    document.querySelector("#failType > small").textContent =
+      "Fail ID: " + this.failID;
+    document.querySelector("#failScreen > h1").textContent =
+      GameFail.prototype.failTitle[
+        Math.floor(Math.random() * GameFail.prototype.failTitle.length)
+      ];
 
-	reset() {
-		document.querySelector("#failScreen").style.display = "none";
-	}
+    document.querySelector("#failCount").textContent =
+      "Fails: " + gameModule.getSaveData().fails.fails;
+    document.querySelector("#uniqueFails").textContent =
+      "Unique Fails: " +
+      gameModule.getSaveData().fails.discoveredFails.length +
+      "/60";
+    document.querySelector("#endings").textContent =
+      "Endings: " + gameModule.getSaveData().endings.length + "/5";
+  }
+
+  reset() {
+    document.querySelector("#failScreen").style.display = "none";
+  }
 }
 GameFail.prototype.failTitle = [
-	"DEED UNDONE",
-	"PURPOSE LOST",
-	"FIE ON'T",
-	"TASK NAUGHT",
-	"FOILED NOW",
-	"UNDONE US",
-	"NO SUCCESS",
-	"AIM MISSED",
-	"PLOT FAILED",
-	"DESIGN LOST",
-	"HOPES DASHED",
-	"FALLEN SO",
-	"LOST LABOR",
-	"WRECKED NOW",
-	"NO FRUIT",
-	"QUEST VAIN",
-	"GAME LOST",
-	"VAIN STRENGTH",
-	"BAD END",
-	"CAUSE COLD",
+  "DEED UNDONE",
+  "PURPOSE LOST",
+  "FIE ON'T",
+  "TASK NAUGHT",
+  "FOILED NOW",
+  "UNDONE US",
+  "NO SUCCESS",
+  "AIM MISSED",
+  "PLOT FAILED",
+  "DESIGN LOST",
+  "HOPES DASHED",
+  "FALLEN SO",
+  "LOST LABOR",
+  "WRECKED NOW",
+  "NO FRUIT",
+  "QUEST VAIN",
+  "GAME LOST",
+  "VAIN STRENGTH",
+  "BAD END",
+  "CAUSE COLD",
 ];
 
 Storyline.prototype.acts = {
-	["Tutorial"]: {
-		displayName: "Tutorial",
-		["teamConspirators"]: {
-			[0]: {
-				dialogue: new Dialogue("Welcome to the tale of Julius Caesar! Before we get started, let's roll through a <b>quick tutorial</b>, shall we?"),
-			},
-			[1]: {
-				dialogue: new Dialogue("Ever heard of the Henry Stickmin Collection, you know... this game? <br> <img src=\"https://m.media-amazon.com/images/M/MV5BZDI0Nzg0OWItODYwNC00NDJkLThlNDEtMDg5ODM3ODUyMjZiXkEyXkFqcGc@._V1_.jpg\" height=150> <br> Probably not, right? Well, let's say that you'll be <i>one like them.</i>"),
-			},
-			[2]: {
-				dialogue: new Dialogue("Here's the deal: as apart of Team Conspirators, your mission is to kill Caesar and take back the Roman Empire for ourselves, or perhaps for the \"better of Rome.\""),
-			},
-			[3]: {
-				dialogue: new Dialogue("How are you going to do that? Well, you'll have the power to enter people's minds and control their decisions - sometimes it helps you get closer to the plan, other times it might just go <i>horribly wrong...</i>."),
-			},
-			[0]: {
-				dialogue: new Dialogue("What do I mean by that, exactly? Well, let's play through Act 1 : Scene 1 as a demonstration, <i>shalt we</i>?"),
-				options: [
-					new OptionElement("Yes, let's do it!", "thumb_up", "Yes"),
-					new OptionElement("What's a Julius Caesar?", "thumb_down", "No"),
-				],
-				optionsConfig: {
-					timedQuestion: 0,
-					instantFeedback: true,
-					appear: "afterDialogue"
-				}
-			},
-			["Tutorial_0_Yes"]: {
-				[0]: {
-					dialogue: new Dialogue("Alright... here we go!!!"),
-					next: "A1_S1"
-				}
-			},
-			["Tutorial_0_No"]: {
-				[0]: {
-					dialogue: new Dialogue("<b>Wrong answer.</b>", "crimson"),
-					fail: new GameFail({
-						failID: "TUTORIAL_FAIL",
-						failText: "why are you here then"
-					}
-					)
-				},
-			},
-		}
-	},
-	["A1_S1"]: {
-		displayName: "Act 1: Scene 1",
-		["teamConspirators"]: {
-			[0]: {
-				dialogue: new StageDirections("<b>Flavius</b> and <b>Murellus</b> enter and speak to a <b>Carpenter, Cobbler,</b> and some other commoners.")
-			},
-			[1]: {
-				dialogue: new Character("Flavius", "Both of you lazy men, get off the streets! What, yall think today is a holiday? Don't you know yall mechanicals be out on the streets without their uniforms? On a <b dialogue-speed=100>WORK DAY??</b><br><u>[Carpenter]</u>, talk to me. What is your profession?", "shadow-purple"),
-				options: [
-					new OptionElement("I'm a carpenter, sir.", "forest", "IsCarpenter"),
-					new OptionElement("I plead the fifth, sir.", "volume_off", "PleadFifth"),
-					new OptionElement("You can't speak to me like that. What is YOUR profession?", "history", "Retaliation")
-				],
-				optionsConfig: {
-					timedQuestion: 0,
-					instantFeedback: true,
-					appear: "afterDialogue"
-				}
-			},
-			["A1_S1_1_IsCarpenter"]: {
-
-			},
-			["A1_S1_1_PleadFifth"]: {
-				[0]: {
-					dialogue: new Character("Flavius", "You dare to speak against me? Why don't we tell the WHOLE senate this.<br>Maybe then you'll tell me.", "shadow-purple"),
-					fail: new GameFail({
-						failID: "PleadingTheFifth",
-						failText: "You could've just said you were a carpenter..."
-					})
-				}
-			},
-			["A1_S1_1_Retaliation"]: {
-
-			}
-		}
-	}
-}
+  ["Tutorial"]: {
+    displayName: "Tutorial",
+    ["teamConspirators"]: {
+      [0]: {
+        dialogue: new Dialogue(
+          "Hey there, welcome to the Julius Caesar: Text-Based Game™."
+        ),
+      },
+      [1]: {
+        dialogue: new Dialogue(
+          "Who am I, you may ask?<br>I... don't really know. But, <i>you</i> are a ghost! A special ghost... one that can infiltrate the minds of others and create some <i>hefty</i> decisions."
+        ),
+      },
+      [2]: {
+        dialogue: new Dialogue(
+          "As a Conspirator, you'll be trying to assassinate Julius Caesar for the good of Rome! <pause duration=1000> Or, you can take Rome for yourselves. The fate lies on YOU."
+        ),
+      },
+      [3]: {
+        dialogue: new Dialogue(
+          "So, are thou ready to head to Act 1: Scene 1 and try stuff out?"
+        ),
+        options: [
+          new OptionElement("Yes, let's do it!", "thumb_up", "Yes"),
+          new OptionElement("What's a Julius Caesar?", "thumb_down", "No"),
+        ],
+        optionsConfig: {
+          timedQuestion: 0,
+          instantFeedback: true,
+          appear: "afterDialogue",
+        },
+      },
+      ["Tutorial_3_Yes"]: {
+        [0]: {
+          dialogue: new Dialogue("Alright... here we go!!!"),
+          next: "A1_S1",
+        },
+      },
+      ["Tutorial_3_No"]: {
+        [0]: {
+          dialogue: new Dialogue("<b>Wrong answer.</b>", "crimson"),
+          fail: new GameFail({
+            failID: "TUTORIAL_FAIL",
+            failText: "why are you here then",
+          }),
+        },
+      },
+    },
+  },
+  ["A1_S1"]: {
+    displayName: "Act 1: Scene 1",
+    ["teamConspirators"]: {
+      [0]: {
+        dialogue: new StageDirections(
+          "<b>Flavius</b> and <b>Murellus</b> enter and speak to a <b>Carpenter, Cobbler,</b> and some other commoners."
+        ),
+      },
+      [1]: {
+        dialogue: new Character(
+          "Flavius",
+          "Both of you lazy men, get off the streets! What, yall think today is a holiday? Don't you know yall mechanicals be out on the streets without their uniforms? On a <b dialogue-speed=100>WORK DAY??</b>",
+          "shadow-purple"
+        ),
+      },
+      [2]: {
+        dialogue: new Character(
+          "Flavius",
+          "<u>[Carpenter]</u>, talk to me. What is your profession?",
+          "shadow-purple"
+        ),
+        options: [
+          new OptionElement("I'm a carpenter, sir.", "forest", "IsCarpenter"),
+          new OptionElement(
+            "I plead the fifth, sir.",
+            "volume_off",
+            "PleadFifth"
+          ),
+          new OptionElement(
+            "You can't speak to me like that. What is YOUR profession?",
+            "history",
+            "Retaliation"
+          ),
+        ],
+        optionsConfig: {
+          timedQuestion: 0,
+          instantFeedback: true,
+          appear: "afterDialogue",
+        },
+      },
+      ["A1_S1_2_IsCarpenter"]: {
+        [0]: {
+          dialogue: new Character(
+            "Murellus",
+            "Well, where's your leather apron and ruler? Why are you trying to stand out with your best apparel?",
+            "charcoal-black"
+          ),
+        },
+        [1]: {
+          dialogue: new Character(
+            "Murellus",
+            "And, you, [Cobbler]. What do you do?",
+            "charcoal-black"
+          ),
+        },
+        [2]: {
+          dialogue: new Character(
+            "Cobbler",
+            "I'm just a plain old cobbler, unlike any other men here.",
+            "burnt-orange"
+          ),
+        },
+        [3]: {
+          dialogue: new Character(
+            "Murellus",
+            "Wh- what do you do??<br>Tell me already!",
+            "charcoal-black"
+          ),
+        },
+        [4]: {
+          dialogue: new Character(
+            "Cobbler",
+            "Just a humble occupation that I perfect, good sir. Or should I say, <i>mending thy bad soles.</i>",
+            "burnt-orange"
+          ),
+        },
+        [5]: {
+          dialogue: new Character(
+            "Murellus",
+            {
+              text: "YOU <b>RASCAL!</b> <pause duration=150> WHAT. <pause duration=150> DO. <pause duration=150> YOU. <pause duration=150> DO???",
+              color: "dark-red",
+            },
+            "charcoal-black"
+          ),
+          options: [
+            new OptionElement(
+              "Good sir! Calm down, don't get angry at me. If you hear me out, I'll tell you awl.",
+              "self_improvement",
+              "CalmDown"
+            ),
+            new OptionElement(
+              "Good sir! Like I said, I am a mender of bad soles.",
+              "volume_off",
+              "MenderOfSoles"
+            ),
+          ],
+          optionsConfig: {
+            timedQuestion: 5000,
+            instantFeedback: true,
+            appear: "afterDialogue",
+          },
+        },
+        ["A1_S1_5_MenderOfSoles"]: {
+          [0]: {
+            dialogue: new Character(
+              "Murellus",
+              "If you're so much of a mender of soles, why don't thou mend an answer for once?",
+              "charcoal-black"
+            ),
+          },
+          [1]: {
+            dialogue: new Character(
+              "Cobbler",
+              "I'm <pause duration=1000> a cobbler.",
+              "burnt-orange"
+            ),
+          },
+          [2]: {
+            dialogue: new Character(
+              "Murellus",
+              "And I, the humble bringer of doom, bid thee farewell!",
+              "charcoal-black"
+            ),
+            fail: new GameFail({
+              failID: "MenderOfSoles",
+              failText: "Well. I didn't expect that.",
+            }),
+          },
+        },
+        ["A1_S1_5_Void"]: {},
+      },
+      ["A1_S1_2_PleadFifth"]: {
+        [0]: {
+          dialogue: new Character(
+            "Flavius",
+            "What is the fifth?<pause=1000>",
+            "shadow-purple"
+          ),
+        },
+        [1]: {
+          dialogue: new Character(
+            "Murellus",
+            "Who is the fifth?",
+            "charcoal-black"
+          ),
+          fail: new GameFail({
+            failID: "PleadingTheFifth",
+            failText:
+              "Sorry, wrong time period. You're about 1837 years late since the fifth amendment was ratified in the United States.",
+          }),
+        },
+      },
+      ["A1_S1_2_Retaliation"]: {
+        [0]: {
+          dialogue: new Character(
+            "Flavius",
+            "Well, I'm apart of the <b>senate</b>, and you're going to be sent on a one way trip to the <b>Senate.</b>",
+            "shadow-purple"
+          ),
+        },
+        [1]: {
+          dialogue: new Character(
+            "Flavius",
+            "Maybe THEN you'll tell all of us your <i>professión</i>.<pause=1000>",
+            "shadow-purple"
+          ),
+          fail: new GameFail({
+            failID: "RetaliatingFlavius",
+            failText: "Just say you're a carpenter.",
+          }),
+        },
+      },
+    },
+  },
+};
