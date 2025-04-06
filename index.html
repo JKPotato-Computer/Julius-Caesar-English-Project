@@ -17,6 +17,22 @@
 </head>
 
 <body>
+  <div id="notificationContainer"></div>
+  <content id="dialogues">
+    <dialog id="statsDialog">
+      <div class="popup-holder">
+        <h5>Game Statistics</h5>
+        <span id="statsClose" class="popup-close">&times;</span>
+      </div>
+      <div class="popup-stats">
+        <p>Fails: <span id="failsStats">0</span></p>
+        <p>Unique Fails: <span id="uniqueFailsStats">0 / 0</span></p>
+        <p>Endings: <span id="totalEndings">0 / 0</span></p>
+        <p>Time Spent: <span id="timeSpent">0s</span></p>
+      </div>
+    </dialog>
+  </content>
+
   <div id="loading-screen" class="loading-screen">
     <div class="spinner"></div>
   </div>
@@ -25,8 +41,10 @@
       <h1>TASK FAILED</h1>
       <span id="failReason">for the last time, no you cannot just kill caesar in the first scene</span>
       <div id="failScreenOptions">
-        <button class="iconLabelBtn" id="retry"><span class="material-symbols-outlined">refresh</span><span>Retry</span></button>
-        <button class="iconLabelBtn" id="return"><span class="material-symbols-outlined">home</span><span>Menu</span></button>
+        <button class="iconLabelBtn" id="retry"><span
+            class="material-symbols-outlined">refresh</span><span>Retry</span></button>
+        <button class="iconLabelBtn" id="return"><span
+            class="material-symbols-outlined">home</span><span>Menu</span></button>
       </div>
       <div id="failScreenStats">
         <span id="failCount">Fails: 0</span>
@@ -52,43 +70,48 @@
       </div>
     </div>
     <div id="dialoguePage">
-      <div class="message dialogueQuestion">
-        <div class="timedQuestion">
-          <div class="timedBar">
-            <div class="barComplete"></div>
-          </div>
-          <span>10.0s</span>
-        </div>
-        <div class="dialogueOptions">
-          <button class="iconLabelBtn dialogueOption">
-            <span class="material-symbols-outlined">radio_button_unchecked</span>
-            <span class="optionLabel">The quick brown fox jumps over the lazy dog.</span></button>
-          <button class="iconLabelBtn dialogueOption">
-            <span class="material-symbols-outlined">radio_button_unchecked</span>
-            <span class="optionLabel">The brown quick fox jumps over the dog lazy.</span></button>
-          <button class="iconLabelBtn dialogueOption">
-            <span class="material-symbols-outlined">radio_button_unchecked</span>
-            <span class="optionLabel">The fox fox fox jumps jumps the dog dog.</span></button>
-          <button class="iconLabelBtn dialogueOption">
-            <span class="material-symbols-outlined">radio_button_unchecked</span>
-            <span class="optionLabel">Dog lazy the over jumps fox brown quick the.</span></button>
-        </div>
-      </div>
     </div>
   </content>
+  <content id="settingsMenu" style="display: none;">
+    <h4 class="settings-title">Settings</h4>
+    <div class="settings-item">
+      <label for="volume">Volume:</label>
+      <input type="range" id="volume" min="0" max="100" value="100">
+      <label for="volume" id="volumeVal">100%</label>
+    </div>
+    <div class="settings-item">
+      <label for="speed">Speed:</label>
+      <input type="range" id="speed" min="25" max="200" value="100">
+      <label for="volume" id="speedVal">100%</label>
+    </div>
+    <div class="settings-item">
+      <label for="canSkipDialogue">Toggle Spacebar Skip:</label>
+      <input type="checkbox" id="canSkipDialogue" checked>
+    </div>
+
+    <button id="returnToMenu">Back</button>
+  </content>
   <content id="mainPage">
-    <div id="title" style="">
+    <div id="title">
       <span class="sans">-- The Tale of --</span>
       <h2 class="serif" id="title">Julius Caesar</h2>
       <span class="tip"><i>"i beesech thou to giveth me a val'rous grade"<br> - not caesar</i></span>
     </div>
-    <div id="mainMenu" style="">
+    <div id="mainMenu">
       <button class="iconLabelBtn" id="startButton"><span class="material-symbols-outlined">play_arrow</span>
         <span><u>S</u>tart</span></button>
       <button class="iconLabelBtn" id="optionsButton"><span class="material-symbols-outlined">settings</span>
         <span><u>O</u>ptions</span></button>
-      <button class="iconLabelBtn" id="optionsButton"><span class="material-symbols-outlined">help</span>
+      <button class="iconLabelBtn" id="aboytButton"><span class="material-symbols-outlined">help</span>
         <span><u>A</u>bout</span></button>
+      <span><small>tip: press <code>SPACE</code> to skip dialogue animations!</small></span>
+    </div>
+    <div id="saveDataManager" style="display: none;">
+      <span>Manage your existing story:</span>
+      <button id="existingData">Continue Story</button>
+      <button id="newData">New Story</button>
+      <span><small><b>Warning: </b> You will definitely lose all your progress if you choose to continue with a new
+          story.</small></span>
     </div>
     <div id="teamSelector" style="display: none;">
       <span><b>Whose side are you on?</b><br>

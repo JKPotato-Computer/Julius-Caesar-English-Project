@@ -11,14 +11,16 @@ class OptionElement {
 		button.dataset.optionId = this.id;
 
 		const label = document.createElement("span");
-		const icon = document.createElement("span");
+		
+		if (this.icon != null) {
+			const icon = document.createElement("span");
+			icon.className = "material-symbols-outlined";
+			icon.textContent = this.icon;
+			button.appendChild(icon);
+		}
 
 		label.className = "optionLabel";
-		icon.className = "material-symbols-outlined";
-
 		label.textContent = this.text;
-		icon.textContent = this.icon;
-		button.appendChild(icon);
 		button.appendChild(label);
 		return button;
 	}
@@ -71,6 +73,13 @@ class Dialogue {
 	}
 
 	displayOptions(dialogueElem, options, optionsConfig) {
+
+		if (optionsConfig.randomize) {
+			for (let i = options.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[options[i], options[j]] = [options[j], options[i]];
+			  }
+		}
 
 		const dialogueOptions = document.createElement("div");
 		dialogueOptions.classList.add("dialogueOptions");
@@ -160,9 +169,10 @@ class Dialogue {
 	static typewriteDialogue(dialogueElem) {
 		const message = dialogueElem;
 		let i = 0, text = message.innerHTML;
+		let tempInterval;
 		message.innerHTML = ''; // Clear the initial text
 
-		let dialogueSpeed = Dialogue.prototype.dialogueSpeed;
+		let dialogueSpeed = Dialogue.prototype.dialogueSpeed * (1/gameModule.getSetting("speed"));
 
 		function checkHeightChange() {
 			const currentHeight = dialogueElem.clientHeight;
@@ -182,11 +192,13 @@ class Dialogue {
 
 		function typeNextCharacter() {
 			if (i > text.length) {
+				clearInterval(tempInterval);
 				return;
 			}
 
 			if (message.classList.contains("skipped")) {
 				message.innerHTML = text;
+				clearInterval(tempInterval);
 				return;
 			}
 
@@ -206,11 +218,20 @@ class Dialogue {
 				}
 			}
 
-			message.innerHTML = text.substring(0, i);
+			if (!message.classList.contains("skipped")) {
+				message.innerHTML = text.substring(0, i);
+			}
 			checkHeightChange();
 			i++;
 			setTimeout(typeNextCharacter, dialogueSpeed);
 		}
+
+		tempInterval = setInterval(() => {
+			if (message.classList.contains("skipped")) {
+				message.innerHTML = text;
+				return;
+			}
+		},50)
 
 		typeNextCharacter();
 	}

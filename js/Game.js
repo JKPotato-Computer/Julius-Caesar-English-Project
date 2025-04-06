@@ -1,44 +1,111 @@
-const saveData = {
-  team: "teamConspirators",
-  storyline: new Storyline({
-    storyID: "",
-  }),
-  playMemory: {},
-
-  fails: {
-    fails: 0,
-    discoveredFails: [],
-  },
-
-  gameEndFail: null,
-  endings: [],
-
-  timeSpent: 0,
-};
+const saveData = {};
+const userSettings = {
+  volume: 1,
+  canSkipDialogue: true,
+  speed: 1
+}
 
 let isPlaying = false;
+let private_load;
 
 const gameModule = (() => {
   let shouldAutoScroll = true; // Variable to control auto-scrolling
   let hasAnsweredQuestion = false;
+  let skipCooldown = false;
+  let wasSkipped = false;
 
   let timeoutCallback, timeoutID;
+  let playingAudio;
+  const playAudio = (audioFileName, spawnAudio) => {
+    try {
+      if (spawnAudio) {
+        const audio = new Audio("./sfx/" + audioFileName);
+        audio.volume = .75 * userSettings.volume;
+        audio.play();
+        return;
+      } else if (playingAudio) {
+        playingAudio.pause();
+      }
+      playingAudio = new Audio("./sfx/" + audioFileName);
+      playingAudio.volume = .5 * userSettings.volume;
+      playingAudio.play();
+    } catch (error) {
+      console.error("Error playing audio:", error);
+    }
+  }
+
   const createInterruptableTimeout = (callback, delay) => {
-    timeoutID = setTimeout(callback, delay);
-    timeoutCallback = callback;
+    return new Promise((resolve) => {
+      timeoutID = setTimeout(() => {
+        callback();
+        resolve();
+      }, delay);
+      timeoutCallback = callback; // Save the callback
+    });
   };
-
-  const interruptTimeout = (disableCallback) => {
-    if (!timeoutCallback || !timeoutID) {
-      return;
+  
+  const interruptTimeout = () => {
+    if (!timeoutID) {
+      return Promise.resolve();
     }
-
-    if (!disableCallback) {
-      timeoutCallback();
-    }
-
+  
     clearTimeout(timeoutID);
+  
+    return new Promise((resolve) => {
+      if (timeoutCallback) {
+        timeoutCallback(); // Execute the saved callback immediately
+        timeoutCallback = null; // Clear to prevent double execution
+      }
+      timeoutID = null; // Clear the timeout ID
+      resolve();
+    });
   };
+
+  function saveDataToLocalStorage(key, data) {
+    try {
+      const serializedData = JSON.stringify(data);
+      localStorage.setItem(key, serializedData);
+      return true; // Indicate success
+    } catch (error) {
+      console.error("Error saving data to localStorage:", error);
+      return false; // Indicate failure
+    }
+  }
+  
+  function loadDataFromLocalStorage(key) {
+    try {
+      const serializedData = localStorage.getItem(key);
+      if (serializedData === null) {
+        return null; // Key doesn't exist
+      }
+      const data = JSON.parse(serializedData);
+      return data;
+    } catch (error) {
+      console.error("Error loading data from localStorage:", error);
+      return null; // Indicate failure
+    }
+  }
+
+  const showNotification = (message) => {
+    const container = document.getElementById('notificationContainer');
+    const notification = document.createElement('div');
+    notification.className = 'notification-item';
+
+    const text = document.createElement('span');
+    text.className = 'notification-text';
+    text.textContent = message;
+
+    const closeButton = document.createElement('button');
+    closeButton.className = 'notification-close';
+    closeButton.textContent = '×';
+    closeButton.onclick = function() {
+      container.removeChild(notification);
+    };
+
+    notification.appendChild(text);
+    notification.appendChild(closeButton);
+    container.appendChild(notification);
+  }
 
   // Function to show the loading screen
   const showLoadingScreen = (duration) => {
@@ -180,6 +247,8 @@ const gameModule = (() => {
         lastOptions = null;
       }
     }
+
+    autoScrollDialogue(containerId);
   };
 
   const loadDialogue = (containerId) => {
@@ -188,45 +257,103 @@ const gameModule = (() => {
       console.error(`Container with ID "${containerId}" not found.`);
       return;
     }
-
+  
     document.querySelector("#actDetails").textContent =
       Storyline.prototype.acts[saveData.storyline.storyID].displayName;
-
-    function displayDialogue() {
+  
+    async function displayDialogue() { // Make displayDialogue async
       if (!saveData.storyline.hasNext()) {
         return;
       }
-
+  
       if (!isPlaying) {
         return;
       }
-
+  
       let [dialogue, dialogueCount] = saveData.storyline.next();
+      let wasSkipped = false;
+  
       const [dialogueElement, message] = dialogue.dialogue.createDialogue();
       let startTime = null;
 
-      const handleSpacebar = (event) => {
-        if (message.classList.contains("skipped")) {
+      function handleDialogueResult() {
+        document.removeEventListener("keydown", handleSpacebar);
+      
+        if ((dialogue.sound) && (dialogue.sound.position == "afterDialogue")) {
+          playAudio(dialogue.sound.file);
+        }
+
+        if (dialogue.addToMemory) {
+          dialogue.addToMemory(saveData.playMemory);
+        }
+
+        if (dialogue.options) {
+          dialogue.dialogue.displayOptions(
+            dialogueElement,
+            dialogue.options,
+            dialogue.optionsConfig
+          );
+          autoScrollDialogue(containerId);
+          awaitInterval();
           return;
         }
+      
+        if (dialogue.fail) {
+          saveData.fails.fails += 1;
+          if (
+            saveData.fails.discoveredFails.indexOf(dialogue.fail.failID) === -1
+          ) {
+            saveData.fails.discoveredFails.push(dialogue.fail.failID);
+          }
+      
+          saveData.gameEndFail = dialogue.fail;
+          dialogue.fail.displayFail();
+          return;
+        }
+      
+        if (dialogue.next) {
+          transitionStoryline(dialogue.next);
+          return;
+        }
+      
+        if (dialogue.goBack) {;
+          saveData.storyline.goBack();
+          displayDialogue();
+          return;
+        }
+      
+        displayDialogue(); // Default: go to next line
+      }
+  
+      const handleSpacebar = (event) => {
+        if (message.classList.contains("skipped")) return;
+        if (!userSettings.canSkipDialogue) return;
+        if (event.key === " " || event.code === "Space" || event.keyCode === 32) {
+          if (skipCooldown) {
+            showNotification("You're skipping through too fast!");
+            return;
+          }
+        
+          skipCooldown = true;
+          setTimeout(() => (skipCooldown = false), 100);
+        
 
-        if (
-          event.key === " " ||
-          event.code === "Space" ||
-          event.keyCode === 32
-        ) {
-          console.log("Skipped!!", message);
           message.classList.add("skipped");
-          interruptTimeout();
+          wasSkipped = true; // <<< Important
+          interruptTimeout().then(() => {
+            console.log("Dialogue interrupted by spacebar.");
+            handleDialogueResult();
+          });
         }
       };
-
+  
       document.addEventListener("keydown", handleSpacebar);
+  
       function awaitInterval() {
         if (!isPlaying) {
           return;
         }
-
+  
         if (
           dialogue.optionsConfig.timedQuestion &&
           dialogue.optionsConfig.timedQuestion > 0
@@ -234,149 +361,164 @@ const gameModule = (() => {
           if (startTime == null) {
             startTime = Date.now() / 1000;
           }
-
+  
           let secondsLeft =
-            dialogue.optionsConfig.timedQuestion / 1000 -
+            (dialogue.optionsConfig.timedQuestion / 1000 * (1 / userSettings.speed)) -
             (Date.now() / 1000 - startTime);
           dialogueElement.querySelector(".barComplete").style.width =
             (Math.abs(secondsLeft) /
-              (dialogue.optionsConfig.timedQuestion / 1000)) *
-              100 +
+            (dialogue.optionsConfig.timedQuestion / 1000 * (1 / userSettings.speed))) *
+            100 +
             "%";
           dialogueElement.querySelector(".timedQuestion > span").textContent =
             Math.abs(secondsLeft).toFixed(1) + "s";
-
+  
           if (secondsLeft <= 0) {
             if (!hasAnsweredQuestion) {
               saveData.storyline.answerResponse("Void");
             }
-
+  
             for (const e of dialogueElement.querySelectorAll(
               ".dialogueOptions > button"
             )) {
               e.disabled = true;
             }
-
+  
             hasAnsweredQuestion = false;
             displayDialogue();
             return;
           }
         }
-
+  
         if (hasAnsweredQuestion && dialogue.optionsConfig.instantFeedback) {
           hasAnsweredQuestion = false;
           displayDialogue();
           return;
         }
-
+  
         setTimeout(awaitInterval, 1);
       }
-
+  
       dialogueCount++;
       document.querySelector("#dialogBar").style.width =
         (dialogueCount / saveData.storyline.getTotalLines()) * 100 + "%";
       document.querySelector("#percentage").textContent =
         Math.floor((dialogueCount / saveData.storyline.getTotalLines()) * 100) +
         "%";
-
+  
       handleDialogueScroll(containerId);
       addMessageAndAutoScroll(containerId, dialogueElement, message);
-      if (dialogue.options) {
-        if (dialogue.optionsConfig.appear == "afterDialogue") {
-          createInterruptableTimeout(function () {
-            document.removeEventListener("keydown", handleSpacebar);
+  
+      try {
+        if ((dialogue.sound) && (dialogue.sound.position == "beforeDialogue")) {
+          playAudio(dialogue.sound.file);
+        }
+
+        if (dialogue.options) {
+          if (dialogue.optionsConfig.appear == "afterDialogue") {
+            await createInterruptableTimeout(() => {
+              if (!wasSkipped) {
+                handleDialogueResult();
+              }
+            }, dialogue.dialogue.getDialogueDuration() + ((dialogue.delay || 750) * (1 / userSettings.speed)));
+          } else {
             dialogue.dialogue.displayOptions(
               dialogueElement,
               dialogue.options,
               dialogue.optionsConfig
             );
             awaitInterval();
-          }, dialogue.dialogue.getDialogueDuration() + (dialogue.delay || 750));
+          }
         } else {
-          dialogue.dialogue.displayOptions(
-            dialogueElement,
-            dialogue.options,
-            dialogue.optionsConfig
-          );
-          awaitInterval();
-        }
-      } else {
-        if (dialogue.fail) {
-          createInterruptableTimeout(() => {
-            saveData.fails.fails += 1;
-            if (
-              saveData.fails.discoveredFails.indexOf(dialogue.fail.failID) != -1
-            ) {
-              saveData.fails.discoveredFails.push(dialogue.fail.failID);
-            }
-
-            saveData.gameEndFail = dialogue.fail;
-            document.removeEventListener("keydown", handleSpacebar);
-            dialogue.fail.displayFail();
-          }, dialogue.dialogue.getDialogueDuration() + 1000);
-          return;
-        }
-
-        if (dialogue.next) {
-          createInterruptableTimeout(() => {
-            if (!isPlaying) {
-              return;
-            }
-            document.removeEventListener("keydown", handleSpacebar);
-            transitionStoryline(dialogue.next);
-          }, dialogue.dialogue.getDialogueDuration() + 1000);
-          return;
-        }
-
-        if (dialogue.goBack) {
-          createInterruptableTimeout(() => {
-            if (!isPlaying) {
-              return;
-            }
-            document.removeEventListener("keydown", handleSpacebar);
-            saveData.storyline.goBack();
-          }, dialogue.dialogue.getDialogueDuration());
-          return;
-        }
-        createInterruptableTimeout(() => {
-          if (!isPlaying) {
+          if (dialogue.fail) {
+            await createInterruptableTimeout(() => {
+              if (!wasSkipped) {
+                handleDialogueResult();
+              }
+            }, dialogue.dialogue.getDialogueDuration() + 1000);
             return;
           }
-          document.removeEventListener("keydown", handleSpacebar);
-          displayDialogue();
-        }, dialogue.dialogue.getDialogueDuration() + (dialogue.delay || 750));
+  
+          if (dialogue.next) {
+            await createInterruptableTimeout(() => {
+              if (!wasSkipped) {
+                handleDialogueResult();
+              }
+            }, dialogue.dialogue.getDialogueDuration() + 1000);
+            return;
+          }
+  
+          if (dialogue.goBack) {
+            await createInterruptableTimeout(() => {
+              if (!wasSkipped) {
+                handleDialogueResult();
+              }
+            }, dialogue.dialogue.getDialogueDuration() + ((dialogue.delay || 750) * (1 / userSettings.speed)));
+            return;
+          }
+          await createInterruptableTimeout(() => {
+            if (!wasSkipped) {
+              handleDialogueResult();
+            }
+          }, dialogue.dialogue.getDialogueDuration() + ((dialogue.delay || 750) * (1 / userSettings.speed)));
+        }
+      } catch (error) {
+        console.error("Dialogue interrupted or failed:", error);
+        // Handle the interrupt or error, if necessary.
       }
     }
-
+  
     displayDialogue();
   };
+
+  const wipeSaveData = function() {
+    console.log("Wiped save data.");
+    for (let key in saveData) {
+      delete saveData[key];
+    }
+    console.log(saveData);
+  }
 
   const init = function (s) {
     if (isPlaying) {
       return;
     }
-
     isPlaying = true;
-    if (saveData.storyline.storyID != "") {
-      transitionStoryline(saveData.storyline.storyID, true);
-      return;
+
+    let hasSaveData = Object.keys(saveData).length != 0;
+    if (!hasSaveData) {
+      // New Save Data
+      saveData["team"] = document.querySelector("#teamSelector > div:nth-child(2) > button.selected").id;
+      saveData["storyline"] = new Storyline({
+        storyID: ((s != "") && (Storyline.prototype.acts[s])) ? s : "Tutorial"
+      });
+      saveData["playMemory"] = {};
+      saveData["fails"] = {
+        fails: 0,
+        discoveredFails: []
+      };
+      saveData["gameEndFail"] = null;
+      saveData["endings"] = [];
+      saveData["timeSpent"] = 0;
     }
 
-    transitionStoryline(
-      s != "" && Storyline.prototype.acts[s] ? s : "Tutorial"
-    );
-  };
-
-  const setTeam = (teamName) => {
-    saveData.team = teamName;
+    transitionStoryline(saveData.storyline.storyID, hasSaveData);
   };
 
   const getTeam = () => saveData.team;
   const getStoryline = () => saveData.storyline;
   const getSaveData = () => saveData;
+  const getSetting = (option) => userSettings[option];
+  const setSetting = (option, value) => {
+    userSettings[option] = value;
+    saveDataToLocalStorage("userSettings", userSettings);
+  };
+
+  const hasSaveData = () => Object.keys(saveData).length != 0;
+
+  private_load = loadDataFromLocalStorage;
 
   return {
-    setTeam: setTeam,
     getTeam: getTeam,
     getStoryline: getStoryline,
     loadDialogue: loadDialogue,
@@ -388,11 +530,25 @@ const gameModule = (() => {
     hideLoadingScreen: hideLoadingScreen,
     retryStory: retryStory,
     exitStory: exitStory,
+    hasSaveData : hasSaveData,
+    wipeSaveData : wipeSaveData,
+    showNotification : showNotification,
+    setSetting: setSetting,
+    getSetting: getSetting
   };
 })();
 
 window.onload = function () {
   gameModule.showLoadingScreen(); // Show loading screen initially
+  let settings = private_load("userSettings");
+  for (const key in settings) {
+    userSettings[key] = settings[key];
+    document.querySelector("#" + key).value = (typeof settings[key] == "boolean") ? ((settings[key] == true) ? "on" : "off") : (settings[key]*100);
+    
+    if (typeof(settings[key]) == "number") {
+      document.querySelector("#" + key + "Val").textContent = (settings[key]*100) + "%";
+    }
+  }
   setTimeout(() => {
     gameModule.hideLoadingScreen(); // Hide loading screen after 1 second
   }, 1000); // 1000ms (1 second) delay after window load

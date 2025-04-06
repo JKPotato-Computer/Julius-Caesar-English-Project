@@ -214,6 +214,7 @@
   overflow: auto;
   display: flex;
   flex-direction: column;
+  scrollbar-color: var(--primary) rgb(255,255,255,.05);
 }
 
 .message {
@@ -256,6 +257,16 @@
   display: grid;
   gap: 10px;
   width: 100%;
+}
+
+.dialogueOptions > button {
+  min-width: auto !important;
+  font-size: 16px;
+}
+
+.dialogueOptions > button:hover {
+  min-width: auto !important;
+  font-size: 16px;
 }
 
 .dialogueOptions.one-option {
@@ -568,7 +579,7 @@
   height: 100%;
   background: var(--background);
   /* Semi-transparent background */
-  display: none;
+  /*display: none;*/
   /* Initially hidden */
   justify-content: center;
   align-items: center;
@@ -597,4 +608,101 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+dialog {
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 300px; /* Adjust as needed */
+  text-align: center;
+  border: none;
+  background: var(--background);
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+dialog[open] {
+  display: block; /* Ensure it's visible when open */
+}
+
+#dialogues {
+  z-index: -1;
+}
+
+#dialogues:has(dialog[open]) {
+  background-color: rgb(255,0,0,.25);
+  z-index: 4;
+}
+
+dialog .popup-close {
+  cursor: pointer;
+  font-size: 16px;
+  color: #888;
+}
+
+.popup-stats {
+    text-align: left;
+}
+
+.popup-holder {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#notificationContainer {
+  position: fixed;
+  left: 50%;
+  top: 8px;
+  transform: translateX(-50%);
+  z-index: 1002; /* Ensure it's above other elements */
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: center; /* Align notifications to the right */
+}
+
+.notification-item {
+  background-color: var(--primary);
+  padding: 6px;
+  margin-bottom: 5px; /* Spacing between notifications */
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: max-content; /* Adjust as needed */
+  min-width: 200px;
+  text-align: center;
+  gap: 8px;
+  box-sizing: border-box; /* Include padding in width */
+  animation: slideUpFadeIn .25s ease-in-out;
+}
+
+.notification-text {
+  flex-grow: 1; /* Allow text to grow */
+  font-size: 12px;
+}
+
+.notification-close {
+  cursor: pointer;
+  border: none;
+  background-color: none;
+  min-width: auto;
+  border-radius: 4px;
+  height: 0;
+  padding: 0;
+  font-size: 14px;
+}
+
+.notification-close:hover {
+  background-color: #d0d0d0;
+  min-width: auto !important;
+}
+
+.dialogueOptions > button:not(:has(.material-symbols-outlined)) {
+  grid-template-columns: 1fr;
 }

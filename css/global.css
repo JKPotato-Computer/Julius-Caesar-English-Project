@@ -220,6 +220,23 @@ button:disabled {
   width: 25%;
 }
 
+div#saveDataManager {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+div#saveDataManager b {
+  color: var(--accent);
+}
+
+#settingsMenu {
+  z-index: 2;
+}
+
 @media only screen and (max-width: 600px) {
   #teamSelector > div {
     flex-direction: column;
