@@ -748,58 +748,12 @@ Storyline.prototype.acts = {
           "Sootsayer",
           "Beware the ides of March.",
           "slate-blue"
-        ),
-        options: [
-          new OptionElement("Ah, you're just a dreamer. Move along.", "bubble_chart", "Dreamer"),
-          new OptionElement("The... Ides of March?", "flag", "Suspicious"),
-          new OptionElement("Wait, there's ice in March?", "deployed_code", "Ice")
-        ],
-        optionsConfig: {
-          timedQuestion: 0,
-          instantFeedback: true,
-          appear: "afterDialogue"
-        }
-      },
-      ["A1_S2_11_Dreamer"]: {
-        [0]: {
-          dialogue: new Character("Caesar", "Go, all of you people.", "dark-gold"),
-          goBack: true,
-        }
-      },
-      ["A1_S2_11_Suspicious"]: {
-        [0]: {
-          dialogue: new Dialogue("<i>Caesar will remember that...<i>"),
-          addToMemory: (playMemory) => {
-            playMemory["CaesarSuspicious"] = true;
-          },
-          goBack: true
-        }
-      },
-      ["A1_S2_11_Ice"]: {
-        [0]: {
-          dialogue: new Character(
-            "Soothsayer",
-            "<b>I D E S</b> of March, not <b>I C E</b> of March.",
-            "slate-blue"
-          )
-        },
-        [1]: {
-          dialogue: new Character(
-            "Caesar",
-            "The id... ce of March? I don't get it, what does ice have to do with me?",
-            "dark-gold"
-          )
-        },
-        [2]: {
-          dialogue: new Character(
-            "Soothsayer",
-            "No- whatever.",
-            "slate-blue"
-          ),
-          goBack: true
-        },
+        )
       },
       [12]: {
+        dialogue: new Character("Caesar", "Ah, you're just a dreamer. Move along. Go, all of you people.", "dark-gold"),
+      },
+      [13]: {
         dialogue: new StageDirections(
           "All but Brutus and Cassius exit."
         ),
@@ -808,34 +762,34 @@ Storyline.prototype.acts = {
           position: "beforeDialogue"
         }
       },
-      [13]: {
+      [14]: {
         dialogue: new Dialogue("<i>whoo..! it's a ghost! you might want to keep track of what you tell to [Brutus], since it may influence the ending of your story... </i>"),
       },
-      [14]: {
+      [15]: {
         dialogue: new Character("Cassius", "So, Brutus. Are you going to watch the race?", "deep-olive"),
       },
-      [15]: {
+      [16]: {
         dialogue: new Character("Brutus", "Me? I'm not gamesome at all! Nor am I as competitive as Antony.<br>But, that's enough time. Let's split paths, shall we?", "midnight-blue"),
       },
-      [16]: {
+      [17]: {
         dialogue: new Character("Cassius", "Wait. You've been acting strange lately. You were once such in a loving and gentle manner, and now you're stubborn over your dear friend?", "deep-olive"),
       },
-      [17]: {
+      [18]: {
         dialogue: new Character("Brutus", "<u>[Cassius]</u>, I get it. I've been going through much contemplating amongst my thoughts and inner conflicts. But you're still a good friend, <u>[Cassius]</u>. Don't let my emotions change you.", "midnight-blue")
       },
-      [18]: {
+      [19]: {
         dialogue: new Character("Brutus", "Don't worry about the poor Brutus fighting against himself at war, who forgets to share love towards others.", "midnight-blue")
       },
-      [19]: {
+      [20]: {
         dialogue: new Character("Cassius", "Brutus, can't you look at yourself?", "deep-olive"),
       },
-      [20]: {
+      [21]: {
         dialogue: new Character("Brutus", "No, I can't. My eyes only look forward, I can only see what reflects back to me.", "midnight-blue"),
       },
-      [21]: {
+      [22]: {
         dialogue: new Character("Cassius", "Too bad there aren't any mirrors to show who you really are, [Brutus], a noble Roman like Caesar. Speaking of Caesar, you've seen the turn of events that's been happening in Rome, right? Or has your sight blocked you from everything?", "deep-olive")
       },
-      [22]: {
+      [23]: {
         dialogue: new Character("Brutus", "What are you trying to tell me, <u>[Cassius]</u>? What dangers are you pointing at for me? Is it <pause duration=500> <i>me?</i>", "midnight-blue"),
         options: [
           new OptionElement("Well, I'll be your mirror to show who you really are, Brutus. A noble gentleman. If you believe me as a fool who goes to slander all friends after befriending them, then go ahead and believe I'm dangerous.", null, "Success"),
@@ -849,14 +803,14 @@ Storyline.prototype.acts = {
           appear: "afterDialogue"
         }
       },
-      ["A1_S2_22_Success"]: {
+      ["A1_S2_23_Success"]: {
         [0]: {
           dialogue: new Character("Brutus", "Okay th-", "midnight-blue"),
           delay: 0,
           goBack: true,
         }
       },
-      ["A1_S2_22_Unique"]: {
+      ["A1_S2_23_Unique"]: {
         [0]: {
           dialogue: new Character("Brutus", "Fine then...", "midnight-blue"),
           addToMemory: (playMemory) => {
@@ -869,7 +823,7 @@ Storyline.prototype.acts = {
           goBack: true,
         }
       },
-      ["A1_S2_22_Fail"]: {
+      ["A1_S2_23_Fail"]: {
         [0]: {
           dialogue: new Character("Brutus", "Methinks you are overrating my worth, <u>[Cassius]</u>. I must seek a place of quietude, for I can't handle such flattery.", "midnight-blue"),
           fail: new GameFail({
@@ -879,19 +833,23 @@ Storyline.prototype.acts = {
           ),
         }
       },
-      [23]: {
-        dialogue: new StageDirections("Shouts are heard."),
-      },
       [24]: {
-        dialogue: new Character("Brutus", "Why are they shouting? I fear the people do choose Ceasar for their king.", "midnight-blue"),
+        dialogue: new StageDirections("Shouts are heard."),
+        sound: {
+          file: "cheer.mp3",
+          position: "beforeDialogue"
+        }
       },
       [25]: {
-        dialogue: new Character("Cassius", "Really, you're fearing that? Then I'd suppose you don't want that, either.", "deep-olive"),
+        dialogue: new Character("Brutus", "Why are they shouting? I fear the people do choose Ceasar for their king.", "midnight-blue"),
       },
       [26]: {
+        dialogue: new Character("Cassius", "Really, you're fearing that? Then I'd suppose you don't want that, either.", "deep-olive"),
+      },
+      [27]: {
         dialogue: new Character("Brutus", "Not really, <u>[Cassius]</u>, though I love Caesar very much. But, why do you keep me here? What do you want from me, all of this? If Caesar is for the good of Rome, then I'd follow suit till my death. The gods will honor me over my death for my commitment.", "midnight-blue"),
         options: [
-          new OptionElement("Honor, Brutus. Honor is what I came here for. We both were born with equal power as Caesar — you know that, right? I remember that one moment at the Tiber: Caesar dared me to swim across, and I did. He followed me, yet halfway, he called, \"Help me, Cassius, or I will sink!\" And like Aeneas, I carried him from the flood that is the Tiber. Yet, that same Cesar now rules as a god.", "null", "Success"),
+          new OptionElement("Honor, Brutus. Honor is what I came here for. We both were born with equal power as Caesar — you know that, right? I remember that one moment at the Tiber: Caesar dared me to swim across, and I did. He followed me, yet halfway, he called, \"Help me, Cassius, or I will sink!\" And like Aeneas, I carried him from the flood that is the Tiber. Yet, that same Cesar now rules as a god.", null, "Success"),
           new OptionElement("Brutus, I'm here to show you honor. We were once like Caesar, powerless and like the others. I once crossed this treacherous river out of pure will, even when Caesar tried to push me downstream. He couldn't even make it halfway across, more of an eighth! I had to save the frail ol' Caesar like a wooden stick. Can't you see it all now?", null, "Fail"),
           new OptionElement("Brutus, think about this for a bit. Caesar once challenged me to swim 'cross the Tiber, and I did. He did, too. Yet halfway across, I overheard Caesar shouting, \"Cassius, I need your help!\" Sure, I carried him out, but I wondered if this defined Caesar as anything. Someone... mortal. A real person. Maybe too good to be true.", null, "Unique")
         ],
@@ -902,14 +860,14 @@ Storyline.prototype.acts = {
           appear: "afterDialogue"
         }
       },
-      ["A1_S2_26_Success"]: {
+      ["A1_S2_27_Success"]: {
         [0]: {
           dialogue: new Character("Brutus", "Sur-", "midnight-blue"),
           delay: 0,
           goBack: true,
         }
       },
-      ["A1_S2_26_Fail"]: {
+      ["A1_S2_27_Fail"]: {
         [0]: {
           dialogue: new Character("Brutus", "What I see is... you're calling Caesar weak? I don't really find you a \"great\" friend you...", "midnight-blue"),
           fail: new GameFail(
@@ -920,9 +878,9 @@ Storyline.prototype.acts = {
           )
         }
       },
-      ["A1_S2_26_Unique"]: {
+      ["A1_S2_27_Unique"]: {
         [0]: {
-          dialogue: new Character("Brutus", "and...? Why are you telling me this?"),
+          dialogue: new Character("Brutus", "and...? Why are you telling me this?", "midnight-blue"),
           goBack: true,
           addToMemory: (playMemory) => {
             if (playMemory["BrutusSuspicions"] && playMemory["BrutusSuspicions"].indexOf("Statement2") != -1) {
@@ -933,15 +891,19 @@ Storyline.prototype.acts = {
           },
         }
       },
-      [27]: {
-        dialogue: new StageDirections("More shouting."),
-      },
       [28]: {
-        dialogue: new StageDirections("Even more shouting! Is this all honors being handed over to Caesar?"),
+        dialogue: new StageDirections("More shouting."),
+        sound: {
+          file: "cheer.mp3",
+          position: "beforeDialogue"
+        }
+      },
+      [29]: {
+        dialogue: new Character("Brutus", "Even more shouting! Is this all honors being handed over to Caesar?", "midnight-blue"),
         options: [
-          new OptionElement("Well, Caesar is like a giant who sees the world beneath him. Us? Petty men! All we get to do is walk, no, <i>crawl</i> under his legs and die in dishonor. Is this Rome to us anymore?", null, "Success"),
+          new OptionElement("Well, Caesar is like a giant who sees the world beneath him. Us? Petty men! All we get to do is walk, no, crawl under his legs and die in dishonor. Is this Rome to us anymore?", null, "Success"),
           new OptionElement("Caesar? He's more of a child than a true king, let alone a \"noble\" one. I'd much rather live a miserable life to anyone but some pathetic leader.", null, "Fail"),
-          new OptionElement("I guess Caesar can stand tall and represent Rome. Honestly, I don't think it's about his position, but rather us. Shouldn't we be standing up for ourselves, for all of Rome?",null,"Unique")
+          new OptionElement("I guess Caesar can stand tall and represent Rome. Honestly, I don't think it's about his position, but rather us. Shouldn't we be standing up for ourselves, for all of Rome?", null, "Unique")
         ],
         optionsConfig: {
           randomize: true,
@@ -950,15 +912,15 @@ Storyline.prototype.acts = {
           appear: "afterDialogue"
         }
       },
-      ["A1_S2_28_Success"]: {
+      ["A1_S2_29_Success"]: {
         [0]: {
           dialogue: new Character("Brutus", "...", "midnight-blue"),
           goBack: true
         }
       },
-      ["A1_S2_28_Fail"]: {
+      ["A1_S2_29_Fail"]: {
         [0]: {
-          dialogue: new Character("Brutus", "A child, you say? How about this?<br><br><i>Dear <u>[Cassius]</u> <pause duration=1000> 's parents, I think you may need to re-educate your chi-", "midnight-blue"),
+          dialogue: new Character("Brutus", "A child, you say? How about this?<br><br><i>Dear <u>[Cassius]</u> <pause duration=1000> 's parents, I think you may need to re-evaluate your choices on having a chi-", "midnight-blue"),
           delay: 0,
           fail: new GameFail({
             failID: "CassiusManiuplationFail3",
@@ -966,7 +928,7 @@ Storyline.prototype.acts = {
           })
         }
       },
-      ["A1_S2_28_Unique"]: {
+      ["A1_S2_29_Unique"]: {
         [0]: {
           dialogue: new Character("Brutus", "So? What do you want me to do, <u>[Cassius]</u> Cheer? Weep?", "midnight-blue"),
           addToMemory: (playMemory) => {
@@ -979,29 +941,29 @@ Storyline.prototype.acts = {
           goBack: true
         }
       },
-      [29]: {
-        dialogue: new Character("Cassius","<small>(continued response)</small>","deep-olive"),
+      [30]: {
+        dialogue: new Character("Cassius", "<small>(continued response)</small>", "deep-olive"),
         options: [
-          new OptionElement("You know this isn't the stars that make us do this, Brutus. The gods don't see Caesar above us, we do. This was our choice, we are the underlings.",null,"Success"),
-          new OptionElement("Really? You'd believe in the stars that Caesar has any power? Come on now, of course not! He's just a cowardest of the cowards. If anything, we're all just fools in this... place of Rome.",null,"Fail"),
-          new OptionElement("Maybe we should look to ourselves. Something that we should've watched before it grew to be much more... dangerous.",null,"Unique")
+          new OptionElement("You know this isn't the stars that make us do this, Brutus. The gods don't see Caesar above us, we do. This was our choice, we are the underlings.", null, "Success"),
+          new OptionElement("Really? You'd believe in the stars that Caesar has any power? Come on now, of course not! He's just a cowardest of the cowards. If anything, we're all just fools in this... place of Rome.", null, "Fail"),
+          new OptionElement("Maybe we should look to ourselves. Something that we should've watched before it grew to be much more... dangerous.", null, "Unique")
         ],
         optionsConfig: {
           randomize: true,
           timedQuestion: 0,
           instantFeedback: true,
-          appear: "afterDialogue"
+          appear: "beforeDialogue"
         }
       },
-      ["A1_S2_29_Success"]: {
+      ["A1_S2_30_Success"]: {
         [0]: {
-          dialogue: new Character("Brutus","I see...","midnight-blue"),
+          dialogue: new Character("Brutus", "I see...", "midnight-blue"),
           goBack: true
         }
       },
-      ["A1_S2_29_Fail"]: {
+      ["A1_S2_30_Fail"]: {
         [0]: {
-          dialogue: new Character("Brutus","Are you just here to complain about Caesar? If so, begone. Maybe <b>YOU'RE</b> the coward after all.","midnight-blue"),
+          dialogue: new Character("Brutus", "Are you just here to complain about Caesar? If so, begone. Maybe <b>YOU'RE</b> the coward after all.", "midnight-blue"),
           fail: new GameFail(
             {
               failID: "CassiusManiuplationFail4",
@@ -1010,9 +972,9 @@ Storyline.prototype.acts = {
           )
         }
       },
-      ["A1_S2_29_Unique"]: {
+      ["A1_S2_30_Unique"]: {
         [0]: {
-          dialogue: new Character("Brutus","Then, what do you want me to do? Look at who I was before?","midnight-blue"),
+          dialogue: new Character("Brutus", "Then, what do you want me to do? Think about myself more?", "midnight-blue"),
           addToMemory: (playMemory) => {
             if (playMemory["BrutusSuspicions"] && playMemory["BrutusSuspicions"].indexOf("Statement4") != -1) {
               playMemory["BrutusSuspcicions"].push("Statement4");
@@ -1023,16 +985,428 @@ Storyline.prototype.acts = {
           goBack: true
         }
       },
-      [30]: {
-        dialogue: new Character("Cassius","<small>(continued response)</small>","deep-olive"),
+      [31]: {
+        dialogue: new Character("Cassius", "<small>(continued response)</small>", "deep-olive"),
         options: [
-          ],
+          new OptionElement("Brutus, what makes the name \"Brutus\" any more different than Caesar? Just write your name out — it's just as fair. Sound it out — can't even tell a difference.", null, "Success"),
+          new OptionElement("Brutus, just think of the name \"Caesar\". Are you really going to trust anyone with the name \"Caesar?\" You fool, of course not! \"Brutus\" rings a different bell to \"Caesar,\" wouldn't be any less surprised if you were the noblest.", null, "Fail"),
+          new OptionElement("Brutus, what comes to your mind when you hear \"Caesar?\" Do you even have an idea? Is it a drive for power, to be recorded in history? Or are you silenced in fear? Perhaps us Romans are... not mighty enough yet.")
+        ],
         optionsConfig: {
           randomize: true,
           timedQuestion: 0,
           instantFeedback: true,
+          appear: "beforeDialogue"
+        }
+      },
+      ["A1_S2_31_Success"]: {
+        [0]: {
+          dialogue: new Character("Cassius", "Oh think about your ancestors, Brutus, who once ruled Rome against the devil. There's room for one famed man, why not you?", "deep-olive"),
+          goBack: true
+        },
+      },
+      ["A1_S2_31_Fail"]: {
+        [0]: {
+          dialogue: new Character("Brutus", "Caesar is <b>NOT</b> incapable, <u>[Cassius]</u>! And for you to call me a... fool??", "midnight-blue"),
+        },
+        [1]: {
+          dialogue: new Character("Brutus", "Is this all who I am to you? A servant for Caesar? <br> Is this all who Caesar is to you? A blockhead?", "midnight-blue"),
+        },
+        [2]: {
+          dialogue: new Character("Brutus", "Well, my dear friend <u>[Cassius]</u>, I think it's time I must leave. I will take some time to consider what you said, and maybe I'll have a word with you another day.", "midnight-blue"),
+        },
+        [3]: {
+          dialogue: new StageDirections("<b>BRUTUS</b> exits."),
+          delay: 2000,
+        },
+        [4]: {
+          dialogue: new StageDirections("<b>CASSIUS</> sees <b>CAESAR</b> and <b>CASCA</b> entering."),
+          delay: 0
+        },
+        [5]: {
+          dialogue: new Character("Caesar", "<h1 class=\"serif\">I heard that.</h1>", "dark-gold"),
+          fail: new GameFail(
+            {
+              failID: "CassiusManipulationFail5",
+              failText: "Did you really think you were actually going to get away scott-free?"
+            }
+          )
+        }
+      },
+      ["A1_S2_31_Unique"]: {
+        [0]: {
+          dialogue: new Character("Brutus", "I- well, perhaps... okay then.", "midnight-blue"),
+          addToMemory: (playMemory) => {
+            if (playMemory["BrutusSuspicions"] && playMemory["BrutusSuspicions"].indexOf("Statement5") != -1) {
+              playMemory["BrutusSuspcicions"].push("Statement5");
+            } else {
+              playMemory["BrutusSuspcicions"] = ["Statement5"];
+            }
+          },
+          goBack: true
+        }
+      },
+      [32]: {
+        dialogue: new Character("Brutus", "I know you love me, I do. But, I think that's enough from you, <u>[Cassius]</u>. I will go and think over what you have said to me, and I'll find a time where we can discuss about this again.", "midnight-blue"),
+      },
+      [33]: {
+        dialogue: new Character("Brutus", "Understand, <u>[Cassius]</u>, that I'd rather be apart of a village over the hard conditions of Rome.", "midnight-blue"),
+      },
+      [34]: {
+        dialogue: new Character("Cassius", "I hope my words have struck a small show of fire from you, [Brutus].", "deep-olive"),
+      },
+      [35]: {
+        dialogue: new StageDirections("<b>CAESAR</b> enters with his followers, including <b>CASCA.</b>")
+      },
+      [36]: {
+        dialogue: new Character("Brutus", "It seems as Caesar is back from the games.", "midnight-blue")
+      },
+      [37]: {
+        dialogue: new Character("Cassius", "Great. Pluck Casca by the sleeve, and he'll share you what hath occured today, something worthy to hear.", "deep-olive")
+      },
+      [38]: {
+        dialogue: new Character("Brutus", "Sure, but I don't know... Caesar doesn't look very happy, and nor does the crowd, or even Calphurnia for that matter.<br>And look at Cicero with his eyes so firey he was apart of the conference with a few senators.", "deep-olive")
+      },
+      [39]: {
+        dialogue: new Character("Cassius", "Casca will tell us everything.", "deep-olive"),
+        next: () => {
+          if (gameModule.getSaveData().playMemory["BrutusSuspcicions"] && gameModule.getSaveData().playMemory["BrutusSuspcicions"].length >= 3) {
+            return "A1_S3"
+          } else {
+            return "A1_S2_2"
+          }
+        }
+      }
+    }
+  },
+  ["A1_S2_2"]: {
+    displayName: "Act 1 : Scene 2",
+    ["teamConspirators"]: {
+      [0]: {
+        dialogue: new StageDirections("Trumpets play. <b>CAESAR</b> exists with all his followers except <b>CASCA.</b>"),
+      },
+      [1]: {
+        dialogue: new Character("Casca", "<i>(to [Brutus])</i> Hey, you pulled me by the cloak. Do you want to talk to me?", "lichen-green")
+      },
+      [2]: {
+        dialogue: new Character("Brutus", "Ay, Casca. Tell us what has happened today. Caesar was in such a serious mood.", "midnight-blue"),
+      },
+      [3]: {
+        dialogue: new Character("Casca", "Look, Caesar was offered a crown, but then he pushed it away.<br>And guess what? The people fell a-shouting.", "lichen-green")
+      },
+      [4]: {
+        dialogue: new Character("Brutus", "The second noise?", "midnight-blue"),
+      },
+      [5]: {
+        dialogue: new Character("Casca", "Yet again!", "lichen-green")
+      },
+      [6]: {
+        dialogue: new Character("Brutus", "The third noise! What about that?", "midnight-blue"),
+      },
+      [7]: {
+        dialogue: new Character("Casca", "<span style=\"font-family: Comic Sans MS;\">Buddy ol' pal you wouldn't <b>BELIEVE</b> what it was all about.</span> <pause duration=1000> <br> The SAME thing!", "lichen-green")
+      },
+      [8]: {
+        dialogue: new Character("Brutus", "The crown was offered to him three times?", "lichen-green"),
+      },
+      [9]: {
+        dialogue: new Character("Casca", "Dude. <pause duration=2000> <br> Ay, indeed, was't. Everytime he pushed it more gently than the past, everytime he refused it, the crowd shouted.", "lichen-green"),
+        sound: {
+          file: "facepalm.mp3",
+          position: "beforeDialogue"
+        }
+      },
+      [10]: {
+        dialogue: new Character("Cassius", "But who offered him the crown?", "deep-olive")
+      },
+      [11]: {
+        dialogue: new Character("Casca", "Why, Antony did.", "lichen-green")
+      },
+      [12]: {
+        dialogue: new Character("Brutus", "Tell us everything, gentle Casca.", "midnight-blue")
+      },
+      [13]: {
+        dialogue: new Character("Casca", "<span dialogue-speed=10>HAAHHAHAHAAHHAAHHAHAHAHAHAHAAHAHAHAHAHAHAH</span> <br> I can't really explain it, it was just... too silly! Look, Mark Antony gave him a crown and, well I told you he refused it. The second time, he refused it again! <small>(though he did kind of keep it on his hands)</small> And the third time, he refused it again!! <br> The crowd went crazy, and... <br> man did they have such a stinky breath. I just couldn't laugh to not take any of this air in unlike Caesar who got choked in this air and swooned at it.", "lichen-green")
+      },
+      [14]: {
+        dialogue: new Character("Cassius", "Wait. Caesar FAINTED??", "deep-olive"),
+      },
+      [15]: {
+        dialogue: new Character("Casca", "Oh yeah, he fell into the marketplace and started foaming at his mouth.", "lichen-green")
+      },
+      [16]: {
+        dialogue: new Character("Brutus", "I expected that, after all, he has epilepsy and got a Caesar.", "deep-olive"),
+        sound: {
+          file: "punchline.mp3",
+          position: "afterDialogue"
+        }
+      },
+      [17]: {
+        dialogue: new Character("Casius", "Nah, Caesar doesn't have it. <b>we</b> have the epilepsy.", "lichen-green")
+      },
+      [18]: {
+        dialogue: new Character("Casca", "??? <br><br> Maybe it's just you... <br><br> I don't really know what you mean by that, but Caesar did fall down. Honestly, I found his audience to do the same thing as actors in a theater. If they didn't, I am no true man.", "lichen-green")
+      },
+      [19]: {
+        dialogue: new Character("Brutus", "What did he say when he came unto himself?", "midnight-blue")
+      },
+      [20]: {
+        dialogue: new Character("Casca", "Oh, he pulled open his robe and offered the commoners to cut his throat. I would've done that, to be honest. <pause duration=1000> <br> But, when he regained consciousness, he just dismissed it with his sickness, and 3-4 women near me just forgave him!", "lichen-green")
+      },
+      [21]: {
+        dialogue: new Character("Brutus", "And yet he came here and looked all that serious. How weird is that?", "lichen-green")
+      },
+      [22]: {
+        dialogue: new Character("Cassius", "Did Cicero say anything?", "deep-olive"),
+      },
+      [23]: {
+        dialogue: new Character("Casca", "Yeah, something in Greek.", "lichen-green")
+      },
+      [24]: {
+        dialogue: new Character("Cassius", "What'd he say?", "deep-olive")
+      },
+      [25]: {
+        dialogue: new Character("Casca", "I don't know man, its all Greek to me. 💀", "lichen-green")
+      },
+      [26]: {
+        dialogue: new Character("Cassius", "Will you sup with me tonight, [Casca]?", "deep-olive")
+      },
+      [27]: {
+        dialogue: new Character("Casca", "No, I have promised forth.", "lichen-green")
+      },
+      [28]: {
+        dialogue: new Character("Cassius", "How about tomorrow?", "deep-olive")
+      },
+      [29]: {
+        dialogue: new Character("Casca", "Sure, if I'm still alive, and you're not out of your mind.", "lichen-green")
+      },
+      [30]: {
+        dialogue: new Character("Cassius", "Good. Farewell, see you then.", "deep-olive")
+      },
+      [31]: {
+        dialogue: new StageDirections("<b>CASCA</b> exits."),
+        delay: 1500
+      },
+      [32]: {
+        dialogue: new Character("Brutus", "bro, [Casca] is actually like so stupid like how was he even a quick mettle when he was still at school-", "midnight-blue"),
+        delay: 0,
+      },
+      [33]: {
+        dialogue: new Character("Cassius", "Nonononononoo, [Casca] isn't dumb, he's a very noble man to run an enterprise. <br> <small>okay, maybe he is</small> but look, he said something smart, and that's all he needs to get our attention.", "deep-olive")
+      },
+      [34]: {
+        dialogue: new Character("Brutus", "Well. Until then.", "midnight-blue")
+      },
+      [35]: {
+        dialogue: new Character("Cassius", "Yeah, just think about the well-being of Rome till then.", "deep-olive")
+      },
+      [36]: {
+        dialogue: new StageDirections("<b>BRUTUS</b> exits.")
+      },
+      [37]: {
+        dialogue: new Character("Cassius", "[Brutus]... noble little [Brutus]. Right into my trap, isn't it? Yet, such honor can't last for long. If I were [Brutus], I would've not listened to [Cassius] at all. It's too late now. Caesar better brace for everything, cause its only going downhill from here.", "deep-olive")
+      },
+      [38]: {
+        dialogue: new StageDirections("<b>CASSIUS</b> exits."),
+        next: "A1_S3"
+      }
+    }
+  },
+  ["A1_S3"]: {
+    displayName: "Act 1 : Scene 3",
+    ["teamConspirators"]: {
+      [0]: {
+        dialogue: new StageDirections("Thunder & Lightning. <b>CASSIUS</b> enters, and <b>CASCA</b> is already present."),
+        sound: {
+          file: "rainstorm.mp3",
+          position: "beforeDialogue"
+        }
+      },
+      [1]: {
+        dialogue: new Character("Cassius", "Who's there?", "deep-olive"),
+      },
+      [2]: {
+        dialogue: new Character("Casca", "A Roman.", "lichen-green"),
+        options: [
+          new OptionElement("A Roman who?", null, "WhoRoman"),
+          new OptionElement("Casca, I know it's you by your voice!", null, "Casca"),
+          new OptionElement("And I'm the police, and you are not a real Roman. Pack your bags, you're leaving immediately.", null, "Deportation")
+        ],
+        optionsConfig: {
+          timedQuestion: 0,
+          instantFeedback: true,
           appear: "afterDialogue"
         }
+      },
+      ["A1_S3_2_WhoRoman"]: {
+        [0]: {
+          dialogue: new Character("Casca", "A Roman named [Casca]!", "lichen-green"),
+        },
+        [1]: {
+          dialogue: new Character("Cassius", "Oh. I would've figured.", "deep-olive"),
+          goBack: true
+        }
+      },
+      ["A1_S3_2_Casca"]: {
+        [0]: {
+          dialogue: new Character("Casca", "Your ear is good. <u>[Cassius]</u>, what a night this is!", "lichen-green"),
+        },
+        [1]: {
+          dialogue: new Character("Cassius", "It's a very pleasing night to honest men.", "deep-olive"),
+          goBack: true
+        }
+      },
+      ["A1_S3_2_Deportation"]: {
+        [0]: {
+          dialogue: new Character("Casca", "B- but I have my Roman citizenship! You can't just do that!", "lichen-green")
+        },
+        [1]: {
+          dialogue: new Character("Cassius", "Oh I can and I will. Do you need a reason? I'll be nice and provide you one, <br> you're kinda dumb for a person.", "deep-olive")
+        },
+        [2]: {
+          dialogue: new Character("Casca", "What??? <i>*sigh*</i> Well, give me a second and-", "lichen-green"),
+          delay: 0,
+        },
+        [3]: {
+          dialogue: new Character("Cassius", "<b>I SAID GET O-</b>", "deep-olive"),
+          fail: new GameFail({
+            failID: "RemovingCascaLegally",
+            failText: "Rule #1: Always ask for a warrant. Cassius definitely did not have one."
+          })
+        }
+      },
+      [3]: {
+        dialogue: new Character("Cassius", "I name a man who's just like this dreadful night. One that thunders, lightens, opens graves, and roars as doth the lion in the Capitol - <br> a man no mightier than any one of us (maybe me) in ability, yet has such more power than these strange eruptions here tonight.", "deep-olive"),
+      },
+      [4]: {
+        dialogue: new Character("Casca", "You're talking about Caesar, right, <u>[Cassius]</u>?","lichen-green")
+      },
+      [5]: {
+        dialogue: new Character("Cassius","Let it be who it is.","deep-olive")
+      },
+      [6]: {
+        dialogue: new Character("Casca","They say that the senators plan to establish Caesar as a king tomorrow, and he will wear his clown by sea and land everywhere but Italy","lichen-green")
+      },
+      [7]: {
+        dialogue: new Character("Cassius","I know that I'll be wearing this dagger, then. I'll kill myself to free myself from everything. The gods make us weak strong and defeat such tyrants, no need for a story tower, nor walls of beaten brass, nor airless dungeon, no chains of iron. If any of this happens, any man could just kill himself. I can control the tyranny whenever I choose to.","deep-olive")
+      },
+      [8]: {
+        dialogue: new StageDirections("Thunder."),
+        sound: {
+          file: "thunder.mp3",
+          position: "beforeDialogue",
+          spawn: true
+        }
+      },
+      [9]: {
+        dialogue: new Character("Casca","So can I. So can any imprisoned man who has the tool to free themselves.","lichen-green")
+      },
+      [10]: {
+        dialogue: new Character("Cassius","How is Caesar a tyrant then? Poor guy, he wouldn't be the wolf if all Romans were the sheep. He couldn't be a lion if the Romans were all prey. Rome will soon be utterly in mighty flames, turned into rubbish and rubble, all to serve someone as vile as <b>CAESAR!</b>","deep-olive"),
+        delay: 1500
+      },
+      [11]: {
+        dialogue: new Character("Cassius","But, O grief. What did I muster in my grief? Whatever, danger can't hurt me anyway - I'm armed.","deep-olive")
+      },
+      [12]: {
+        dialogue: new Character("Casca","Look, you're talking to Casca. Hold my hand and shake it. Let me help you in this deal, <u>[Cassius.]</u>","lichen-green")
+      },
+      [13]: {
+        dialogue: new Character("Cassius","Deal. Now, tell me Casca. I've convinced many noble Romans to join me upon this honorable yet dangerous mission. They're all waiting on Pompey's porch. We're meeting now, at night, since nobody is out on the streets. It may look bloody, firey, and most terrible outside, but it's just the work we have to do.","deep-olive")
+      },
+      [14]: {
+        dialogue: new StageDirections("<b>CINNA</b> enters.")
+      },
+      [15]: {
+        dialogue: new Character("Casca","Who's that? HIDE!","lichen-green"),
+        delay: 0,
+      },
+      [16]: {
+        dialogue: new Character("Cassius","Hold. It's just [Cinna], my friend. Why are you in a hurry?","deep-olive")
+      },
+      [17]: {
+        dialogue: new Character("Cinna","To find you. Is that Metellus Cimber?","umber-brown")
+      },
+      [18]: {
+        dialogue: new Character("Cassius","No, that's [Casca]. Are the others watiing for me, [Cinna]?","deep-olive")
+      },
+      [19]: {
+        dialogue: new Character("Cinna","I'm just glad Metellus Cimber is with us. What a fearful night tihs is! Two or three of us have seen some strange sights.","umber-brown")
+      },
+      [20]: {
+        dialogue: new Character("Cassius","Are the others waiting??","deep-olive"),
+        options: [
+          new OptionElement("Yes, they are. If only you could convince Brutus to join us-",null,"Brutus"),
+          new OptionElement("Just look outside for a second, do you see how demanding the sky is today?",null,"Sky")
+        ],
+        optionsConfig: {
+          timedQuestion: 0,
+          instantFeedback: true,
+          appear: "afterDialogue",
+        }
+      },
+      ["A1_S3_20_Brutus"]: {
+        [0]: {
+          dialogue: new Character("Cassius","Don't worry, good Cinna. Take this paper and lay it on the judge's chair where Brutus is meant to sit. Put this one on his window, this one on his ancestor with wax. Once you're done, return to Pompey's porch where you'll find us. Is Decius Brutus and Trebonious there?","deep-olive"),
+        },
+        [1]: {
+          dialogue: new Character("Cinna","Everyone's there except Metellus Cimber, but he's looking for you. I'll go ahead and put these papers where you told me.","umber-brown")
+        },
+        [2]: {
+          dialogue: new Character("Cassius","Good. Go back to Pompey's theater when you're done.","deep-olive")
+        },
+        [3]: {
+          dialogue: new StageDirections("<b>CINNA</b> exits.")
+        },
+        [4]: {
+          dialogue: new Character("Cassius","Come on Casca, lets head over to Brutus' house before sunrise. He's 75% on our side, and we'll win the remaining at this meeting.","deep-olive")
+        },
+        [5]: {
+          dialogue: new Character("Casca","Oh, yeah. The people love him. Anything Brutus does - the rest will follow, just like how an alchemist turns rubber to gold.","lichen-green")
+        },
+        [6]: {
+          dialogue: new Character("Cassius","You mean... tin? Whatever, let's go show how worthy Brutus really is. It's already after midnight, we need to go now before the sun rises.","deep-olive"),
+          next: "A2_S1"
+        }
+      },
+      ["A1_S3_20_Sky"]: {
+        [0]: {
+          dialogue: new Character("Cassius","There's not enough time for that, are they outs-","deep-olive"),
+          delay: 0
+        },
+        [1]: {
+          dialogue: new Character("???","What are you two doing here? Why are you just standing here?")
+        },
+        [2]: {
+          dialogue: new Character("Cassius","ummm... we- we're just having a talk on how the heavens are weeping today.","deep-olive"),
+        },
+        [3]: {
+          dialogue: new Character("Cinna","Plus, Cassius is my friend. I haven't seen him for some time.","umber-brown")
+        },
+        [4]: {
+          dialogue: new Character("???","Oh really? Then, why are you holding a ton of letters here? Give me that.")
+        },
+        [5]: {
+          dialogue: new StageDirections("<b>[EXPUNGED]</b> took the letters from <b>CASCA</b>.")
+        },
+        [6]: {
+          dialogue: new Character("???","Dude. What the heck is all this? Why did you lie to my face?"),
+        },
+        [7]: {
+          dialogue: new Character("???","I was on my way to go mail something, but I think I have <i>one</i> more letter to write. And I know who this is getting addressed to. <br> And it will not be your little friend Brutus here."),
+          fail: new GameFail({
+            failID: "PlansLeaked",
+            failText: "It was a pretty rainy day, not going to lie. Maybe they should've been inside?"
+          })
+        }
+      }
+    }
+  },
+  ["A2_S1"]: {
+    displayName: "Act 2 : Scene 1",
+    ["teamConspirators"]: {
+      [0]: {
+        
       }
     }
   }

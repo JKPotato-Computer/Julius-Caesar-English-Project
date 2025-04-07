@@ -280,7 +280,7 @@ const gameModule = (() => {
         document.removeEventListener("keydown", handleSpacebar);
       
         if ((dialogue.sound) && (dialogue.sound.position == "afterDialogue")) {
-          playAudio(dialogue.sound.file);
+          playAudio(dialogue.sound.file, dialogue.sound.spawn || false);
         }
 
         if (dialogue.addToMemory) {
@@ -312,7 +312,12 @@ const gameModule = (() => {
         }
       
         if (dialogue.next) {
-          transitionStoryline(dialogue.next);
+          if (typeof(dialogue.next) == "string") {
+            transitionStoryline(dialogue.next);
+          } else if (typeof(dialogue.next) == "function") {
+            transitionStoryline(dialogue.next());
+          }
+
           return;
         }
       
