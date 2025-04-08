@@ -295,7 +295,7 @@ const gameModule = (() => {
 
       function handleDialogueResult() {
         document.removeEventListener("keydown", handleSpacebar);
-        document.removeEventListener("click", handleMouse);
+        dialogueElement.removeEventListener("click", handleMouse);
 
         if (dialogue.sound && dialogue.sound.position == "afterDialogue") {
           playAudio(
@@ -394,7 +394,7 @@ const gameModule = (() => {
       };
 
       document.addEventListener("keydown", handleSpacebar);
-      document.addEventListener("click", handleMouse);
+      dialogueElement.addEventListener("click", handleMouse);
 
       function awaitInterval() {
         if (!isPlaying) {
