@@ -706,3 +706,127 @@ dialog .popup-close {
 .dialogueOptions > button:not(:has(.material-symbols-outlined)) {
   grid-template-columns: 1fr;
 }
+
+#timer-container {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ff0000; /* Red background */
+  color: white;
+  padding: 10px 20px;
+  font-family: monospace;
+  font-size: 20px;
+  z-index: 1000; /* Ensure it's on top */
+  border-radius: 0 0 5px 5px;
+  display: none;
+  flex-direction: column;
+}
+
+#timer-container * {
+  text-align: center;
+}
+
+#timer-container > span:nth-child(1) {
+  animation: 1s linear blink infinite;
+  font-size: 14px;
+}
+
+#timer {
+  font-weight: bold;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  49% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  99% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#vignette {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; /* Allows clicks to pass through */
+  background-image: radial-gradient(ellipse at center, transparent 0%, rgba(255, 0, 0, 0.3) 100%);
+  z-index: 2; /* Place it over most other elements, but below the timer */
+  display: none;
+  opacity: 0;
+  transition: 15s linear;
+}
+
+#dagger {
+  margin: 0;
+  background-color: var(--background);
+  color: white;
+  height: max-content;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 60%;
+  transform: translate(-50%, -50%);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 100;
+  border: 2px solid white;
+  padding: 24px;
+  display: none;
+}
+
+#dagger .bar-container {
+  position: relative;
+  width: 80%;
+  max-width: 600px;
+  height: 40px;
+  border: 3px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: white;
+}
+
+#dagger .bar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+#dagger .white-zone {
+  flex: 1;
+  background-color: white;
+}
+
+#dagger .green-zone {
+  width: 50%;
+  background-color: green;
+}
+
+#dagger .slider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: red;
+  transition: none;
+}
+
+#dagger .text {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  text-align: center;
+}

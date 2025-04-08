@@ -16,18 +16,23 @@ const gameModule = (() => {
 
   let timeoutCallback, timeoutID;
   let playingAudio;
-  const playAudio = (audioFileName, spawnAudio) => {
+  const playAudio = (audioFileName, spawnAudio, volume) => {
     try {
       if (spawnAudio) {
         const audio = new Audio("./sfx/" + audioFileName);
-        audio.volume = 0.75 * userSettings.volume;
+        audio.volume = (volume || .75) * userSettings.volume;
         audio.play();
         return;
       } else if (playingAudio) {
         playingAudio.pause();
       }
+
+      if (!audioFileName) {
+        return;
+      }
+
       playingAudio = new Audio("./sfx/" + audioFileName);
-      playingAudio.volume = 0.5 * userSettings.volume;
+      playingAudio.volume = (volume || .5) * userSettings.volume;
       playingAudio.play();
     } catch (error) {
       console.error("Error playing audio:", error);
@@ -151,8 +156,8 @@ const gameModule = (() => {
     // If the user has scrolled away from the bottom (with a tolerance)
     if (
       dialogueList.scrollHeight -
-        dialogueList.scrollTop -
-        dialogueList.clientHeight >
+      dialogueList.scrollTop -
+      dialogueList.clientHeight >
       20
     ) {
       shouldAutoScroll = false;
@@ -197,7 +202,7 @@ const gameModule = (() => {
   };
 
   const exitStory = () => {
-    if (saveData.storyline.hasFail()) {
+    if (!saveData.storyline.storyID.includes("A3_S1") && saveData.storyline.hasFail()) {
       return;
     }
 
@@ -277,11 +282,16 @@ const gameModule = (() => {
       const [dialogueElement, message] = dialogue.dialogue.createDialogue();
       let startTime = null;
 
+      if (dialogue.playMethod) {
+        dialogue.playMethod();
+      }
+
       function handleDialogueResult() {
         document.removeEventListener("keydown", handleSpacebar);
+        dialogueElement.removeEventListener("click", handleSpacebar)
 
         if (dialogue.sound && dialogue.sound.position == "afterDialogue") {
-          playAudio(dialogue.sound.file, dialogue.sound.spawn || false);
+          playAudio(dialogue.sound.file, dialogue.sound.spawn || false, dialogue.sound.volume);
         }
 
         if (dialogue.addToMemory) {
@@ -316,7 +326,17 @@ const gameModule = (() => {
           if (typeof dialogue.next == "string") {
             transitionStoryline(dialogue.next);
           } else if (typeof dialogue.next == "function") {
-            transitionStoryline(dialogue.next());
+            const nextResult = dialogue.next();
+            console.log(nextResult);
+            if (nextResult instanceof Promise) {
+              nextResult.then((resolvedValue) => {
+                transitionStoryline(resolvedValue);
+              }).catch((error) => {
+                console.error("Error resolving the promise from dialogue.next():", error);
+              });
+            } else {
+              transitionStoryline(nextResult);
+            }
           }
 
           return;
@@ -357,6 +377,7 @@ const gameModule = (() => {
       };
 
       document.addEventListener("keydown", handleSpacebar);
+      dialogueElement.addEventListener("click", handleSpacebar)
 
       function awaitInterval() {
         if (!isPlaying) {
@@ -373,13 +394,13 @@ const gameModule = (() => {
 
           let secondsLeft =
             (dialogue.optionsConfig.timedQuestion / 1000) *
-              (1 / userSettings.speed) -
+            (1 / userSettings.speed) -
             (Date.now() / 1000 - startTime);
           dialogueElement.querySelector(".barComplete").style.width =
             (Math.abs(secondsLeft) /
               ((dialogue.optionsConfig.timedQuestion / 1000) *
                 (1 / userSettings.speed))) *
-              100 +
+            100 +
             "%";
           dialogueElement.querySelector(".timedQuestion > span").textContent =
             Math.abs(secondsLeft).toFixed(1) + "s";
@@ -495,6 +516,7 @@ const gameModule = (() => {
       return;
     }
     isPlaying = true;
+    document.querySelector("#paneFade").style.display = "block";
 
     let hasSaveData = Object.keys(saveData).length != 0;
     if (!hasSaveData) {
@@ -527,6 +549,10 @@ const gameModule = (() => {
     saveDataToLocalStorage("userSettings", userSettings);
   };
 
+  const addEnding = (ending) => {
+    saveData.endings.push(ending);
+  }
+
   const hasSaveData = () => Object.keys(saveData).length != 0;
 
   private_load = loadDataFromLocalStorage;
@@ -548,6 +574,8 @@ const gameModule = (() => {
     showNotification: showNotification,
     setSetting: setSetting,
     getSetting: getSetting,
+    playAudio: playAudio,
+    addEnding: addEnding
   };
 })();
 

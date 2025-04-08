@@ -139,8 +139,8 @@ class Dialogue {
         }
 
         let answer = optionElement.dataset.optionId;
-        if (dialogueOptions.optionVerification) {
-          answer = dialogueOptions.optionVerification(answer);
+        if (optionsConfig.optionVerification) {
+          answer = optionsConfig.optionVerification(answer);
         }
 
         optionElement.classList.add("locked");
