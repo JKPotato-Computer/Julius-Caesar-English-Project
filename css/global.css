@@ -19,7 +19,6 @@ body {
   margin: 0;
   background: var(--background);
   /*overflow: hidden;*/
-  transition: 5s linear background;
 }
 
 h1,

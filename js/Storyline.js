@@ -297,7 +297,7 @@ Storyline.prototype.acts = {
       [1]: {
         dialogue: new Character(
           "Flavius",
-          "Both of you lazy men, get off the streets! What, yall think today is a holiday? Don't you know yall mechanicals be out on the streets without their uniforms? On a <b dialogue-speed=100>WORK DAY??</b>",
+          "Both of you lazy men, get off the streets! What, yall think today is a holiday? Don't you know yall mechanicals can't  out on the streets without their uniforms? On a <b dialogue-speed=100>WORK DAY??</b>",
           "shadow-purple"
         ),
       },
@@ -1544,7 +1544,7 @@ Storyline.prototype.acts = {
         sound: {
           file: "rainstorm.mp3",
           position: "beforeDialogue",
-          volume: .75
+          volume: 0.75,
         },
       },
       [1]: {
@@ -2095,7 +2095,7 @@ Storyline.prototype.acts = {
         sound: {
           file: "rainstorm.mp3",
           position: "beforeDialogue",
-          volume: 1
+          volume: 1,
         },
       },
       [1]: {
@@ -2281,8 +2281,8 @@ Storyline.prototype.acts = {
         sound: {
           file: "clock.mp3",
           position: "beforeDialogue",
-          spawn: true
-        }
+          spawn: true,
+        },
       },
       [18]: {
         dialogue: new Character("Brutus", "...", "midnight-blue"),
@@ -2303,7 +2303,7 @@ Storyline.prototype.acts = {
               return "FourthWall2";
             } else if (
               option == "FourthWall" &&
-              gamemodule.getSaveData().playMemory["FourthWall"]
+              gameModule.getSaveData().playMemory["FourthWall"]
             ) {
               return "FourthWall";
             } else {
@@ -2318,14 +2318,14 @@ Storyline.prototype.acts = {
             "Brutus",
             "Did you guys hear that? The clock?",
             "midnight-blue"
-          )
+          ),
         },
         [1]: {
           dialogue: new Character(
             "Cassius",
             "Yeah? It's a clock. What do you want from it?",
             "deep-olive"
-          )
+          ),
         },
         [2]: {
           dialogue: new Character(
@@ -2333,8 +2333,8 @@ Storyline.prototype.acts = {
             "I don't know. It's a nice clock, though.",
             "midnight-blue"
           ),
-          goBack: true
-        }
+          goBack: true,
+        },
       },
       ["A2_S1_18_FourthWall"]: {
         [0]: {
@@ -2357,7 +2357,7 @@ Storyline.prototype.acts = {
             "I don't really know, [Cassius]. It's still pouring outside, kind of strange? We haven't had such onslaught of a weather since ever.<br>Perhaps this really isn't a dream, and it's real-",
             "midnight-blue"
           ),
-          delay: 0
+          delay: 0,
         },
         [3]: {
           dialogue: new StageDirections("Thunder."),
@@ -2374,7 +2374,7 @@ Storyline.prototype.acts = {
             "... As [Brutus] was saying, I don't think this empire we live in is r-",
             "lichen-green"
           ),
-          delay: 0
+          delay: 0,
         },
         [5]: {
           dialogue: new StageDirections("Thunder."),
@@ -2419,7 +2419,7 @@ Storyline.prototype.acts = {
             "Brutus",
             "Speaking of power, have you noticed the weather lately? It's been raging much more than usual. Silly, isn't it?",
             "midnight-blue"
-          )
+          ),
         },
         [10]: {
           dialogue: new Character(
@@ -2434,7 +2434,7 @@ Storyline.prototype.acts = {
             "It's almost as if something, perhaps someone, is commanding u-",
             "deep-olive"
           ),
-          delay: 0
+          delay: 0,
         },
         [12]: {
           dialogue: new StageDirections("Thunder."),
@@ -2470,7 +2470,7 @@ Storyline.prototype.acts = {
             "Cassius",
             "That makes sense, but I don't think that's the case.",
             "deep-olive"
-          )
+          ),
         },
         [17]: {
           dialogue: new Character(
@@ -2482,8 +2482,8 @@ Storyline.prototype.acts = {
             file: "riser.mp3",
             volume: 1,
             position: "beforeDialogue",
-            spawn: true
-          }
+            spawn: true,
+          },
         },
         [18]: {
           dialogue: new Character(
@@ -2498,10 +2498,10 @@ Storyline.prototype.acts = {
           ),
           sound: {
             file: "alarm.mp3",
-            volume: .05,
+            volume: 0.05,
             position: "beforeDialogue",
-            spawn: true
-          }
+            spawn: true,
+          },
         },
         [20]: {
           dialogue: new Character(
@@ -2536,10 +2536,10 @@ Storyline.prototype.acts = {
           delay: 0,
           sound: {
             file: "alarm.mp3",
-            volume: .05,
+            volume: 0.05,
             position: "afterDialogue",
-            spawn: true
-          }
+            spawn: true,
+          },
         },
         [25]: {
           dialogue: new Dialogue(
@@ -2547,12 +2547,12 @@ Storyline.prototype.acts = {
           ),
           sound: {
             file: "countdown.mp3",
-            volume: .125,
-            position: "beforeDialogue"
+            volume: 0.125,
+            position: "beforeDialogue",
           },
           playMethod: () => {
             console.log("Hi");
-            let timerDisplay = document.getElementById('timer');
+            let timerDisplay = document.getElementById("timer");
             let countdownInterval;
             let endTime;
             let lastTickSecond = -1; // Track the last second a tick sound played
@@ -2570,7 +2570,7 @@ Storyline.prototype.acts = {
 
               if (remainingTime <= 0) {
                 clearInterval(countdownInterval);
-                timerDisplay.textContent = 'T-00:00.000';
+                timerDisplay.textContent = "T-00:00.000";
                 // You might want to add a callback or event when the timer finishes
                 return;
               }
@@ -2580,16 +2580,19 @@ Storyline.prototype.acts = {
               const seconds = totalSeconds % 60;
               const milliseconds = remainingTime % 1000;
 
-              const formattedMinutes = String(minutes).padStart(2, '0');
-              const formattedSeconds = String(seconds).padStart(2, '0');
-              const formattedMilliseconds = String(milliseconds).padStart(3, '0');
+              const formattedMinutes = String(minutes).padStart(2, "0");
+              const formattedSeconds = String(seconds).padStart(2, "0");
+              const formattedMilliseconds = String(milliseconds).padStart(
+                3,
+                "0"
+              );
 
               timerDisplay.textContent = `T-${formattedMinutes}:${formattedSeconds}.${formattedMilliseconds}`;
 
               // Play ticking sound every 1000 milliseconds (1 second)
               const currentSecond = Math.floor(remainingTime / 1000);
               if (currentSecond !== lastTickSecond) {
-                gameModule.playAudio("ticking.mp3", true, .75); // Call your audio function
+                gameModule.playAudio("ticking.mp3", true, 0.75); // Call your audio function
                 lastTickSecond = currentSecond;
               }
             }
@@ -2598,9 +2601,10 @@ Storyline.prototype.acts = {
             document.querySelector("#vignette").style.opacity = 1;
             document.querySelector("#timer-container").style.display = "flex";
             document.querySelector("#paneFade").style.display = "none";
-            document.querySelector("body").style.backgroundColor = "var(--secondary)";
+            document.querySelector("body").style.backgroundColor =
+              "var(--secondary)";
             startCountdown(25000);
-          }
+          },
         },
         [26]: {
           dialogue: new Character(
@@ -2649,7 +2653,8 @@ Storyline.prototype.acts = {
             '<span style="background-color: var(--primary); font-family: monospace; font-size: 20px;"><b>⚠ ALERT:</b> TERMINATING JC_PLAY_2763.</span>'
           ),
           playMethod: () => {
-            document.querySelector("body").style.backgroundColor = "var(--background)";
+            document.querySelector("body").style.backgroundColor =
+              "var(--background)";
           },
           delay: 5000,
         },
@@ -2659,15 +2664,17 @@ Storyline.prototype.acts = {
             file: "boom.mp3",
             volume: 1,
             spawn: true,
-            appear: "beforeDialogue"
+            appear: "beforeDialogue",
           },
           addToMemory: () => {
             gameModule.addEnding("FourthWall");
-          }
+          },
         },
         [35]: {
-          dialogue: new Dialogue("You might want to refresh to view something else instead."),
-        }
+          dialogue: new Dialogue(
+            "You might want to refresh to view something else instead."
+          ),
+        },
       },
       ["A2_S1_18_Nothing"]: {
         [0]: {
@@ -2677,95 +2684,93 @@ Storyline.prototype.acts = {
             "deep-olive"
           ),
           goBack: true,
-          delay: 0
-        }
+          delay: 0,
+        },
       },
       [19]: {
         dialogue: new Character(
           "Trebonius",
           "'Tis time to leave.",
           "dark-mauve"
-        )
+        ),
       },
       [20]: {
         dialogue: new Character(
           "Casisus",
           "Wait. Will Caesar even come out in public? He's been very superstitious lately after he had such a bad opinion of fantasy, dreams and ceremonies. It'll keep him under such unusual terror tonight, and maybe such augurers would not let him go to the Capitol at all.",
           "deep-olive"
-        )
+        ),
       },
       [21]: {
         dialogue: new Character(
           "Decius",
           "Oh, don't worry 'bout that. I can convince him pretty easily, just like how unicorns may be betrayed with trees, bears with glasses, elephants with holes, and lions with toils. <br> Just let me do it, I can set him in the right mood and bring him to the Capitol.",
           "copper"
-        )
+        ),
       },
       [22]: {
         dialogue: new Character(
           "Cassius",
           "No. All of us are going.",
           "deep-olive"
-        )
+        ),
       },
       [23]: {
         dialogue: new Character(
           "Brutus",
           "By the eighth hour?",
           "midnight-blue"
-        )
+        ),
       },
       [24]: {
         dialogue: new Character(
           "Cinna",
           "Sure, but we should be early.",
           "umber-brown"
-        )
+        ),
       },
       [25]: {
         dialogue: new Character(
           "Metellus",
           "Shall we get Caius Ligarius too? He doth bear Caesar hard for speaking well of Pompey.",
           "indigo-dye"
-        )
+        ),
       },
       [26]: {
         dialogue: new Character(
           "Brutus",
           "Go get him, he loves me well and I have reasons. I'll persuade him, just get him here.",
           "midnight-blue"
-        )
+        ),
       },
       [27]: {
         dialogue: new Character(
           "Cassius",
           "Morning is approaching. We'll leave you, Brutus. Remember, all of us, <b dialogue-speed=50>show yourselves as true Romans!</b>",
           "deep-olive"
-        )
+        ),
       },
       [28]: {
         dialogue: new Character(
           "Brutus",
           "Farewell. Don't let our looks show our purposes, and carry ourselves as Roman actors - with cheerful and well-composed faces! Till then, good morrow to everyone.",
           "midnight-blue"
-        )
+        ),
       },
       [29]: {
-        dialogue: new StageDirections("<b>EVERYONE</b> except <b>BRUTUS</b> exits, <b>PORTIA</b> enters.")
+        dialogue: new StageDirections(
+          "<b>EVERYONE</b> except <b>BRUTUS</b> exits, <b>PORTIA</b> enters."
+        ),
       },
       [30]: {
-        dialogue: new Character(
-          "Portia",
-          "Brutus, my lord.",
-          "crimson"
-        )
+        dialogue: new Character("Portia", "Brutus, my lord.", "crimson"),
       },
       [31]: {
         dialogue: new Character(
           "Brutus",
           "Portia, why are you awake? It's not healthy for you to be exposed to the raw, cold morning.",
           "midnight-blue"
-        )
+        ),
       },
       [32]: {
         dialogue: new Character(
@@ -2774,16 +2779,28 @@ Storyline.prototype.acts = {
           "crimson"
         ),
         options: [
-          new OptionElement("Oh, I'm just not feeling well.","health_and_safety","NotWell"),
-          new OptionElement("[Stamps feet with arms crossed, musing and sighing]","replay","Repeat"),
-          new OptionElement("Not that it's any of your business, Portia.","do_not_disturb","NotImportant")
+          new OptionElement(
+            "Oh, I'm just not feeling well.",
+            "health_and_safety",
+            "NotWell"
+          ),
+          new OptionElement(
+            "[Stamps feet with arms crossed, musing and sighing]",
+            "replay",
+            "Repeat"
+          ),
+          new OptionElement(
+            "Not that it's any of your business, Portia.",
+            "do_not_disturb",
+            "NotImportant"
+          ),
         ],
         optionsConfig: {
           randomize: true,
           timedQuestion: 0,
           instantFeedback: true,
-          appear: "afterDialogue"
-        }
+          appear: "afterDialogue",
+        },
       },
       ["A2_S1_32_Repeat"]: {
         [0]: {
@@ -2791,39 +2808,41 @@ Storyline.prototype.acts = {
             "Portia",
             "Are you being serious right now, YOU WERE LITERALLY JUST TALKING TO ME. <br> What's next, you're going to suddenly start \"walking about?\"",
             "crimson"
-          )
+          ),
         },
         [1]: {
-          dialogue: new StageDirections("<b>BRUTUS</b> begins walking about.")
+          dialogue: new StageDirections("<b>BRUTUS</b> begins walking about."),
         },
         [2]: {
           dialogue: new Character(
             "Portia",
             "Oh for the love of heavens. What's next, you'll say: \"My name is Brutus!\", right?",
             "crimson"
-          )
+          ),
         },
         [3]: {
           dialogue: new Character(
             "Brutus",
             "My name is Brutus!",
             "midnight-blue"
-          )
+          ),
         },
         [4]: {
           dialogue: new Character(
             "Portia",
             "What's next, you'll run to Caesar's house and say out loud for all of Rome to hear, \"Hi Caesar, I hope you enjoy getting stabbed by this funny dagger here!\", <i>(hands dagger)</i> won't you?",
             "crimson"
-          )
+          ),
         },
         [5]: {
-          dialogue: new StageDirections("<b>BRUTUS</b> runs to Caesar's house.")
+          dialogue: new StageDirections(
+            "<b>BRUTUS</b> runs to Caesar's house."
+          ),
         },
         [6]: {
           dialogue: new Character(
             "Brutus",
-            "<h4 class=\"serif\">Hi Caesar, I hope you enjoy getting stabbed by this funny dagger here!</h4>",
+            '<h4 class="serif">Hi Caesar, I hope you enjoy getting stabbed by this funny dagger here!</h4>',
             "midnight-blue"
           ),
           sound: {
@@ -2839,9 +2858,9 @@ Storyline.prototype.acts = {
           ),
           fail: new GameFail({
             failID: "ListeningToPortia",
-            failText: "Brutus see, Brutus do?"
-          })
-        }
+            failText: "Brutus see, Brutus do?",
+          }),
+        },
       },
       ["A2_S1_32_NotImportant"]: {
         [0]: {
@@ -2849,7 +2868,7 @@ Storyline.prototype.acts = {
             "Portia",
             "Not important? You're telling me I, your beloved wife in this household, cannot think and care about your health because it's <i>not important?</i>",
             "crimson"
-          )
+          ),
         },
         [1]: {
           dialogue: new Character(
@@ -2860,9 +2879,10 @@ Storyline.prototype.acts = {
           delay: 0,
           fail: new GameFail({
             failID: "PortiaNotImportant",
-            failText: "I was not allowed to finish the sentence, but you would've failed regardless."
-          })
-        }
+            failText:
+              "I was not allowed to finish the sentence, but you would've failed regardless.",
+          }),
+        },
       },
       ["A2_S1_32_NotWell"]: {
         [0]: {
@@ -2870,7 +2890,7 @@ Storyline.prototype.acts = {
             "Portia",
             "[Brutus] is a wise man, and you'd do whatever it takes to feel better in health, right?",
             "crimson"
-          )
+          ),
         },
         [1]: {
           dialogue: new Character(
@@ -2878,7 +2898,7 @@ Storyline.prototype.acts = {
             "Why, perhaps I am. Go to bed, good [Portia].",
             "midnight-blue"
           ),
-          goBack: true          
+          goBack: true,
         },
       },
       [33]: {
@@ -2886,7 +2906,7 @@ Storyline.prototype.acts = {
           "Portia",
           "Is [Brutus] sick? Is it healthy to walk uncovered and breathe in the dampness of the morning? No, [Brutus]. You're sick in the mind, and I deserve to know what's going on.",
           "crimson"
-        )
+        ),
       },
       [34]: {
         dialogue: new Character(
@@ -2900,7 +2920,7 @@ Storyline.prototype.acts = {
           "Brutus",
           "Dont kneel, noble [Portia].",
           "midnight-blue"
-        )
+        ),
       },
       [36]: {
         dialogue: new Character(
@@ -2914,7 +2934,7 @@ Storyline.prototype.acts = {
           "Brutus",
           "You're my true and honorable wife, as dear to me as the blood that runs through my sad heart.",
           "midnight-blue"
-        )
+        ),
       },
       [38]: {
         dialogue: new Character(
@@ -2923,16 +2943,28 @@ Storyline.prototype.acts = {
           "midnight-blue"
         ),
         options: [
-          new OptionElement("You're a woman. This kind of burden is not for you.","female","Burden"),
-          new OptionElement("Oh gods, bless me to be worthy for this wife!","folded_hands","Bless"),
-          new OptionElement("You want to know the secret? I'll tell you the secret.","lock_open","Secret")
+          new OptionElement(
+            "You're a woman. This kind of burden is not for you.",
+            "female",
+            "Burden"
+          ),
+          new OptionElement(
+            "Oh gods, bless me to be worthy for this wife!",
+            "folded_hands",
+            "Bless"
+          ),
+          new OptionElement(
+            "You want to know the secret? I'll tell you the secret.",
+            "lock_open",
+            "Secret"
+          ),
         ],
         optionsConfig: {
           randomize: true,
           timedQuestion: 0,
           instantFeedback: true,
-          appear: "afterDialogue"
-        }
+          appear: "afterDialogue",
+        },
       },
       ["A2_S1_38_Burden"]: {
         [0]: {
@@ -2947,28 +2979,28 @@ Storyline.prototype.acts = {
             "Portia",
             "I know of a way that will help remind you how much power I have, and you won't like it.",
             "crimson"
-          )
+          ),
         },
         [2]: {
           dialogue: new Character(
             "Portia",
-            "<i>(pulls a dagger)</i> I hope this dagger teaches you well of what your assumed \"poor old [Portia\" could do. Fare the well, [Brutus].",
+            '<i>(pulls a dagger)</i> I hope this dagger teaches you well of what your assumed "poor old [Portia" could do. Fare the well, [Brutus].',
             "crimson"
-          )
+          ),
         },
         [3]: {
           dialogue: new Character(
             "Brutus",
             "Halt, thou shalt not do such action!",
             "midnight-blue"
-          )
+          ),
         },
         [4]: {
           dialogue: new Character(
             "Portia",
             "Give me one good reason why and I won't, since you can't seem to honor my position.",
             "crimson"
-          )
+          ),
         },
         [5]: {
           dialogue: new Character(
@@ -2976,21 +3008,24 @@ Storyline.prototype.acts = {
             "I'll think about it, my beloved wife [Portia], <pause duration=1000> right after this segue to our sponsor: Nord-",
             "midnight-blue"
           ),
-          delay: 0
+          delay: 0,
         },
         [6]: {
-          dialogue: new StageDirections("<b>PORTIA</b> kills herself and dies."),
+          dialogue: new StageDirections(
+            "<b>PORTIA</b> kills herself and dies."
+          ),
           fail: new GameFail({
             failID: "#NotSponsored",
-            failText: "Even if you can get secure encrypted access through a VPN, I don't think it would've saved Portia from dying."
-          })
-        }
+            failText:
+              "Even if you can get secure encrypted access through a VPN, I don't think it would've saved Portia from dying.",
+          }),
+        },
       },
       ["A2_S1_38_Bless"]: {
         [0]: {
           dialogue: new StageDirections("Knocking sound."),
-          goBack: true
-        }
+          goBack: true,
+        },
       },
       ["A2_S1_38_Secret"]: {
         [0]: {
@@ -3004,89 +3039,93 @@ Storyline.prototype.acts = {
           dialogue: new StageDirections("Thunder."),
           sound: {
             file: "thunder.mp3",
-            volume: .25,
+            volume: 0.25,
             position: "beforeDialogue",
-            spawn: true
-          }
+            spawn: true,
+          },
         },
         [2]: {
           dialogue: new Character(
             "Portia",
             "You can't do that! You're going to just, leave me? In the middle of the night? During a planned assassination??",
             "crimson"
-          )
+          ),
         },
         [3]: {
           dialogue: new Character(
             "Brutus",
             "Yeah, I will. What are you going to do about it? You're a woman, your skills go south once you exit the household. And that is what I will do.",
             "midnight-blue"
-          )
+          ),
         },
         [4]: {
-          dialogue: new StageDirections("<b>BRUTUS</b> storms outside the house and into the streets of Rome.")
+          dialogue: new StageDirections(
+            "<b>BRUTUS</b> storms outside the house and into the streets of Rome."
+          ),
         },
         [5]: {
           dialogue: new Character(
             "Brutus",
             "Was that, even a good idea? Is breaking up with my wife, noble? Oh gods, I don't think this was a good choice. It's too late now, though. I must continue my mission to kill Caesar, for the better of Rome. But, it's... strange.",
             "midnight-blue"
-          )
+          ),
         },
         [6]: {
-          dialogue: new StageDirections("<b>CASSIUS</b> crosses paths.")
+          dialogue: new StageDirections("<b>CASSIUS</b> crosses paths."),
         },
         [7]: {
           dialogue: new Character(
             "Cassius",
             "[Brutus], what are you doing out here? It's not morning yet. Go to sleep already!",
             "deep-olive"
-          )
+          ),
         },
         [8]: {
           dialogue: new Character(
             "Brutus",
             "I know, but my wife [Portia], well let's just say she's my former wife now.",
             "midnight-blue"
-          )
+          ),
         },
         [9]: {
           dialogue: new Character(
             "Cassius",
             "Oh, that sucks. It's fine, just get over it. We have a whole day to plan, and one of them is killing Caesar. Such an evil entity for Rome...",
             "deep-olive"
-          )
+          ),
         },
         [10]: {
           dialogue: new Character(
             "Cassius",
             "Besides, after that, we get to spend the whole day in freedom! Together, along with all the conspirators. All we need is team effort with you and me, and we'd be true boullion.",
             "deep-olive"
-          )
+          ),
         },
         [11]: {
           dialogue: new Character(
             "Brutus",
             "I suppose so. Why thou speakst of that?",
             "midnight-blue"
-          )
+          ),
         },
         [12]: {
           dialogue: new Character(
             "Cassius",
             "Perhaps maybe, perhaps.",
             "deep-olive"
-          )
+          ),
         },
         [13]: {
           dialogue: new Character(
             "Brutus",
             "Are you saying that we, <pause duration=500> should, <pause duration=750> be to-",
             "midnight-blue"
-          )
+          ),
         },
         [14]: {
-          dialogue: new StageDirections("<b>BRUTUS</b> gets hit by a flying brick and dies.")
+          dialogue: new StageDirections(
+            "<b>BRUTUS</b> gets hit by a flying brick and dies."
+          ),
         },
         [15]: {
           dialogue: new Character(
@@ -3094,30 +3133,31 @@ Storyline.prototype.acts = {
             "[Brutus]? [Brutus]! What hast happened to you, [Brutus]? <br> I just wanted to ask if you wanted to go for a walk 'round Rome after we kill Caesar...",
             "deep-olive"
           ),
-          fail: new GameFail(
-            {
-              failID: "GoodTryBrutus",
-              failText: "Sorry Brutus, fate is fate. Also, where'd the brick come from?"
-            }
-          )
-        }
+          fail: new GameFail({
+            failID: "GoodTryBrutus",
+            failText:
+              "Sorry Brutus, fate is fate. Also, where'd the brick come from?",
+          }),
+        },
       },
       [39]: {
         dialogue: new Character(
           "Brutus",
           "Listen! Someone knocked. Portia, I'll be back with you in a second. I'll tell you EVERYTHING! Leave me, quickly.",
           "midnight-blue"
-        )
+        ),
       },
       [40]: {
-        dialogue: new StageDirections("<b>PORTIA</b> exits as <b>LUCIUS</b> and <b>LIGARIUS</b> enter.")
+        dialogue: new StageDirections(
+          "<b>PORTIA</b> exits as <b>LUCIUS</b> and <b>LIGARIUS</b> enter."
+        ),
       },
       [41]: {
         dialogue: new Character(
           "Brutus",
           "Dude, I've been waiting for you. Where have you been?",
           "midnight-blue"
-        )
+        ),
       },
       [42]: {
         dialogue: new Character(
@@ -3126,13 +3166,17 @@ Storyline.prototype.acts = {
           "twilight-gray"
         ),
         options: [
-          new OptionElement("Wait. I need to talk with my wife, Portia, for a second.",null,"TalkToPortia")
+          new OptionElement(
+            "Wait. I need to talk with my wife, Portia, for a second.",
+            null,
+            "TalkToPortia"
+          ),
         ],
         optionsConfig: {
           timedQuestion: 5000,
           instantFeedback: false,
-          appear: "afterDialogue"
-        }
+          appear: "afterDialogue",
+        },
       },
       ["A2_S1_42_TalkToPortia"]: {
         [0]: {
@@ -3140,100 +3184,117 @@ Storyline.prototype.acts = {
             "Brutus",
             "Wait. I need to talk to Portia, I made a vow to tell my whole heart to her. I will return in post haste.",
             "midnight-blue"
-          )
+          ),
         },
         [1]: {
           dialogue: new Character(
             "Ligarius",
             "Okay then, I will wait here.",
             "twilight-gray"
-          )
+          ),
         },
         [2]: {
-          dialogue: new StageDirections("<b>BRUTUS</b> goes to talk with <b>PORTIA.</b>")
+          dialogue: new StageDirections(
+            "<b>BRUTUS</b> goes to talk with <b>PORTIA.</b>"
+          ),
         },
         [3]: {
-          dialogue: new StageDirections("<b>PORTIA</b> gets somewhat angry.")
+          dialogue: new StageDirections("<b>PORTIA</b> gets somewhat angry."),
         },
         [4]: {
-          dialogue: new StageDirections("<b>BRUTUS</b> is somewhat sad, well even more sad.")
+          dialogue: new StageDirections(
+            "<b>BRUTUS</b> is somewhat sad, well even more sad."
+          ),
         },
         [5]: {
-          dialogue: new StageDirections("Moment of silence. Did [Brutus] die?")
+          dialogue: new StageDirections("Moment of silence. Did [Brutus] die?"),
         },
         [6]: {
-          dialogue: new StageDirections("<b>BRUTUS</b> returns to <b>LIGARIUS.</b>")
+          dialogue: new StageDirections(
+            "<b>BRUTUS</b> returns to <b>LIGARIUS.</b>"
+          ),
         },
         [7]: {
           dialogue: new Character(
             "Brutus",
             "Send this message to Cassius, please: Are you really trying to make me plot against my 'father' Julius Caesar? Curse you and all the Conspirators! I shall tell Caesar about your ideas before you do any harm to him. Our alliance is over.",
             "midnight-blue"
-          )
+          ),
         },
         [8]: {
           dialogue: new Character(
             "Ligarius",
             "Oh. Okay then. Fine.",
             "twilight-gray"
-          )
+          ),
         },
         [9]: {
-          dialogue: new StageDirections("<b>LIGARIUS</b> leaves.")
+          dialogue: new StageDirections("<b>LIGARIUS</b> leaves."),
         },
         [10]: {
-          dialogue: new StageDirections("<b>BRUTUS</b> waits for a response from Cassius.")
+          dialogue: new StageDirections(
+            "<b>BRUTUS</b> waits for a response from Cassius."
+          ),
         },
         [11]: {
-          dialogue: new StageDirections("<b>LIGARIUS</b> returns.")
+          dialogue: new StageDirections("<b>LIGARIUS</b> returns."),
         },
         [12]: {
           dialogue: new Character(
             "Brutus",
             "What did Cassius say?",
             "midnight-blue"
-          )
+          ),
         },
         [13]: {
           dialogue: new Character(
             "Ligarius",
             "He said he sent an ICBM missile to you... whatever that is.",
             "twilight-gray"
-          )
+          ),
         },
         [14]: {
-          dialogue: new Character(
-            "Brutus",
-            "A WHAT???!!!",
-            "midnight-blue"
-          )
+          dialogue: new Character("Brutus", "A WHAT???!!!", "midnight-blue"),
         },
         [15]: {
           dialogue: new StageDirections("<b>Explosion.</b>"),
           sound: {
             file: "nuke.mp3",
-            volume: .4,
+            volume: 0.4,
             spawn: true,
-            position: "beforeDialogue"
+            position: "beforeDialogue",
           },
           delay: 5000,
+          playMethod: () => {
+            document.querySelector("body").style.backgroundColor =
+              "rgb(255,255,255)";
+            document.querySelector("body").style.transition =
+              "10s linear background";
+            setTimeout(() => {
+              document.querySelector("body").style.backgroundColor =
+                "var(--background)";
+              setTimeout(() => {
+                document.querySelector("body").style.transition = "";
+              }, 10000);
+            }, 200);
+          },
           fail: new GameFail({
             failID: "ICBM",
-            failText: "Well, you killed Caesar at least. And all of Rome too."
-          })
-        }
+            failText: "Well, you killed Caesar at least. And all of Rome too.",
+          }),
+        },
       },
       ["A2_S1_42_Void"]: {
         [0]: {
-          dialogue: new StageDirections("They all exit.")
+          dialogue: new StageDirections("They all exit."),
         },
         [1]: {
           dialogue: new StageDirections("Thunder."),
           sound: {
             file: "thunder.mp3",
-            volume: .25,
+            volume: 0.25,
             position: "beforeDialogue",
-            spawn: true
+            spawn: true,
           },
           next: () => {
             if (gameModule.getSaveData().playMemory["BrutusSuspicions"] >= 3) {
@@ -3241,9 +3302,9 @@ Storyline.prototype.acts = {
             } else {
               return "A3_S1";
             }
-          }
-        }
-      }
+          },
+        },
+      },
     },
   },
   ["A3_S1"]: {
@@ -3375,7 +3436,7 @@ Storyline.prototype.acts = {
           "Caesar",
           "What, even you, Brutus?",
           "dark-gold"
-        )
+        ),
       },
       [18]: {
         dialogue: new Character(
@@ -3392,11 +3453,7 @@ Storyline.prototype.acts = {
         ),
       },
       [20]: {
-        dialogue: new Character(
-          "Cinna",
-          "O Caesar—",
-          "umber-brown"
-        ),
+        dialogue: new Character("Cinna", "O Caesar—", "umber-brown"),
       },
       [21]: {
         dialogue: new Character(
@@ -3406,18 +3463,14 @@ Storyline.prototype.acts = {
         ),
       },
       [22]: {
-        dialogue: new Character(
-          "Decius",
-          "Great Caesar-",
-          "copper"
-        )
+        dialogue: new Character("Decius", "Great Caesar-", "copper"),
       },
       [23]: {
         dialogue: new Character(
           "Caesar",
           "Did I no just resist Brutus, begging from his knees?",
           "dark-gold"
-        )
+        ),
       },
       [24]: {
         dialogue: new StageDirections(
@@ -3432,13 +3485,15 @@ Storyline.prototype.acts = {
         ),
       },
       [26]: {
-        dialogue: new Dialogue("This is your moment. Do not touch the keyboard. A small rectangle will slide across the bar, that is your dagger. <b>Press any key</b> at the green spot to kill Caesar, otherwise... <br> Get ready, in 3 <pause duration=1000> 2 <pause duration=1000> 1 <pause duration=1000>"),
+        dialogue: new Dialogue(
+          "This is your moment. Do not touch the keyboard. A small rectangle will slide across the bar, that is your dagger. <b>Press any key</b> at the green spot to kill Caesar, otherwise... <br> Get ready, in 3 <pause duration=1000> 2 <pause duration=1000> 1 <pause duration=1000>"
+        ),
         delay: 0,
         sound: {
           file: "riser.mp3",
           volume: 1,
           position: "afterDialogue",
-          spawn: true
+          spawn: true,
         },
         next: () => {
           return new Promise((resolve) => {
@@ -3448,21 +3503,26 @@ Storyline.prototype.acts = {
                 const slider = document.getElementById("slider");
                 const container = document.querySelector(".bar-container");
                 const greenZone = container.querySelector(".green-zone");
-            
+
                 if (!dagger || !slider || !container || !greenZone) {
-                  console.error("One or more elements are missing:", { dagger, slider, container, greenZone });
+                  console.error("One or more elements are missing:", {
+                    dagger,
+                    slider,
+                    container,
+                    greenZone,
+                  });
                   return;
                 }
-            
+
                 let containerWidth = container.offsetWidth;
                 let greenStart = greenZone.offsetLeft;
                 let greenEnd = greenStart + greenZone.offsetWidth;
-            
+
                 slider.style.left = "0px";
                 let startTime = null;
-            
+
                 const duration = 10000; // 10 seconds full animation
-            
+
                 function animate(time) {
                   if (!startTime) startTime = time;
                   containerWidth = container.offsetWidth;
@@ -3473,31 +3533,34 @@ Storyline.prototype.acts = {
                   const progress = Math.min(elapsed / duration, 1);
                   const position = containerWidth * progress;
                   slider.style.left = `${position}px`;
-            
+
                   if (progress < 1) {
                     requestAnimationFrame(animate);
                   } else {
                     resolve(false);
                   }
                 }
-            
+
                 function handleKeyPress(event) {
                   console.log("Key pressed:", event.key);
                   const sliderPosition = slider.offsetLeft;
-                  const hit = sliderPosition >= greenStart && sliderPosition <= greenEnd;
-            
+                  const hit =
+                    sliderPosition >= greenStart && sliderPosition <= greenEnd;
+
+                  document.removeEventListener("click", handleKeyPress);
                   document.removeEventListener("keydown", handleKeyPress);
                   dagger.style.display = "none";
                   resolve(hit);
                 }
-            
+
                 document.addEventListener("keydown", handleKeyPress);
+                document.addEventListener("click", handleKeyPress);
                 dagger.style.display = "flex";
                 console.log("Dagger displayed");
                 requestAnimationFrame(animate);
               });
             }
-        
+
             runAccuracyTest().then((hit) => {
               if (hit) {
                 resolve("A3_S1_Hit");
@@ -3506,7 +3569,7 @@ Storyline.prototype.acts = {
               }
             });
           });
-        }
+        },
       },
     },
   },
@@ -3514,9 +3577,7 @@ Storyline.prototype.acts = {
     displayName: "Act 3 : Scene 1",
     ["teamConspirators"]: {
       [0]: {
-        dialogue: new StageDirections(
-          "<b>CASCA</b> stabs <b>CAESAR</b>."
-        ),
+        dialogue: new StageDirections("<b>CASCA</b> stabs <b>CAESAR</b>."),
       },
       [1]: {
         dialogue: new Character(
@@ -3564,46 +3625,47 @@ Storyline.prototype.acts = {
         ),
       },
       [8]: {
-        dialogue: new Character(
-          "Decius",
-          "Shall we move forward?",
-          "copper"
-        ),
+        dialogue: new Character("Decius", "Shall we move forward?", "copper"),
       },
       [9]: {
-        dialogue: new Dialogue("CONGRATULATIONS! You have achieved the: Killing Caesar ending. I don't have enough time to create a proper end screen, my apologies. Unless..?"),
+        dialogue: new Dialogue(
+          "CONGRATULATIONS! You have achieved the: Killing Caesar ending. I don't have enough time to create a proper end screen, my apologies. Unless..?"
+        ),
         next: "A3_S1_Cont",
-        delay: 3000
-      }
+        delay: 3000,
+      },
     },
   },
   ["A3_S1_Cont"]: {
-    displayName : "Act 3 : Scene 1",
+    displayName: "Act 3 : Scene 1",
     ["teamConspirators"]: {
       [0]: {
-        dialogue: new Character("Antony",
+        dialogue: new Character(
+          "Antony",
           "<span dialogue-speed=50>Domestic fury and fierce civil strife <br> Shall cumber all the parts of Italy. <br> Blood and destruction shall be so in use, <br> And dreadful objects so familiar, <br> That mothers shall but smile when they behold <br> Their infants quartered with the hands of war, <br> All pity choked with custom of fell deeds, <br> And Caesar’s spirit, ranging for revenge, <br> With Ate by his side come hot from hell, <br> Shall in these confines with a monarch’s voice <br> Cry “Havoc!” and let slip the dogs of war, <br> That this foul deed shall smell above the earth <br> With carrion men, groaning for burial.</span>",
           "dark-red"
-        )
+        ),
       },
       [1]: {
-        dialogue: new Dialogue("Find out more in the Julius Caesar: The Game DLC! Only $49.99* a month *tax included, game sold separately"),
+        dialogue: new Dialogue(
+          "Find out more in the Julius Caesar: The Game DLC! Only $49.99* a month *tax included, game sold separately"
+        ),
         addToMemory: () => {
           gameModule.addEnding("CaesarEnding");
-        }
+        },
       },
       [2]: {
-        dialogue: new Dialogue("You'll have to refresh the page (or click on Exit). You can't really go anywhere else from here.")
-      }
-    }
+        dialogue: new Dialogue(
+          "You'll have to refresh the page (or click on Exit). You can't really go anywhere else from here."
+        ),
+      },
+    },
   },
   ["A3_S1_NoHit"]: {
     displayName: "Act 3 : Scene 1",
     ["teamConspirators"]: {
       [0]: {
-        dialogue: new StageDirections(
-          "<b>CASCA</b> misses <b>CAESAR</b>."
-        ),
+        dialogue: new StageDirections("<b>CASCA</b> misses <b>CAESAR</b>."),
       },
       [1]: {
         dialogue: new StageDirections("Silence in the crowd."),
@@ -3611,60 +3673,59 @@ Storyline.prototype.acts = {
           file: "crickets.mp3",
           position: "beforeDialogue",
         },
-        delay: 4000
+        delay: 4000,
       },
       [2]: {
         dialogue: new Character(
           "Cassius",
           "Did- did you seriously miss the dagger on Caesar?",
           "deep-olive"
-        )
+        ),
       },
       [3]: {
         dialogue: new Character(
           "Cassius",
           "I- I can't believe you. We spent <b>ALL</b> night planning for this, and you come back to me with- with.",
           "deep-olive"
-        )
+        ),
       },
       [4]: {
-        dialogue: new Character(
-          "Cassius",
-          "A SKILL ISSUE???",
-          "deep-olive"
-        ),
+        dialogue: new Character("Cassius", "A SKILL ISSUE???", "deep-olive"),
         sound: {
           file: "boom.mp3",
           volume: 1,
           position: "beforeDialogue",
-          spawn: true
-        }
+          spawn: true,
+        },
       },
       [5]: {
         dialogue: new Character(
           "Cassius",
           "That's it. You're dead to me.",
           "deep-olive"
-        )
+        ),
       },
       [6]: {
-        dialogue: new StageDirections("<b>CASSIUS</b> pulls out an AK-47 and shoots <b>CASCA</b>."),
+        dialogue: new StageDirections(
+          "<b>CASSIUS</b> pulls out an AK-47 and shoots <b>CASCA</b>."
+        ),
         sound: {
           file: "ak47.mp3",
           position: "beforeDialogue",
           volume: 2,
-          spawn: true
+          spawn: true,
         },
-        delay: 3000
+        delay: 3000,
       },
       [7]: {
         dialogue: new Dialogue("<h4>HEADSHOT! x2 POINTS!</h4>"),
         fail: new GameFail({
           failID: "MissedCaesar",
-          failText: "H- how did you? I am really dissapointed in you. On second note, couldn't Cassius just kill Caesar while he was at it?"
-        })
-      }
-    }
+          failText:
+            "H- how did you? I am really dissapointed in you. On second note, couldn't Cassius just kill Caesar while he was at it?",
+        }),
+      },
+    },
   },
   ["A3_S1_Unique"]: {
     displayName: "Act 3 : Scene 1?",
@@ -3795,7 +3856,7 @@ Storyline.prototype.acts = {
           "Caesar",
           "What, even you, Brutus?",
           "dark-gold"
-        )
+        ),
       },
       [18]: {
         dialogue: new Character(
@@ -3812,11 +3873,7 @@ Storyline.prototype.acts = {
         ),
       },
       [20]: {
-        dialogue: new Character(
-          "Cinna",
-          "O Caesar—",
-          "umber-brown"
-        ),
+        dialogue: new Character("Cinna", "O Caesar—", "umber-brown"),
       },
       [21]: {
         dialogue: new Character(
@@ -3826,18 +3883,14 @@ Storyline.prototype.acts = {
         ),
       },
       [22]: {
-        dialogue: new Character(
-          "Decius",
-          "Great Caesar-",
-          "copper"
-        )
+        dialogue: new Character("Decius", "Great Caesar-", "copper"),
       },
       [23]: {
         dialogue: new Character(
           "Caesar",
           "Did I no just resist Brutus, begging from his knees?",
           "dark-gold"
-        )
+        ),
       },
       [24]: {
         dialogue: new StageDirections(
@@ -3845,130 +3898,237 @@ Storyline.prototype.acts = {
         ),
       },
       [25]: {
-        dialogue: new Character(
-          "Casca",
-          "Speak, hands, for-",
-          "lichen-green"
-        ),
+        dialogue: new Character("Casca", "Speak, hands, for-", "lichen-green"),
         delay: 0,
       },
       [26]: {
-        dialogue: new StageDirections("<b>BRUTUS</b> pushes <b>CAESAR</b> aside. The dagger cuts the air."),
+        dialogue: new StageDirections(
+          "<b>BRUTUS</b> pushes <b>CAESAR</b> aside. The dagger cuts the air."
+        ),
       },
       [27]: {
-        dialogue: new Character("Caesar","[BRUTUS]??","dark-gold")
+        dialogue: new Character("Caesar", "[BRUTUS]??", "dark-gold"),
       },
       [28]: {
-        dialogue: new Character("Cassius","[Brutus], what on the name of the Greeks are you doing??","deep-olive")
+        dialogue: new Character(
+          "Cassius",
+          "[Brutus], what on the name of the Greeks are you doing??",
+          "deep-olive"
+        ),
       },
       [29]: {
-        dialogue: new Character("Brutus","<i>(exhales)</i> I'm sorry. This won't be happening.","midnight-blue")
+        dialogue: new Character(
+          "Brutus",
+          "<i>(exhales)</i> I'm sorry. This won't be happening.",
+          "midnight-blue"
+        ),
       },
       [30]: {
-        dialogue: new Character("Casca","You- you TRAITOR!","lichen-green"),
+        dialogue: new Character("Casca", "You- you TRAITOR!", "lichen-green"),
       },
       [31]: {
-        dialogue: new StageDirections("<b>CASCA</b> lunges at <b>BRUTUS</b>, but <b>BRUTUS</b> knocks him back. The other conspirators are speechless."),
+        dialogue: new StageDirections(
+          "<b>CASCA</b> lunges at <b>BRUTUS</b>, but <b>BRUTUS</b> knocks him back. The other conspirators are speechless."
+        ),
       },
       [32]: {
-        dialogue: new Character("Cassius","You planned with us. You led us. You swore with us- is this... all a lie?","deep-olive")
+        dialogue: new Character(
+          "Cassius",
+          "You planned with us. You led us. You swore with us- is this... all a lie?",
+          "deep-olive"
+        ),
       },
       [33]: {
-        dialogue: new Character("Brutus","You know what was a lie? Swearing with you, because we never did! <br> <i>(aside) I believed their ideas... then I saw the blade. I can't do this anymore.</i>","midnight-blue"),
+        dialogue: new Character(
+          "Brutus",
+          "You know what was a lie? Swearing with you, because we never did! <br> <i>(aside) I believed their ideas... then I saw the blade. I can't do this anymore.</i>",
+          "midnight-blue"
+        ),
       },
       [34]: {
-        dialogue: new StageDirections("Suddenly, shouts appear in the distance - the <b>COMMONERS</b> have seen it all.")
+        dialogue: new StageDirections(
+          "Suddenly, shouts appear in the distance - the <b>COMMONERS</b> have seen it all."
+        ),
       },
       [35]: {
-        dialogue: new Character("First Plebian","<i>(points to [Casca])</i> HIM! HE TRIED TO KILL CAESAR!","ash-gray"),
+        dialogue: new Character(
+          "First Plebian",
+          "<i>(points to [Casca])</i> HIM! HE TRIED TO KILL CAESAR!",
+          "ash-gray"
+        ),
       },
       [36]: {
-        dialogue: new Character("Second Plebian","<i>(points to [Cassius])</i> HIM! HE ORCHESTRATED THE WHOLE ACT!","ash-gray")
+        dialogue: new Character(
+          "Second Plebian",
+          "<i>(points to [Cassius])</i> HIM! HE ORCHESTRATED THE WHOLE ACT!",
+          "ash-gray"
+        ),
       },
       [37]: {
-        dialogue: new Character("Third Plebian","<i>(points to [Brutus])</i> HIM! He's Brutus. What a cool guy. <pause duration=2000> GET THEM!!!","ash-gray")
+        dialogue: new Character(
+          "Third Plebian",
+          "<i>(points to [Brutus])</i> HIM! He's Brutus. What a cool guy. <pause duration=2000> GET THEM!!!",
+          "ash-gray"
+        ),
       },
       [38]: {
-        dialogue: new StageDirections("An all out war breaks in the Capitol, swords start clanging and the conspirators are overwhelmed.")
+        dialogue: new StageDirections(
+          "An all out war breaks in the Capitol, swords start clanging and the conspirators are overwhelmed."
+        ),
       },
       [39]: {
-        dialogue: new StageDirections("<b>CASCA</b> gets struck by a <b>commoner</b>.")
+        dialogue: new StageDirections(
+          "<b>CASCA</b> gets struck by a <b>commoner</b>."
+        ),
       },
       [40]: {
-        dialogue: new Character("Casca","Let the whole world know I tried to kill Caesar, and it was almost successful. Until that traitor Bruté stepped in. <i>(Dies)</i>","lichen-green")
+        dialogue: new Character(
+          "Casca",
+          "Let the whole world know I tried to kill Caesar, and it was almost successful. Until that traitor Bruté stepped in. <i>(Dies)</i>",
+          "lichen-green"
+        ),
       },
       [41]: {
-        dialogue: new StageDirections("<b>CASSIUS</b> is also struck.")
+        dialogue: new StageDirections("<b>CASSIUS</b> is also struck."),
       },
       [42]: {
-        dialogue: new Character("Cassius","PLE- PLEBIANS! JUST KNOW THAT I DIDN'T KILL CAESAR FOR MY HATRED, IT WAS JUST FOR THE GOOD. OF. ROOOMEE!!!! <i>(Stumbles to the ground)</i> But, it's your choice. So, live with it. <i>(Dies)</i>)","deep-olive")
+        dialogue: new Character(
+          "Cassius",
+          "PLE- PLEBIANS! JUST KNOW THAT I DIDN'T KILL CAESAR FOR MY HATRED, IT WAS JUST FOR THE GOOD. OF. ROOOMEE!!!! <i>(Stumbles to the ground)</i> But, it's your choice. So, live with it. <i>(Dies)</i>)",
+          "deep-olive"
+        ),
       },
       [43]: {
-        dialogue: new StageDirections("The crowd slowly clears and exits the Capitol. <b>CAESAR</b> and <b>BRUTUS</b> remain at the Capitol, surrounded by the remains.")
+        dialogue: new StageDirections(
+          "The crowd slowly clears and exits the Capitol. <b>CAESAR</b> and <b>BRUTUS</b> remain at the Capitol, surrounded by the remains."
+        ),
       },
       [44]: {
-        dialogue: new Character("Caesar","You- you saved my life. In a way that was the most least expected.","dark-gold")
+        dialogue: new Character(
+          "Caesar",
+          "You- you saved my life. In a way that was the most least expected.",
+          "dark-gold"
+        ),
       },
       [45]: {
-        dialogue: new Character("Brutus","But- I didn't. I still joined the Conspiracy, I was against you this whole time! <br> Then, I saw the- the dagger.","midnight-blue")
+        dialogue: new Character(
+          "Brutus",
+          "But- I didn't. I still joined the Conspiracy, I was against you this whole time! <br> Then, I saw the- the dagger.",
+          "midnight-blue"
+        ),
       },
       [46]: {
-        dialogue: new Character("Caesar","Then you had a change of heart, [Brutus]. You realized the whole problem with the Conspiracy, and you came back to me last minute. How is that not, honorable?","dark-gold")
+        dialogue: new Character(
+          "Caesar",
+          "Then you had a change of heart, [Brutus]. You realized the whole problem with the Conspiracy, and you came back to me last minute. How is that not, honorable?",
+          "dark-gold"
+        ),
       },
       [47]: {
-        dialogue: new Character("Caesar","You did something heroic, and I can't thank you enough. You stood against all of them, armed with a dagger. You sacrificed your own life, for me.","dark-gold")
+        dialogue: new Character(
+          "Caesar",
+          "You did something heroic, and I can't thank you enough. You stood against all of them, armed with a dagger. You sacrificed your own life, for me.",
+          "dark-gold"
+        ),
       },
       [48]: {
-        dialogue: new Character("Brutus","I joined the Confederacy. I saved you from the Confederacy. I'm no hero nor villian, I'm just... a Roman. A Roman who knows Caesar heart-to-heart.","midnight-blue")
+        dialogue: new Character(
+          "Brutus",
+          "I joined the Confederacy. I saved you from the Confederacy. I'm no hero nor villian, I'm just... a Roman. A Roman who knows Caesar heart-to-heart.",
+          "midnight-blue"
+        ),
       },
       [49]: {
-        dialogue: new Character("Brutus","I still feel a ton of guilt. I believed everything Cassius stated, I <b>should've</b> known it was all <pause duration=500> fake. Just to ploy me into even more danger. And even, almost lose you.","dark-gold")
+        dialogue: new Character(
+          "Brutus",
+          "I still feel a ton of guilt. I believed everything Cassius stated, I <b>should've</b> known it was all <pause duration=500> fake. Just to ploy me into even more danger. And even, almost lose you.",
+          "dark-gold"
+        ),
       },
       [50]: {
-        dialogue: new Character("Caesar","Then ask me this, why did you not just let me die? Send me down below?","dark-gold")
+        dialogue: new Character(
+          "Caesar",
+          "Then ask me this, why did you not just let me die? Send me down below?",
+          "dark-gold"
+        ),
       },
       [51]: {
-        dialogue: new Character("Brutus","Because... there was no need to. If anything, you are my Northern Star. Rome doesn't need more blood and shame, Rome needs a good leader. And that leader is, you.","midnight-blue")
+        dialogue: new Character(
+          "Brutus",
+          "Because... there was no need to. If anything, you are my Northern Star. Rome doesn't need more blood and shame, Rome needs a good leader. And that leader is, you.",
+          "midnight-blue"
+        ),
       },
       [52]: {
-        dialogue: new Character("Brutus","I... broke free from the chains of Cassius. I'm a free man, a free and... debatedly unnoble man.","midnight-blue")
+        dialogue: new Character(
+          "Brutus",
+          "I... broke free from the chains of Cassius. I'm a free man, a free and... debatedly unnoble man.",
+          "midnight-blue"
+        ),
       },
       [53]: {
-        dialogue: new Character("Caesar","Hold my hand, [Brutus]. You did a good deed today, and you quite possibly have saved Rome from even more chaos. Out of all the Conspirators, only you were the true person in the group altogether.")
+        dialogue: new Character(
+          "Caesar",
+          "Hold my hand, [Brutus]. You did a good deed today, and you quite possibly have saved Rome from even more chaos. Out of all the Conspirators, only you were the true person in the group altogether."
+        ),
       },
       [54]: {
-        dialogue: new Character("Brutus","Thank you, my father Caesar.","midnight-blue")
+        dialogue: new Character(
+          "Brutus",
+          "Thank you, my father Caesar.",
+          "midnight-blue"
+        ),
       },
       [53]: {
-        dialogue: new Character("Caesar","Why don't we go and explore Rome, together? Let's ignore all this royalty and who gets to be the next leader - just you and me, together once again.","dark-gold")
+        dialogue: new Character(
+          "Caesar",
+          "Why don't we go and explore Rome, together? Let's ignore all this royalty and who gets to be the next leader - just you and me, together once again.",
+          "dark-gold"
+        ),
       },
       [54]: {
-        dialogue: new Character("Brutus","I- I would appreciate that.","midnight-blue")
+        dialogue: new Character(
+          "Brutus",
+          "I- I would appreciate that.",
+          "midnight-blue"
+        ),
       },
       [55]: {
-        dialogue: new StageDirections("<b>BRUTUS</b> and <b>CAESAR</b> gets up and exits the Capitol, touring all of Rome... together.")
+        dialogue: new StageDirections(
+          "<b>BRUTUS</b> and <b>CAESAR</b> gets up and exits the Capitol, touring all of Rome... together."
+        ),
       },
       [56]: {
-        dialogue: new Dialogue("<h3>THE END.</h3>")
+        dialogue: new Dialogue("<h3>THE END.</h3>"),
       },
       [57]: {
-        dialogue: new Dialogue("What, did you expect everyone to just explode? I already did that, you can't reuse a joke in the exact same manner twice. But hey, that was a pleasant ending, wasn't it?")
+        dialogue: new Dialogue(
+          "What, did you expect everyone to just explode? I already did that, you can't reuse a joke in the exact same manner twice. But hey, that was a pleasant ending, wasn't it?"
+        ),
       },
       [58]: {
-        dialogue: new Dialogue("Who knows what happens to the empire next? Maybe it'll become a monarchy? Maybe nothing will happen? Maybe people will actually get his will. Maybe, we should use this time to reflect on ourselves.")
+        dialogue: new Dialogue(
+          "Who knows what happens to the empire next? Maybe it'll become a monarchy? Maybe nothing will happen? Maybe people will actually get his will. Maybe, we should use this time to reflect on ourselves."
+        ),
       },
       [59]: {
-        dialogue: new Dialogue("Despite Brutus carrying much guilt from listening to Cassius, he let it all out by defending Caesar one last time. How heroic is that.")
+        dialogue: new Dialogue(
+          "Despite Brutus carrying much guilt from listening to Cassius, he let it all out by defending Caesar one last time. How heroic is that."
+        ),
       },
       [60]: {
-        dialogue: new Dialogue("Maybe we should be like Brutus? I don't know, I don't really do well on rhetorical analysis anyways. 😅")
+        dialogue: new Dialogue(
+          "Maybe we should be like Brutus? I don't know, I don't really do well on rhetorical analysis anyways. 😅"
+        ),
       },
       [61]: {
-        dialogue: new Dialogue("Until then, reader. Or watcher. Refresh the page if you want to continue viewing other stuff. OR press the Exit button, I think it works now."),
+        dialogue: new Dialogue(
+          "Until then, reader. Or watcher. Refresh the page if you want to continue viewing other stuff. OR press the Exit button, I think it works now."
+        ),
         addToMemory: () => {
           gameModule.addEnding("HappyEnding");
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 };
