@@ -1067,7 +1067,7 @@ Storyline.prototype.acts = {
           randomize: true,
           timedQuestion: 0,
           instantFeedback: true,
-          appear: "beforeDialogue",
+          appear: "afterDialogue",
         },
       },
       ["A1_S2_30_Success"]: {
@@ -1135,7 +1135,7 @@ Storyline.prototype.acts = {
           randomize: true,
           timedQuestion: 0,
           instantFeedback: true,
-          appear: "beforeDialogue",
+          appear: "afterDialogue",
         },
       },
       ["A1_S2_31_Success"]: {
